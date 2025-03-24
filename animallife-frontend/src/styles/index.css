@@ -1,68 +1,120 @@
-:root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
+* {
+  margin: 0;
+  padding: 0;
+  font: inherit;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
+:root {
+  --bg-color: #ffffff;
+  --text-color: #5A5A5B;
+  --second-text-color: #D9D9D9;
+  --light-text-color: #FFF;
+  --light-gray: #F8F8F8;
+  --primary-color: #227504;
+  --secondary-color: #57AB23;
+  --attention-color: #F67D0D;
+  --attention-secundary: #FEDAB9;
+  --warning-color: #FF2828;
+  --warning-secundary: #FFBCBC;
+  --healty-color: #C2E5AD;
+
+  linear-gradient(
+    [ [ <top> | to <bottom> ] ,]?
+    <227504>[, <57AB23>]+
+  )
+
+  --ff-sans: "Monstererrat", system-ui, sans-serif;
+  --fw-base: 400;
+  --fw-md: 500;
+  --fw-bold: 800;
+
+  --fs-sm: 0.875rem;
+  --fs-base: 1rem;
+  --fs-lg: 1.25rem;
+  --fs-xl: 1.75rem;
+  --fs-2xl: 2.25rem;
+
+  --py-sm: 0.875rem;
+  --py-base: 1rem;
+  --py-lg: 1.5rem;
+  --py-xl: 3rem;
+  --px-lg: 1.5rem;
 }
-a:hover {
-  color: #535bf2;
+
+html {
+  background-color: var(--light-gray);
+  font-family: var(--ff-sans);
+  font-weight: var(--fw-base);
+  font-size: var(--fs-base);
+  line-height: 1.6;
+  color: var(--text-color);
+  overflow-x: hidden;
+  scroll-behavior: smooth;
 }
 
 body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+h1,
+h2,
+h3 {
+  line-height: 1.2;
+  color: var(--text-color);
+  font-weight: var(--fw-bold);
+  letter-spacing: -0.04em;
 }
 
 h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
+  font-size: var(--fs-2xl);
 }
 
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+h2 {
+  font-size: var(--fs-xl);
 }
 
-@media (prefers-color-scheme: light) {
+h3 {
+  font-size: var(--fs-lg);
+}
+
+a {
+  text-decoration: none;
+  color: var(--second-text-color);
+  font-weight: var(--fw-bold);
+  font-size: var(--fs-sm);
+}
+
+a:hover {
+  color: var(--primary-color);
+}
+
+img {
+  max-width: 100%;
+  display: inline-block;
+}
+
+ul {
+  list-style: none;
+}
+
+@media (width >=1280px) {
   :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
+    --fs-lg: 2rem;
+    --fs-xl: 2.625rem;
+    --fs-2xl: 4rem;
+
+    --py-sm: 1rem;
+    --py-base: 1.5rem;
+    --py-lg: 2.5rem;
+    --py-xl: 5rem;
+    --pg-lg: 2rem;
   }
 }
