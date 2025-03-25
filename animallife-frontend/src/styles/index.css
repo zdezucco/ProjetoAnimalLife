@@ -82,6 +82,7 @@ color-card{
   border-radius: 1.5rem;
   padding-block: 4rem;
   gap: 2rem;
+  box-shadow: rgba(58, 68, 78, 0.2) 0px 12px 24px;
 }
 
 #card2 {
@@ -91,6 +92,7 @@ color-card{
   border-radius: 1.5rem;
   padding-block: 4rem;
   gap: 2rem;
+  box-shadow: rgba(58, 68, 78, 0.2) 0px 12px 24px;
 }
 
 #card3 {
@@ -100,6 +102,7 @@ color-card{
   border-radius: 1.5rem;
   padding-block: 4rem;
   gap: 2rem;
+  box-shadow: rgba(58, 68, 78, 0.2) 0px 12px 24px;
 }
 
 #card4 {
@@ -109,6 +112,7 @@ color-card{
   border-radius: 1.5rem;
   padding-block: 4rem;
   gap: 2rem;
+  box-shadow: rgba(58, 68, 78, 0.2) 0px 12px 24px;
 }
 
 #card5 {
@@ -118,17 +122,18 @@ color-card{
   border-radius: 1.5rem;
   padding-block: 4rem;
   gap: 2rem;
+  box-shadow: rgba(58, 68, 78, 0.2) 0px 12px 24px;
 
   p{
     color: var(--text-color);
   }
 
   h3{
-    color:var(--text-color);
+    color: var(--text-color);
   }
 
   h2{
-    color:var(--text-color);
+    color: var(--text-color);
   }
 }
 
@@ -139,6 +144,7 @@ color-card{
   border-radius: 1.5rem;
   padding-block: 4rem;
   gap: 2rem;
+  box-shadow: rgba(58, 68, 78, 0.2) 0px 12px 24px;
 }
 
 #card7 {
@@ -148,17 +154,18 @@ color-card{
   border-radius: 1.5rem;
   padding-block: 4rem;
   gap: 2rem;
+  box-shadow: rgba(58, 68, 78, 0.2) 0px 12px 24px;
 
   p{
     color: var(--text-color);
   }
 
   h3{
-    color:var(--text-color);
+    color: var(--text-color);
   }
 
   h2{
-    color:var(--text-color);
+    color: var(--text-color);
   }
 }
 
@@ -169,17 +176,18 @@ color-card{
   border-radius: 1.5rem;
   padding-block: 4rem;
   gap: 2rem;
+  box-shadow: rgba(58, 68, 78, 0.2) 0px 12px 24px;
   
   p{
     color: var(--text-color);
   }
 
   h3{
-    color:var(--text-color);
+    color: var(--text-color);
   }
 
   h2{
-    color:var(--text-color);
+    color: var(--text-color);
   }
 
 }
@@ -191,17 +199,18 @@ color-card{
   border-radius: 1.5rem;
   padding-block: 4rem;
   gap: 2rem;
+  box-shadow: rgba(58, 68, 78, 0.2) 0px 12px 24px;
   
   p{
     color: var(--text-color);
   }
 
   h3{
-    color:var(--text-color);
+    color: var(--text-color);
   }
 
   h2{
-    color:var(--text-color);
+    color: var(--text-color);
   }
 
 }
@@ -213,6 +222,7 @@ color-card{
   border-radius: 1.5rem;
   padding-block: 4rem;
   gap: 2rem;
+  box-shadow: rgba(58, 68, 78, 0.2) 0px 12px 24px;
   
   p{
     color: var(--second-text-color);
@@ -235,17 +245,18 @@ color-card{
   border-radius: 1.5rem;
   padding-block: 4rem;
   gap: 2rem;
+  box-shadow: rgba(58, 68, 78, 0.2) 0px 12px 24px;
   
   p{
     color: var(--text-color);
   }
 
   h3{
-    color:var(--text-color);
+    color: var(--text-color);
   }
 
   h2{
-    color:var(--text-color);
+    color: var(--text-color);
   }
 
 }
@@ -257,17 +268,18 @@ color-card{
   border-radius: 1.5rem;
   padding-block: 4rem;
   gap: 2rem;
-  
+  box-shadow: rgba(58, 68, 78, 0.2) 0px 12px 24px;
+
   p{
-    color: var(--text-color);;
+    color: var(--text-color);
   }
 
   h3{
-    color:var(--text-color);
+    color: var(--text-color);
   }
 
   h2{
-    color:var(--text-color);
+    color: var(--text-color);
   }
 
 }
