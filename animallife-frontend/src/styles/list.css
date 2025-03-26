@@ -1,0 +1,107 @@
+.TelaAnimal {
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
+    background: var(--bg-primary-color);
+    border-radius: 10px;
+    padding: 1rem;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 6px;
+  }
+  
+  .header {
+    font-size: 22px;
+    font-weight: var(--fw-bold);
+    color: var(--primary-color);
+    text-align: center;
+    margin-bottom: 1rem;
+  }
+  
+  .search-bar {
+    display: flex;
+    align-items: center;
+    background: var(--bg-secundary-color);
+    border-radius: 0.5rem;
+    padding: 0.5rem;
+    margin-bottom: 1rem;
+    height: 50px;
+  }
+  
+  .search-input {
+    flex: 1;
+    border: none;
+    background: transparent;
+    outline: none;
+    font-size: 14px;
+    color: var(--text-color);
+  }
+  
+  .icon {
+    color: var(--primary-color);
+    margin: 0 8px;
+    cursor: pointer;
+  }
+  
+  .animal-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .animal-card {
+    display: flex;
+    align-items: center;
+    background: var(--bg-secundary-color);
+    border-radius: 8px;
+    padding: 0.7rem;
+    box-shadow: rgba(0, 0, 0, 0.05) 0px 2px 4px;
+  }
+  
+  .animal-avatar {
+    width: 50px;
+    height: 50px;
+    background: gray;
+    border-radius: 50%;
+    margin-right: 10px;
+  }
+  
+  .animal-info {
+    flex-grow: 1;
+  }
+  
+  .animal-name {
+    font-size: 16px;
+    font-weight: var(--fw-bold);
+    color: var(--text-color);
+  }
+  
+  .animal-type {
+    font-size: 12px;
+    color: var(--second-text-color);
+  }
+  
+  .animal-temp {
+    font-size: 16px;
+    font-weight: var(--fw-bold);
+  }
+  
+  .notification {
+    position: relative;
+    top: 10px;
+    right: 10px;
+  }
+  
+  .bell-icon {
+    color: var(--primary-color);
+  }
+  
+  .notification-count {
+    background: red;
+    color: white;
+    font-size: 12px;
+    border-radius: 50%;
+    padding: 2px 6px;
+    position: absolute;
+    top: -5px;
+    right: -5px;
+  }
+  

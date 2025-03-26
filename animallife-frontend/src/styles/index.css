@@ -4,13 +4,6 @@
   box-sizing: border-box;
 }
 
-* {
-  margin: 0.5rem;
-  padding: 0;
-  box-sizing: border-box;
-  letter-spacing: 1px;
-}
-
 :root {
   --bg-color: linear-gradient( 45deg, #227504, #57AB23);
   --text-color: #5A5A5B;
@@ -33,30 +26,6 @@
 
 }
 
-.container{
-  display: flex;
-  gap: 20px;
-  justify-content: center;
-}
-
-p {
-  font-size: 12px;
-  font-weight: var(--fw-md);
-  color: var(--second-text-color);
-}
-
-h3{
-  font-size: 20px;
-  font-weight: var(--fw-md);
-  color: var(--second-text-color);
-}
-
-h2{
-  font-size: 18px;
-  font-weight: var(--fw-md);
-  color: var(--second-text-color);
-}
-
 html {
   background-color: var(--bg-color);
   font-family: var(--ff-sans);
@@ -68,218 +37,29 @@ html {
   scroll-behavior: smooth;
 }
 
-color-card{
-  border-radius: 1.5rem;
-  padding-block: 4rem;
-  gap: 2rem;
-  flex-direction: column;
+
+footer {
+  box-shadow: 0px 5px 35px var(--second-text-color);
+  width: 100%;
 }
 
-#card1 {
-  height: 50vh;
-  width: 80vh;
-  background: var(--bg-color);
-  border-radius: 1.5rem;
-  padding-block: 4rem;
-  gap: 2rem;
-  box-shadow: rgba(58, 68, 78, 0.2) 0px 12px 24px;
+#footer_content{
+  background-color: var(--primary-color);
+  display: flex;
+  padding: 0.8rem;
+  justify-content: center;
 }
 
-#card2 {
-  height: 50vh;
-  width: 80vh;
-  background: var(--primary-color);
-  border-radius: 1.5rem;
-  padding-block: 4rem;
-  gap: 2rem;
-  box-shadow: rgba(58, 68, 78, 0.2) 0px 12px 24px;
-}
-
-#card3 {
-  height: 50vh;
-  width: 80vh;
-  background: var(--secondary-color);
-  border-radius: 1.5rem;
-  padding-block: 4rem;
-  gap: 2rem;
-  box-shadow: rgba(58, 68, 78, 0.2) 0px 12px 24px;
-}
-
-#card4 {
-  height: 50vh;
-  width: 80vh;
-  background: var(--attention-color);
-  border-radius: 1.5rem;
-  padding-block: 4rem;
-  gap: 2rem;
-  box-shadow: rgba(58, 68, 78, 0.2) 0px 12px 24px;
-}
-
-#card5 {
-  height: 50vh;
-  width: 80vh;
-  background: var(--attention-secundary);
-  border-radius: 1.5rem;
-  padding-block: 4rem;
-  gap: 2rem;
-  box-shadow: rgba(58, 68, 78, 0.2) 0px 12px 24px;
-
-  p{
-    color: var(--text-color);
-  }
-
-  h3{
-    color: var(--text-color);
-  }
-
-  h2{
-    color: var(--text-color);
+@media screen and (max-width: 768px){
+  #footer_content{
+      gap: 2rem;
   }
 }
 
-#card6 {
-  height: 50vh;
-  width: 80vh;
-  background: var(--warning-color);
-  border-radius: 1.5rem;
-  padding-block: 4rem;
-  gap: 2rem;
-  box-shadow: rgba(58, 68, 78, 0.2) 0px 12px 24px;
-}
-
-#card7 {
-  height: 50vh;
-  width: 80vh;
-  background: var(--warning-secundary);
-  border-radius: 1.5rem;
-  padding-block: 4rem;
-  gap: 2rem;
-  box-shadow: rgba(58, 68, 78, 0.2) 0px 12px 24px;
-
-  p{
-    color: var(--text-color);
-  }
-
-  h3{
-    color: var(--text-color);
-  }
-
-  h2{
-    color: var(--text-color);
+@media screen and (max-width: 426px){
+  #footer_content{
+      padding: 0.8rem;
+      max-width: 500px;
   }
 }
 
-#card8 {
-  height: 50vh;
-  width: 80vh;
-  background: var(--healty-color);
-  border-radius: 1.5rem;
-  padding-block: 4rem;
-  gap: 2rem;
-  box-shadow: rgba(58, 68, 78, 0.2) 0px 12px 24px;
-  
-  p{
-    color: var(--text-color);
-  }
-
-  h3{
-    color: var(--text-color);
-  }
-
-  h2{
-    color: var(--text-color);
-  }
-
-}
-
-#card9 {
-  height: 50vh;
-  width: 80vh;
-  background: var(--bg-primary-color);
-  border-radius: 1.5rem;
-  padding-block: 4rem;
-  gap: 2rem;
-  box-shadow: rgba(58, 68, 78, 0.2) 0px 12px 24px;
-  
-  p{
-    color: var(--text-color);
-  }
-
-  h3{
-    color: var(--text-color);
-  }
-
-  h2{
-    color: var(--text-color);
-  }
-
-}
-
-#card10 {
-  height: 50vh;
-  width: 80vh;
-  background: var(--text-color);
-  border-radius: 1.5rem;
-  padding-block: 4rem;
-  gap: 2rem;
-  box-shadow: rgba(58, 68, 78, 0.2) 0px 12px 24px;
-  
-  p{
-    color: var(--second-text-color);
-  }
-
-  h3{
-    color:var(--second-text-color);
-  }
-
-  h2{
-    color:var(--second-text-color);
-  }
-
-}
-
-#card11 {
-  height: 50vh;
-  width: 80vh;
-  background: var(--second-text-color);
-  border-radius: 1.5rem;
-  padding-block: 4rem;
-  gap: 2rem;
-  box-shadow: rgba(58, 68, 78, 0.2) 0px 12px 24px;
-  
-  p{
-    color: var(--text-color);
-  }
-
-  h3{
-    color: var(--text-color);
-  }
-
-  h2{
-    color: var(--text-color);
-  }
-
-}
-
-#card12 {
-  height: 50vh;
-  width: 80vh;
-  background: var(--bg-secundary-color);
-  border-radius: 1.5rem;
-  padding-block: 4rem;
-  gap: 2rem;
-  box-shadow: rgba(58, 68, 78, 0.2) 0px 12px 24px;
-
-  p{
-    color: var(--text-color);
-  }
-
-  h3{
-    color: var(--text-color);
-  }
-
-  h2{
-    color: var(--text-color);
-  }
-
-}
