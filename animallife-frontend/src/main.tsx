@@ -1,13 +1,9 @@
-import { StrictMode } from 'react'
+import { BrowserRouter } from "react-router";
 import { createRoot } from 'react-dom/client'
-import './styles/index.css'
-import './styles/color.css'
-import Color from './Color'
-import List from './list'
+import App from './App';
 
 createRoot(document.getElementById('root')!).render(
-  <StrictMode>
-    <Color />
-    <List />
-  </StrictMode>,
+  <BrowserRouter>
+    <App />
+  </BrowserRouter>
 )

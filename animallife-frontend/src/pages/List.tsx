@@ -1,6 +1,6 @@
 import { Bell, Search, Filter } from "lucide-react";
-import "./styles/index.css";
-import "./styles/list.css";
+import "../styles/index.css";
+import "../styles/list.css";
 
 const animals = [
   { name: "INDIRA", temp: 39.5, gender: "♀", status: "normal" },
