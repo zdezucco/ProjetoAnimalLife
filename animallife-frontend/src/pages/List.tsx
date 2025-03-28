@@ -1,4 +1,4 @@
-import { Bell, Search, Filter } from "lucide-react";
+import { Bell, Search, Filter, Section } from "lucide-react";
 import "../styles/index.css";
 import "../styles/list.css";
 
@@ -25,37 +25,48 @@ export default function AnimalList() {
   return (
     <>
       <div className="container" id="TelaAnimal">
-        <div className="header">Animais</div>
 
-        <div className="notification">
-          <Bell className="bell-icon" />
-          <span className="notification-count">2</span>
-        </div>
+        <div className="container" id="background-list">
+          <section id="top-header">
+            <div className="header">Animais</div>
 
-        <div className="container" id="listagem">
+            <div className="notification">
+              <Bell className="bell-icon" />
+              <span className="notification-count">2</span>
+            </div>
+            
+          </section>
 
-          <div className="search-bar" id="barrapesquisa">
-            <Search className="icon search-icon" />
-            <input type="text" placeholder="Pesquisar" className="search-input" />
-            <Filter className="icon filter-icon" />
-          </div>
-
-          <div className="animal-list">
-            {animals.map((animal, index) => (
-              <div key={index} className="animal-card">
-                <div className="animal-avatar" />
-                <div className="animal-info">
-                  <div className="animal-name">{animal.name}</div>
-                  <div className="animal-type">Onça Pintada</div>
-                </div>
-                <div className="animal-temp" style={{ color: getStatusColor(animal.status) }}>
-                  {animal.temp.toFixed(1)}°c
+          <section id="animallist">
+            <section id="searchbar">
+              <div id="search-bar-background">
+                <div className="search-bar" id="barrapesquisa">
+                  <Search className="icon search-icon" />
+                  <input type="text" placeholder="Pesquisar" className="search-input" />
+                  <Filter className="icon filter-icon" />
                 </div>
               </div>
-            ))}
-          </div> 
+            </section>
+
+              <div className="animal-list">
+                {animals.map((animal, index) => (
+                  <div key={index} className="animal-card">
+                    <div className="animal-avatar" />
+                    <div className="animal-info">
+                      <div className="animal-name">{animal.name}</div>
+                      <div className="animal-type">Onça Pintada</div>
+                    </div>
+                    <div className="animal-temp" style={{ color: getStatusColor(animal.status) }}>
+                      {animal.temp.toFixed(1)}°c
+                    </div>
+                  </div>
+                ))}
+              </div> 
+
+          </section>
 
         </div>
+
       </div>
       <footer>
         <div id="footer_content">
