@@ -1,142 +1,153 @@
 .TelaAnimal {
-    width: 375px;
-    height: 812px;
-    margin: 0 auto;
-    background-color: var(--bg-primary-color);
-    border-radius: 10px;
-    margin: 0;
-    box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 6px;
-  }
-  
-  #search-header{
-    flex-direction: row;
-  }
+  width: 375px;
+  height: 812px;
+  margin: 0 auto;
+  background-color: var(--bg-primary-color);
+  border-radius: 10px;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 6px;
+  position: relative;
+  overflow: hidden;
+}
 
-  .header {
-    font-size: 32px;
-    font-weight: var(--fw-bold);
-    color: var(--primary-color);
-    text-align: center;
-    margin: 0;
-  }
+#background-list {
+  background-color: var(--bg-secundary-color);
+  width: 100%;
+  height: 100%;
+  border-radius: 0 0 10px 10px;
+  padding: 16px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+}
 
+#top-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
 
-  #searchbar{
-    display: flex;
-    align-items: center;
-    background-color: var(--primary-color);
-    border-radius: 0.5rem 0.5rem 0 0 ;
-    height: 55px;
-    width: 355px;
-    margin: 0;
-  }
-  
-  .search-bar {
-    display: flex;
-    align-items: center;
-    background: #D9D9D9;
-    border-radius: 0.5rem;
-    padding: 0.5rem;
-    margin: 0;
-    height: 32px;
-    width: 181px;
-  }
-  
-  .search-input {
-    flex: 1;
-    border: none;
-    background: transparent;
-    outline: none;
-    font-size: 12px;
-    color: var(--second-text-color);
-  }
-  
-  .icon {
-    color: var(--primary-color);
-    margin: 0 8px;
-    cursor: pointer;
-  }
+.header {
+  font-size: 24px;
+  font-weight: var(--fw-bold);
+  color: var(--primary-color);
+  margin: 0;
+}
 
-  #background-list{
-    background-color: var(--bg-secundary-color);
-    border: #c5c5c5;
-    box-shadow: rgba(0, 0, 0, 0.05) 0px 2px 4px;
-    margin: 0;
-    width: 355px;
-    height: 665px;
-    border-radius: 0 0 0.5rem 0.5rem;
-    flex-direction: column;
-  }
-  
-  .animal-list {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    align-items: center;
-  }
-  
-  .animal-card {
-    display: flex;
-    align-items: center;
-    background: var(--second-text-color);
-    border-radius: 8px;
-    padding: 0.7rem;
-    margin: 1px;
-    width: 335px;
-    height: 74px;
-    box-shadow: rgba(0, 0, 0, 0.05) 0px 2px 4px;
-  }
-  
-  .animal-avatar {
-    width: 50px;
-    height: 50px;
-    background: gray;
-    border-radius: 50%;
-    margin-right: 10px;
-  }
-  
-  .animal-info {
-    flex-grow: 1;
-  }
-  
-  .animal-name {
-    font-size: 20px;
-    font-weight: var(--fw-bold);
-    color: var(--text-color);
-    margin: 0;
-  }
-  
-  .animal-type {
-    font-size: 12px;
-    color: var(--primary-text-color);
-    margin: 0;
-  }
-  
-  .animal-temp {
-    font-size: 24px;
-    font-weight: var(--fw-bold);
-  }
-  
-  .notification {
-    display: flex;
-    position: relative;
-    top: 10px;
-    right: 10px;
-    margin: 0;
-  }
-  
-  .bell-icon {
-    color: var(--primary-color);
-  }
-  
-  .notification-count {
-    background: red;
-    color: white;
-    font-size: 12px;
-    border-radius: 50%;
-    padding: 2px 6px;
-    position: relative;
-    top: -5px;
-    right: -5px;
-  }
-  
+.notification {
+  position: relative;
+}
+
+.bell-icon {
+  color: var(--primary-color);
+}
+
+.notification-count {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background: red;
+  color: white;
+  border-radius: 50%;
+  width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+}
+
+#search-container {
+  margin-bottom: 20px;
+}
+
+#searchbar {
+  background-color: var(--primary-color);
+  border-radius: 8px;
+  padding: 8px;
+}
+
+.search-bar {
+  display: flex;
+  align-items: center;
+  background: white;
+  border-radius: 6px;
+  padding: 8px 12px;
+}
+
+.search-input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  outline: none;
+  margin: 0 8px;
+  font-size: 14px;
+}
+
+.icon {
+  color: var(--primary-color);
+}
+
+.animal-list {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.animal-item {
+  margin-bottom: 12px;
+}
+
+.animal-card {
+  display: flex;
+  align-items: center;
+  background: white;
+  border-radius: 8px;
+  padding: 12px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.animal-avatar {
+  width: 40px;
+  height: 40px;
+  background: #D9D9D9;
+  border-radius: 50%;
+  margin-right: 12px;
+}
+
+.animal-info {
+  flex: 1;
+}
+
+.animal-name {
+  font-size: 16px;
+  font-weight: var(--fw-bold);
+  color: var(--text-color);
+  display: flex;
+  align-items: center;
+}
+
+.star-icon {
+  margin-left: 4px;
+}
+
+.animal-type {
+  font-size: 12px;
+  color: var(--primary-text-color);
+  margin-top: 2px;
+}
+
+.temp-container {
+  display: flex;
+  align-items: center;
+}
+
+.temp-icon {
+  width: 20px;
+  height: 20px;
+  margin-right: 4px;
+}
+
+.animal-temp {
+  font-size: 16px;
+  font-weight: var(--fw-bold);
+}
