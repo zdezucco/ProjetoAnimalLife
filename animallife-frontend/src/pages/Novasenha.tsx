@@ -1,8 +1,17 @@
 import React from 'react';
 import Logo from "../assets/Logo.svg";
 import '../styles/novasenha.css';
+import { useNavigate } from 'react-router';
+
+
 
 const NovaSenha: React.FC = () => {
+  const navigate = useNavigate();
+
+  const acessarLogin = () => {
+    navigate('/Login');
+  };
+
   return (
     <div className="password-container">
       <div className="password-logo">
@@ -11,9 +20,9 @@ const NovaSenha: React.FC = () => {
 
       <div className="password-form">
         <div className="confirm-password">Insira a sua nova senha</div>
-        <input type="text" placeholder="Nova Senha" className="password-input" />
-        <input type="text" placeholder="Repita a Nova Senha" className="newpassword-input" />
-        <button className="confirm-button">Confirmar</button>
+        <input type="text" placeholder="Nova senha" className="password-input" />
+        <input type="text" placeholder="Repita a nova senha" className="newpassword-input" />
+        <button className="confirm-button" onClick={acessarLogin}>Confirmar</button>
       </div>
     </div>
   );

@@ -1,0 +1,53 @@
+.splash-container {
+    background: linear-gradient(to top right, #227504, #2CA400); 
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    color: white;
+    font-family: 'Montserrat', sans-serif;
+  }
+  
+  .logo {
+    text-align: center;
+    margin-bottom: 90px;
+  }
+  
+  .logo img {
+    width: 280px;
+    height: 280px;
+    margin-top: 0px;
+    margin-bottom: 20px;
+  }
+  
+  .logo h1 {
+    color: white;
+    font-size: 28px;
+    margin-top: 5px;
+  }
+
+  .loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 40px;
+  }
+  
+  .spinner {
+    border: 4px solid rgba(255, 255, 255, 0.3);
+    border-top: 4px solid white;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    animation: spin 1s linear infinite;
+  }
+  
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  

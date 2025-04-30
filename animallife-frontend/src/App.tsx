@@ -5,6 +5,7 @@ import Login from "./pages/Login";
 import Monitoramento from "./pages/Monitoramento";
 import RecuperaSenha from "./pages/Recuperasenha";
 import NovaSenha from "./pages/Novasenha";
+import LoadingScreen from "./pages/Loadinscreen";
 
 
 function App() {
@@ -16,7 +17,8 @@ function App() {
         <Route path="/Monitoramento" element={<Monitoramento />}/>
         <Route path="/Login" element={<Login />}/>
         <Route path="/RecuperaSenha" element={<RecuperaSenha />}/>
-        <Route path="/Novasenha" element={<NovaSenha />}/>
+        <Route path="/Novasenha" element={<NovaSenha />}/> 
+        <Route path="/LoadingScreen" element={<LoadingScreen />}/> 
       </Routes>
     </BrowserRouter>
   );
