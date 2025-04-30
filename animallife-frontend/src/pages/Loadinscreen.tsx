@@ -4,7 +4,7 @@ import '../styles/loadingScreen.css';
 
 const LoadingScreen: React.FC = () => {
   return (
-    <div className="splash-container">
+    <div className="loading-container">
       <div className="logo">
         <img src={Logo} alt="AnimalLife" className="logo-img" />
       </div>
