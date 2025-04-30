@@ -3,7 +3,7 @@
   base = "."
   command = "npm run dev"
   functions = "netlify/functions"
-  publish = "./"
+  publish = "./animallife-frontend"
 
 # Redirecionamento de todas as rotas para /index.html
 [[redirects]]
