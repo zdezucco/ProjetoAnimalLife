@@ -1,0 +1,73 @@
+.reset-container {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(to top right, #227504, #2CA400);
+    font-family: Arial, sans-serif;
+    padding: 0px;
+  }
+  
+  .reset-logo {
+    text-align: center;
+    margin-bottom: 90px;
+  }
+  
+  .reset-logo img {
+    width: 280px;
+    height: 280px;
+  }
+  
+  .reset-logo h1 {
+    color: white;
+    font-size: 28px;
+    margin-top: 5px;
+  }
+  
+  .reset-form {
+    width: 100%;
+    max-width: 300px;
+    display: flex;
+    flex-direction: column;
+    margin-top: 110px;
+  }
+  
+  .reset-input {
+    background-color: rgba(255, 255, 255, 0.2);
+    border: 2px solid white;
+    border-radius: 8px;
+    padding: 10px;
+    margin-bottom: 90px;
+    color: white;
+    font-size: 16px;
+  }
+  
+  .reset-input::placeholder {
+    color: rgba(255, 255, 255, 0.7);
+  }
+  
+  .reset-password {
+    color: white;
+    font-size: 12px;
+    text-align: left;
+    margin-bottom: 5px;
+  }
+  
+  .send-button {
+    background-color: white;
+    color: #444;
+    border: none;
+    padding: 12px;
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-bottom: 100px;
+  }
+  
+  .reset-button:hover {
+    background-color: #e0e0e0;
+  }
+  
