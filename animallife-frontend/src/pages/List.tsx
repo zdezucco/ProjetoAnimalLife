@@ -6,6 +6,7 @@ import GreenTemp from "../assets/green-term.svg";
 import RedTemp from "../assets/red-term.svg";
 import OrangeTemp from "../assets/orange-term.svg";
 import GrayTemp from "../assets/gray-term.svg";
+import { useNavigate } from "react-router";
 
 
 const animals = [
@@ -37,6 +38,12 @@ const getStatusColor = (status = "") => {
 };
 
 export default function AnimalList() {
+  const navigate = useNavigate();
+
+  const acessarMonitoramento = () => {
+    navigate("/Monitoramento");
+  }
+
   return (
     <div className="TelaAnimal">
       <div id="background-list">
@@ -62,7 +69,7 @@ export default function AnimalList() {
           {animals.map((animal, index) => {
             const TempIcon = getStatusIcon(animal.status);
             return (
-              <div key={index} className="animal-item">
+              <div key={index} className="animal-item" onClick={acessarMonitoramento}>
                 <div className="animal-card">
                   <div className="animal-avatar" />
                   <div className="animal-info">
