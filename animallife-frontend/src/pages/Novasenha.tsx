@@ -9,7 +9,7 @@ const NovaSenha: React.FC = () => {
   const navigate = useNavigate();
 
   const acessarLogin = () => {
-    navigate('/Login');
+    navigate('/');
   };
 
   return (
