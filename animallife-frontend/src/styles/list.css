@@ -42,6 +42,7 @@
 
 .bell-icon {
   color: var(--primary-color);
+  position: absolute right;
 }
 
 .notification-count {
