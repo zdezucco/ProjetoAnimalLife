@@ -37,7 +37,8 @@
 }
 
 .notification {
-  position: relative;
+  display: flex;
+  align-items: center;
 }
 
 .bell-icon {
