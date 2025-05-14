@@ -37,7 +37,7 @@
 }
 
 .notification {
-  position: absolute right;
+  position: absolute right 50px;
 }
 
 .bell-icon {

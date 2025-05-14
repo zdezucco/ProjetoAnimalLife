@@ -50,7 +50,7 @@ export default function AnimalList() {
       <div className="notification">
             <Bell className="bell-icon" />
             <span className="notification-count">2</span>
-          </div>
+      </div>
       <div id="top-header">
         <h1 className="header">Animais</h1>
       </div>
