@@ -37,12 +37,12 @@
 }
 
 .notification {
-  position: absolute right 50px;
+  position: relative;
 }
 
 .bell-icon {
   color: var(--primary-color);
-  position: absolute right;
+  position: absolute;
 }
 
 .notification-count {
