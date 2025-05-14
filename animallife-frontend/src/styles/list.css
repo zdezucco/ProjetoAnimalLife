@@ -28,7 +28,8 @@
 
 .header {
   position: absolute;
-  top: 0;
+  inset-block-start: 10px;
+  inset-inline-start: center;
   font-size: 24px;
   font-weight: var(--fw-bold);
   color: var(--primary-color);
