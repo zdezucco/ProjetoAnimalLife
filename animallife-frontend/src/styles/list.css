@@ -55,8 +55,8 @@
   width: 18px;
   height: 18px;
   display: flex;
-  align-items: center;
-  justify-content: center;
+  justify-items: end;
+  align-items: start;
   font-size: 10px;
 }
 
