@@ -47,7 +47,8 @@
 
 .notification-count {
   position: absolute;
-  right: -5px;
+  top: -2px;
+  right: -2px;
   background: red;
   color: white;
   border-radius: 50%;
