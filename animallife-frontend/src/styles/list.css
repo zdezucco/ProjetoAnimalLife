@@ -23,13 +23,13 @@
 
 #top-header {
   justify-content: space-between;
-  margin-bottom: 20px;
+  margin-bottom: 40px;
 }
 
 .header {
   position: absolute;
   inset-block-start: 10px;
-  inset-inline-start: 50px;
+  inset-inline-start: 135px;
   font-size: 24px;
   font-weight: var(--fw-bold);
   color: var(--primary-color);
