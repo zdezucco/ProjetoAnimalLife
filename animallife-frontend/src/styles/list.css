@@ -46,7 +46,6 @@
 }
 
 .notification-count {
-  position: absolute;
   top: -5px;
   right: -5px;
   background: red;
@@ -55,8 +54,8 @@
   width: 18px;
   height: 18px;
   display: flex;
-  justify-items: end;
-  align-items: start;
+  align-items: center;
+  justify-content: end;
   font-size: 10px;
 }
 
