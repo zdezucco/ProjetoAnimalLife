@@ -1,4 +1,4 @@
-import {Bell, EditIcon} from "lucide-react";
+import {Bell} from "lucide-react";
 import React from 'react';
 import Animal from '../assets/animal.svg';
 import Refresh from '../assets/refresh.svg';
