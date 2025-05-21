@@ -6,13 +6,14 @@ import Female from '../assets/female-icon.svg';
 import FavIcon from '../assets/fav-icon.svg';
 import Temp from '../assets/term.svg';
 import Editicon from '../assets/edit-icon.svg';
+import Return from '../assets/return.svg';
 import '../styles/monitoramento.css';
 
 const Monitoramento2: React.FC = () => {
   return (
     <div className="profile-container">
       <div className="header-icons">
-        <button className="icon-button">←</button>
+        <img src={Return} alt="Botao de voltar" className="icon-return"/>
         <div className="header-right">
             <div className="notification">
                 <Bell className="bell-icon" />
