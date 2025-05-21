@@ -20,6 +20,11 @@
     padding-left: 10px;
 }
 
+.edit-icon{
+  top: 40px;
+  right: 20px;
+}
+
 .icon-return {
   background: none;
   border: none;
@@ -51,8 +56,8 @@
 
 .notification-count {
   position: absolute;
-  top: 5px;
-  right: 5px;
+  top: 10px;
+  right: 15px;
   background: red;
   color: white;
   border-radius: 50%;
