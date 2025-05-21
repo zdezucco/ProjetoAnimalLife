@@ -1,9 +1,11 @@
-import {Bell} from "lucide-react";
+import {Bell, EditIcon} from "lucide-react";
 import React from 'react';
 import Animal from '../assets/animal.svg';
 import Refresh from '../assets/refresh.svg';
 import Female from '../assets/female-icon.svg';
 import FavIcon from '../assets/fav-icon.svg';
+import Temp from '../assets/term.svg';
+import Editicon from '../assets/edit-icon.svg';
 import '../styles/monitoramento.css';
 
 const Monitoramento2: React.FC = () => {
@@ -16,17 +18,18 @@ const Monitoramento2: React.FC = () => {
                 <Bell className="bell-icon" />
                 <span className="notification-count">2</span>
             </div>
-          <img src={FavIcon} alt="Icone de Favorito" className="icon-button star"/>
+          <img src={FavIcon} alt="Icone de Favorito" className="icon-star"/>
         </div>
       </div>
 
       <div className="animal-photo-section">
         <img src={Animal} alt="Animal" className="animal-photo" />
         <p className="animal-id">Coleira 53014</p>
-        <span className="edit-icon">✎</span>
+        <img src={Editicon} alt="" className="edit-icon"/>
       </div>
 
       <div className="animal-name-box">
+        
         <img src={Refresh} alt="Icone de Atualizar" className='icon'/>
         <div className="animal-name-info">
           <h2>INDIRA</h2>
@@ -39,7 +42,8 @@ const Monitoramento2: React.FC = () => {
       <div className="temperature-box">
         <p><strong>Temperatura:</strong></p>
         <div className="temperature-status">
-          <p className="temp-value">🌡️ 39.5°C</p>
+          <img src={Temp} alt="Icone Temperatura" className="temp-icon"/>
+          <p className="temp-value">39.5°C</p>
           <p className="status">Saudável</p>
         </div>
         <p className="average">Média: 38.2°C</p>
@@ -67,7 +71,7 @@ const Monitoramento2: React.FC = () => {
       </div>
 
       <div className="checkboxes">
-        <label><input type="checkbox" checked readOnly /> Herbívoro</label>
+        <label><input type="checkbox" readOnly /> Herbívoro</label>
         <label><input type="checkbox" checked readOnly /> Carnívoro</label>
         <label><input type="checkbox" readOnly /> Onívoro</label>
         <label><input type="checkbox" readOnly /> Macho</label>

@@ -15,11 +15,9 @@
   align-items: center;
 }
 
-.icon-button {
-  background: none;
-  border: none;
-  font-size: 20px;
-  cursor: pointer;
+.icon-star{
+  display: flex;
+  flex-direction: column;
 }
 
 .header-right {
