@@ -36,7 +36,7 @@ const Monitoramento2: React.FC = () => {
           <p>Onça Pintada</p>
         </div>
         <img src={Female} alt="Logo Gênero" className="sex-badge"/>
-        <p>Fêmea</p>
+        <p className="sex-text">Fêmea</p>
       </div>
 
       <div className="temperature-box">
