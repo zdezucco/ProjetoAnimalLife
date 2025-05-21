@@ -1,5 +1,7 @@
 import React from 'react';
 import Animal from '../assets/animal.svg';
+import Refresh from '../assets/refresh.svg';
+import Female from '../assets/female-icon.svg';
 import '../styles/monitoramento.css';
 
 const Monitoramento2: React.FC = () => {
@@ -21,12 +23,13 @@ const Monitoramento2: React.FC = () => {
       </div>
 
       <div className="animal-name-box">
-        <div className="icon">📷</div>
+        <img src={Refresh} alt="Icone de Atualizar" className='icon'/>
         <div className="animal-name-info">
           <h2>INDIRA</h2>
           <p>Onça Pintada</p>
         </div>
-        <div className="sex-badge">Fêmea ♀️</div>
+        <img src={Female} alt="Logo Gênero" className="sex-badge"/>
+        <p>Fêmea</p>
       </div>
 
       <div className="temperature-box">
@@ -63,8 +66,8 @@ const Monitoramento2: React.FC = () => {
         <label><input type="checkbox" checked readOnly /> Herbívoro</label>
         <label><input type="checkbox" checked readOnly /> Carnívoro</label>
         <label><input type="checkbox" readOnly /> Onívoro</label>
-        <label><input type="checkbox" readOnly /> Macho ♂️</label>
-        <label><input type="checkbox" checked readOnly /> Fêmea ♀️</label>
+        <label><input type="checkbox" readOnly /> Macho</label>
+        <label><input type="checkbox" checked readOnly /> Fêmea</label>
       </div>
 
       <div className="register-box">
