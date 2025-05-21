@@ -51,8 +51,8 @@
 
 .notification-count {
   position: absolute;
-  inset-inline-end: 12px;
-  inset-block-start: 6px;
+  top: 5px;
+  right: 5px;
   background: red;
   color: white;
   border-radius: 50%;
@@ -135,6 +135,10 @@
   margin-bottom: 15px;
 }
 
+.temperature-status{
+    flex-direction: column;
+}
+
 .temp-value {
   font-size: 20px;
   font-weight: bold;
@@ -162,7 +166,6 @@
 
 .info-form input {
   padding: 8px;
-  border: 1px solid #ccc;
   border-radius: 6px;
 }
 
@@ -176,7 +179,7 @@
   flex-wrap: wrap;
   gap: 10px;
   padding: 10px;
-  border-top: 4px solid #2CA400;
+  border-top: 4px;
   margin-top: 10px;
   background-color: #fff;
 }

@@ -45,9 +45,9 @@ const Monitoramento2: React.FC = () => {
         <div className="temperature-status">
           <img src={Temp} alt="Icone Temperatura" className="temp-icon"/>
           <p className="temp-value">39.5°C</p>
-          <p className="status">Saudável</p>
+          <p className="average">Média: 38.2°C</p>
         </div>
-        <p className="average">Média: 38.2°C</p>
+        <p className="status">Saudável</p>
       </div>
 
       <div className="info-box">
