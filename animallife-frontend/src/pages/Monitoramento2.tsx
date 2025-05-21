@@ -1,4 +1,5 @@
 import React from 'react';
+import Animal from '../assets/animal.svg';
 import '../styles/monitoramento.css';
 
 const Monitoramento2: React.FC = () => {
@@ -14,7 +15,7 @@ const Monitoramento2: React.FC = () => {
       </div>
 
       <div className="animal-photo-section">
-        <img src="/assets/animal.jpg" alt="Animal" className="animal-photo" />
+        <img src={Animal} alt="Animal" className="animal-photo" />
         <p className="animal-id">Coleira 53014</p>
         <span className="edit-icon">✎</span>
       </div>
