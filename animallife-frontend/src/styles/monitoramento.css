@@ -1,0 +1,165 @@
+.profile-container {
+  font-family: Arial, sans-serif;
+  padding: 15px;
+  background-color: #f2f2f2;
+  min-height: 100vh;
+}
+
+.header-icons {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.icon-button {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  position: relative;
+}
+
+.notification-dot {
+  width: 8px;
+  height: 8px;
+  background-color: red;
+  border-radius: 50%;
+  position: absolute;
+  top: -2px;
+  right: 36px;
+}
+
+.animal-photo-section {
+  text-align: center;
+  position: relative;
+  margin-top: 10px;
+}
+
+.animal-photo {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.animal-id {
+  margin: 5px 0;
+  font-weight: bold;
+}
+
+.edit-icon {
+  position: absolute;
+  right: 42%;
+  top: 75%;
+  font-size: 16px;
+  background-color: white;
+  border-radius: 50%;
+  padding: 2px;
+}
+
+.animal-name-box {
+  background-color: #2CA400;
+  color: white;
+  padding: 10px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 15px 0;
+}
+
+.animal-name-info h2 {
+  margin: 0;
+}
+
+.animal-name-info p {
+  margin: 0;
+  font-size: 14px;
+}
+
+.sex-badge {
+  background-color: #ffffff33;
+  padding: 4px 8px;
+  border-radius: 6px;
+}
+
+.temperature-box {
+  background-color: #D6F5C9;
+  padding: 10px;
+  border-radius: 6px;
+  color: #227504;
+  margin-bottom: 15px;
+}
+
+.temp-value {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.status {
+  color: #2CA400;
+  font-weight: bold;
+}
+
+.average {
+  font-size: 12px;
+  color: #666;
+}
+
+.info-box h3 {
+  margin-bottom: 10px;
+}
+
+.info-form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.info-form input {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+.row {
+  display: flex;
+  gap: 10px;
+}
+
+.checkboxes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 10px;
+  border-top: 4px solid #2CA400;
+  margin-top: 10px;
+  background-color: #fff;
+}
+
+.checkboxes label {
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.register-box {
+  margin-top: 20px;
+}
+
+.register-box textarea {
+  width: 100%;
+  height: 120px;
+  padding: 10px;
+  resize: none;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+}
