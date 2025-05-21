@@ -29,14 +29,28 @@
   position: relative;
 }
 
-.notification-dot {
-  width: 8px;
-  height: 8px;
-  background-color: red;
-  border-radius: 50%;
+.notification {
+  display: flex;
+  justify-content: end;
+}
+
+.bell-icon {
+  color: var(--primary-color);
+}
+
+.notification-count {
   position: absolute;
-  top: -2px;
-  right: 36px;
+  inset-inline-end: 12px;
+  inset-block-start: 6px;
+  background: red;
+  color: white;
+  border-radius: 50%;
+  width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
 }
 
 .animal-photo-section {

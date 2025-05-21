@@ -1,7 +1,9 @@
+import {Bell} from "lucide-react";
 import React from 'react';
 import Animal from '../assets/animal.svg';
 import Refresh from '../assets/refresh.svg';
 import Female from '../assets/female-icon.svg';
+import FavIcon from '../assets/fav-icon.svg';
 import '../styles/monitoramento.css';
 
 const Monitoramento2: React.FC = () => {
@@ -10,9 +12,11 @@ const Monitoramento2: React.FC = () => {
       <div className="header-icons">
         <button className="icon-button">←</button>
         <div className="header-right">
-          <span className="notification-dot"></span>
-          <button className="icon-button">🔔</button>
-          <button className="icon-button star">⭐</button>
+            <div className="notification">
+                <Bell className="bell-icon" />
+                <span className="notification-count">2</span>
+            </div>
+          <img src={FavIcon} alt="Icone de Favorito" className="icon-button star"/>
         </div>
       </div>
 
