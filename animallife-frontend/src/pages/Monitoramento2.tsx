@@ -36,15 +36,19 @@ const Monitoramento2: React.FC = () => {
           <h2>INDIRA</h2>
           <p>Onça Pintada</p>
         </div>
-        <img src={Female} alt="Logo Gênero" className="sex-badge"/>
-        <p className="sex-text">Fêmea</p>
+        <div className="animal-sex">
+          <img src={Female} alt="Logo Gênero" className="sex-badge"/>
+          <p className="sex-text">Fêmea</p>
+        </div>
       </div>
 
       <div className="temperature-box">
         <p><strong>Temperatura:</strong></p>
         <div className="temperature-status">
-          <img src={Temp} alt="Icone Temperatura" className="temp-icon"/>
-          <p className="temp-value">39.5°C</p>
+          <div className="icon-container">
+            <img src={Temp} alt="Icone Temperatura" className="temp-icon"/>
+            <p className="temp-value">39.5°C</p>
+          </div>
           <p className="average">Média: 38.2°C</p>
         </div>
         <p className="status">Saudável</p>

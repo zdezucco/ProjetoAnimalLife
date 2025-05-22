@@ -16,13 +16,12 @@
 }
 
 .icon{
-    background-color: #ffffff33;
-    padding-left: 10px;
+  background-color: #ffffff33;
 }
 
 .edit-icon{
-  top: 40px;
-  right: 20px;
+  right: 38%;
+  top: 55%;
 }
 
 .icon-return {
@@ -56,8 +55,8 @@
 
 .notification-count {
   position: absolute;
-  top: 10px;
-  right: 15px;
+  top: -9%;
+  right: -20%;
   background: red;
   color: white;
   border-radius: 50%;
@@ -109,8 +108,9 @@
 }
 
 .animal-name-info{
-    display: flex;
-    align-items: center;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
 }
 
 .animal-name-info h2 {
@@ -122,6 +122,9 @@
   font-size: 14px;
 }
 
+.animal-sex{
+  flex-direction: column;
+}
 .sex-badge {
   background-color: #ffffff33;
   padding-right: 10px;
@@ -138,6 +141,11 @@
   border-radius: 6px;
   color: #227504;
   margin-bottom: 15px;
+  flex-direction: row;
+}
+
+.icon-container{
+  flex-direction: column;
 }
 
 .temperature-status{
