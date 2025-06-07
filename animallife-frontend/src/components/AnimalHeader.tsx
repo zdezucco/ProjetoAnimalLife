@@ -40,6 +40,7 @@ const RefreshButton = styled.button`
 
 const AnimalInfo = styled.div`
   text-align: center;
+  margin-left: 42px;
 `;
 
 const AnimalName = styled.h2`

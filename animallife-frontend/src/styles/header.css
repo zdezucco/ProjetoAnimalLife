@@ -64,11 +64,13 @@
 .photo-wrapper {
   position: relative;
   display: inline-block; /* Importante para o posicionamento funcionar */
+  width: 120px; /* Mesmo width da .animal-photo */
+  height: 120px; /* Mesmo height da .animal-photo */
 }
 
 .animal-photo {
-  width: 120px;
-  height: 120px;
+  width: 100%; /* Ocupa 100% do wrapper */
+  height: 100%; /* Ocupa 100% do wrapper */
   border-radius: 50%;
   object-fit: cover;
   border: 4px solid #fff;
@@ -83,12 +85,17 @@
 }
 
 .edit-icon {
-  position: relative;
+  position: absolute;
+  /* Ajuste os valores para um posicionamento perfeito sobre a borda */
+  bottom: 0px;
+  right: 0px;
   background-color: white;
   border-radius: 50%;
   padding: 6px;
-  width: 32px; /* Aumenta o tamanho total do ícone */
+  width: 32px;
   height: 32px;
   cursor: pointer;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  /* Transform pode ajudar a centralizar o ícone na borda */
+  transform: translate(25%, 25%);
 }
