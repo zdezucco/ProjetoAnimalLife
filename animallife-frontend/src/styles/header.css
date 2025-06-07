@@ -37,7 +37,7 @@
 .notification-count {
   position: absolute;
   top: -4px;
-  right: -6px;
+  right: -4px;
   background-color: #f44336; /* Cor vermelha do protótipo */
   color: white;
   border-radius: 50%;
@@ -48,7 +48,8 @@
   justify-content: center;
   font-size: 11px;
   font-weight: bold;
-  border: 2px solid white; /* Borda branca para destacar */
+  border: 2px solid white;
+  overflow-y: hidden; /* Borda branca para destacar */
 }
 
 .icon-star {
