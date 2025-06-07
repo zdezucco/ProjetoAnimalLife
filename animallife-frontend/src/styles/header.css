@@ -27,7 +27,6 @@
 }
 
 .bell-icon {
-  color: #555; /* Cor um pouco mais escura */
   width: 28px;
   height: 28px;
 }
@@ -85,9 +84,8 @@
 
 .edit-icon {
   position: absolute;
-  /* Posicionamento na diagonal inferior direita */
-  bottom: 5px;
-  right: 5px;
+  right: 1%;
+  top: 65%;
   background-color: white;
   border-radius: 50%;
   padding: 6px;
