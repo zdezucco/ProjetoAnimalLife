@@ -10,8 +10,9 @@ import Return from '../assets/return.svg';
 import '../styles/monitoramento.css';
 
 const Monitoramento2: React.FC = () => {
-  return (
+  return (    
     <div className="profile-container">
+      
       <div className="header-icons">
         <img src={Return} alt="Botao de voltar" className="icon-return"/>
         <div className="header-right">

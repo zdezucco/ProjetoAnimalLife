@@ -2,16 +2,22 @@ import styled from "styled-components";
 import AnimalHeader from "../components/AnimalHeader";
 import VitalSignCard from "../components/VitalSignCard";
 import "../styles/index.css";
+import InfoBox from "../components/InfoBox";
+import Header from "../components/Header";
 
 
 const Monitoramento = () => {
   return (
+    <>
     <PageContainer>
+      <Header />
       <AnimalHeader />
       <Content>
         <VitalSignCard />
       </Content>
+      <InfoBox />
     </PageContainer>
+  </>
   );
 };
 
