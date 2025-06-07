@@ -2,62 +2,69 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 0;
+  padding: 10px 5px; /* Ajuste de espaçamento */
 }
 
 .icon-return {
   background: none;
   border: none;
   cursor: pointer;
-  width: 24px; 
-  height: 24px; 
+  width: 28px;
+  height: 28px;
 }
 
 .header-right {
   display: flex;
   align-items: center;
-  gap: 15px;
+  gap: 20px; /* Aumenta o espaço entre o sino e a estrela */
 }
 
 .notification {
   position: relative;
   display: flex;
   align-items: center;
+  /* Removido o background que estava sendo aplicado indevidamente */
 }
 
 .bell-icon {
-  color: #333; 
-  width: 24px;
-  height: 24px;
+  color: #555; /* Cor um pouco mais escura */
+  width: 28px;
+  height: 28px;
 }
 
 .notification-count {
   position: absolute;
-  top: -5px;
-  right: -8px;
-  background: red;
+  top: -4px;
+  right: -6px;
+  background-color: #f44336; /* Cor vermelha do protótipo */
   color: white;
   border-radius: 50%;
-  width: 16px;
-  height: 16px;
+  width: 18px;
+  height: 18px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 10px;
+  font-size: 11px;
   font-weight: bold;
+  border: 2px solid white; /* Borda branca para destacar */
 }
 
 .icon-star {
   cursor: pointer;
-  width: 24px; 
-  height: 24px; 
+  width: 28px;
+  height: 28px;
+  color: #FFC107; /* Cor da estrela */
 }
 
 .animal-photo-section {
   text-align: center;
+  margin: 20px 0;
+}
+
+/* Novo wrapper para a foto e o ícone */
+.photo-wrapper {
   position: relative;
-  margin-top: 20px;
-  margin-bottom: 20px;
+  display: inline-block; /* Importante para o posicionamento funcionar */
 }
 
 .animal-photo {
@@ -65,12 +72,12 @@
   height: 120px;
   border-radius: 50%;
   object-fit: cover;
-  border: 4px solid white;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  border: 4px solid #fff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 .animal-id {
-  margin-top: 10px;
+  margin-top: 12px;
   font-weight: bold;
   font-size: 1.1em;
   color: #444;
@@ -78,14 +85,14 @@
 
 .edit-icon {
   position: absolute;
-  bottom: 30px; 
-  right: calc(50% - 60px);
-  transform: translateX(45px); 
+  /* Posicionamento na diagonal inferior direita */
+  bottom: 5px;
+  right: 5px;
   background-color: white;
   border-radius: 50%;
-  padding: 5px;
-  width: 16px;
-  height: 16px;
+  padding: 6px;
+  width: 32px; /* Aumenta o tamanho total do ícone */
+  height: 32px;
   cursor: pointer;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
 }

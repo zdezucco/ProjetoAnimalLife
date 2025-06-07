@@ -19,10 +19,13 @@ const Header = () => {
         </div>
     </div>
     <div className="animal-photo-section">
+      <div className="photo-wrapper"> {/* Wrapper para posicionamento relativo */}
         <img src={animalImage} alt="Animal" className="animal-photo" />
-        <p className="animal-id">{}</p>
         <img src={Editicon} alt="Editar" className="edit-icon" />
-    </div></>
+      </div>
+      <p className="animal-id">{}</p>
+    </div>
+    </>
   );
 };
 

@@ -4,6 +4,7 @@ import VitalSignCard from "../components/VitalSignCard";
 import "../styles/index.css";
 import InfoBox from "../components/InfoBox";
 import Header from "../components/Header";
+import "../styles/novomonitoramento.css"
 
 
 const Monitoramento = () => {

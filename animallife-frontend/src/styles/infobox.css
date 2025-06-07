@@ -1,44 +1,61 @@
-.info-box h3 {
-  margin-bottom: 10px;
+.info-box-container h4 {
+  font-size: 1.2em;
+  margin-bottom: 15px;
+  color: #333;
 }
 
 .info-form {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 12px; /* Espaço entre os grupos de formulário */
 }
 
-.info-form input {
-  padding: 8px;
-  border-radius: 6px;
-  border: 1px solid #ccc;
-}
-
-.info-form .row {
+.form-group {
   display: flex;
-  gap: 10px;
+  flex-direction: column;
+  flex: 1; /* Para ocupar espaço igual na linha */
 }
 
-.info-form .row input {
-  flex: 1;
+.form-group label {
+  margin-bottom: 5px;
+  font-size: 0.9em;
+  color: #666;
 }
 
-.checkboxes-container {
+.form-group input {
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  width: 100%; /* Ocupa toda a largura do seu contêiner pai */
+}
+
+.form-row {
+  display: flex;
+  gap: 15px; /* Espaço entre os inputs na mesma linha */
+}
+
+.checkboxes-section {
+  margin-top: 20px;
+}
+.checkbox-group {
+  margin-bottom: 15px;
+}
+.group-label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: bold;
+  color: #666;
+}
+.checkbox-group .options {
   display: flex;
   flex-wrap: wrap;
-  gap: 15px 20px;
-  padding: 15px;
-  border-top: 1px solid #eee;
-  border-bottom: 1px solid #eee;
-  margin-top: 15px;
+  gap: 20px;
 }
-
-.checkboxes-container label {
-  font-size: 14px;
+.checkbox-group label {
+  font-size: 1em;
   display: flex;
   align-items: center;
-  gap: 5px;
-  cursor: pointer;
+  gap: 8px;
 }
 
 .register-box {
@@ -46,16 +63,18 @@
 }
 
 .register-box h3 {
-  margin-bottom: 10px;
+  font-size: 1.2em;
+  margin-bottom: 15px;
 }
 
 .register-box textarea {
   width: 100%;
-  height: 120px;
-  padding: 10px;
-  resize: none;
-  border-radius: 6px;
+  min-height: 120px; /* Usa min-height para ser flexível */
+  padding: 12px;
+  resize: vertical; /* Permite redimensionar verticalmente */
+  border-radius: 8px;
   border: 1px solid #ccc;
-  font-size: 14px;
-  line-height: 1.5;
+  font-size: 1em;
+  line-height: 1.6;
+  background-color: #f7f9fa; /* Fundo levemente azulado/cinza */
 }
