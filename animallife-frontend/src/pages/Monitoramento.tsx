@@ -10,19 +10,25 @@ import "../styles/novomonitoramento.css"
 const Monitoramento = () => {
   return (
     <>
-    <PageContainer>
-      <Header />
-      <AnimalHeader />
-      <Content>
-        <VitalSignCard />
-      </Content>
-      <InfoBox />
-    </PageContainer>
+    <GeneralContainer>
+      <PageContainer>
+        <Header />
+        <AnimalHeader />
+        <Content>
+          <VitalSignCard />
+        </Content>
+        <InfoBox />
+      </PageContainer>
+    </GeneralContainer>
   </>
   );
 };
 
 export default Monitoramento;
+
+const GeneralContainer = styled.div`
+  padding: 400px;
+`;  
 
 const PageContainer = styled.div`
   background-color:var(--bg-primary-color);

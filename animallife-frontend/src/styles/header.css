@@ -83,9 +83,7 @@
 }
 
 .edit-icon {
-  position: absolute;
-  right: 1%;
-  top: 65%;
+  position: relative;
   background-color: white;
   border-radius: 50%;
   padding: 6px;
