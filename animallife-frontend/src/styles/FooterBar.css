@@ -8,10 +8,10 @@
   right: 0;
 
   /* Define uma altura para a barra. Ajuste se necessário. */
-  height: 50px;
+  height: 23px;
 
   /* A cor verde do seu design */
-  background-color: #004d40;
+  background-color: var( --primary-color);
 
   /* Garante que a barra fique por cima de outros elementos, se houver */
   z-index: 1000;
