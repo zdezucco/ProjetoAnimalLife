@@ -28,10 +28,11 @@ export default Monitoramento;
 
 const PageContainer = styled.div`
   background-color:var(--bg-primary-color);
-  width: 360px;
-  border-radius: 10px;
+  width: 390px;
+  border-radius: 25px;
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
   margin: auto;
+  padding: 5px
 `;
 
 const Content = styled.div`
