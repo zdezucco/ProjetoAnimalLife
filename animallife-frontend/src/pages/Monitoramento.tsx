@@ -10,7 +10,6 @@ import "../styles/novomonitoramento.css"
 const Monitoramento = () => {
   return (
     <>
-    <GeneralContainer>
       <PageContainer>
         <Header />
         <AnimalHeader />
@@ -19,16 +18,11 @@ const Monitoramento = () => {
         </Content>
         <InfoBox />
       </PageContainer>
-    </GeneralContainer>
   </>
   );
 };
 
 export default Monitoramento;
-
-const GeneralContainer = styled.div`
-  padding: 400px;
-`;  
 
 const PageContainer = styled.div`
   background-color:var(--bg-primary-color);
