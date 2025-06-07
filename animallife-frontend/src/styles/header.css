@@ -23,6 +23,7 @@
   position: relative;
   display: flex;
   align-items: center;
+  overflow-x: hidden;
   /* Removido o background que estava sendo aplicado indevidamente */
 }
 
