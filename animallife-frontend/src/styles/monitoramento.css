@@ -56,7 +56,7 @@
 .notification-count {
   position: absolute;
   top: -9%;
-  right: -20%;
+  right: -10%;
   background: red;
   color: white;
   border-radius: 50%;
@@ -88,10 +88,18 @@
 
 .edit-icon {
   position: absolute;
-  font-size: 16px;
+  /* Ajuste os valores para um posicionamento perfeito sobre a borda */
+  bottom: 0px;
+  right: 0px;
   background-color: white;
   border-radius: 50%;
-  padding: 2px;
+  padding: 6px;
+  width: 32px;
+  height: 32px;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  /* Transform pode ajudar a centralizar o ícone na borda */
+  transform: translate(25%, 25%);
 }
 
 .animal-name-box {
