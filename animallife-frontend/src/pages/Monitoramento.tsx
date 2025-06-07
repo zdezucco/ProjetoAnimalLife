@@ -5,6 +5,7 @@ import "../styles/index.css";
 import InfoBox from "../components/InfoBox";
 import Header from "../components/Header";
 import "../styles/novomonitoramento.css"
+import FooterBar from "../components/FooterBar";
 
 
 const Monitoramento = () => {
@@ -18,6 +19,7 @@ const Monitoramento = () => {
         </Content>
         <InfoBox />
       </PageContainer>
+      <FooterBar />
   </>
   );
 };

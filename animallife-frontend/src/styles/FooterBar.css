@@ -1,0 +1,18 @@
+.fixed-footer-bar {
+  /* Posiciona a barra em relação à janela do navegador */
+  position: fixed;
+
+  /* Gruda a barra na parte inferior da tela */
+  bottom: 0;
+  left: 0;
+  right: 0;
+
+  /* Define uma altura para a barra. Ajuste se necessário. */
+  height: 50px;
+
+  /* A cor verde do seu design */
+  background-color: #004d40;
+
+  /* Garante que a barra fique por cima de outros elementos, se houver */
+  z-index: 1000;
+}
