@@ -1,4 +1,4 @@
-import '../assets/styles/InfoBox.css';
+import '../styles/infobox.css';
 
 const registerText = `19/09/2023: Animal capturado, avaliado e registrado (Indira). Coleira AnimalLife implantada.
 14/09/2023: Animal encontrado em condições saudáveis, entre a área 22 e 23, sem foto registrada:`;
