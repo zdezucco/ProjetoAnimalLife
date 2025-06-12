@@ -1,5 +1,6 @@
 *{
     overflow: auto;
+    margin-bottom: 50px;
 }
 
 .profile-container {
@@ -7,7 +8,6 @@
   padding: 15px;
   background-color: #f2f2f2;
   min-height: 100vh;
-  margin-bottom: 50px;
 }
 
 .header-icons {
