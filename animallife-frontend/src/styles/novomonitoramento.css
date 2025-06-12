@@ -8,7 +8,8 @@ body {
   background-color: #eef1f4; /* Fundo cinza claro como no protótipo */
   font-family: sans-serif;
   color: #333;
-  overflow-x: hidden; /* Impede rolagem horizontal */
+  overflow-x: hidden;
+  margin-bottom: 50px; /* Impede rolagem horizontal */
 }
 
 .animal-profile-container {
@@ -20,5 +21,4 @@ body {
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
   overflow-x: hidden;
   padding-bottom: 65px;
-  margin-bottom: 50px;
 }
