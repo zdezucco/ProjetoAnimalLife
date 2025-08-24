@@ -7,6 +7,7 @@ import RedTemp from "../assets/red-term.svg";
 import OrangeTemp from "../assets/orange-term.svg";
 import GrayTemp from "../assets/gray-term.svg";
 import { useNavigate } from "react-router";
+import FooterBar from "../components/FooterBar";
 
 
 const animals = [
@@ -99,6 +100,7 @@ export default function AnimalList() {
           })}
         </div>
       </div>
+      <FooterBar />
     </div>
   );
 }
