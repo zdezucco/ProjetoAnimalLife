@@ -8,8 +8,8 @@ import OrangeTemp from "../assets/orange-term.svg";
 import GrayTemp from "../assets/gray-term.svg";
 import { useNavigate } from "react-router";
 import FooterBar from "../components/FooterBar";
-import FemaleIcon from "@/assets/female-icon.png";
-import MaleIcon from "@/assets/male-icon.png";
+import FemaleIcon from "../assets/female-icon.png";
+import MaleIcon from "../assets/male-icon.png";
 
 
 
