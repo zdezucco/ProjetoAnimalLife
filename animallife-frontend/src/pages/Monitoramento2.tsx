@@ -8,13 +8,20 @@ import Temp from '../assets/term.svg';
 import Editicon from '../assets/edit-icon.svg';
 import Return from '../assets/return.svg';
 import '../styles/monitoramento.css';
+import { useNavigate } from "react-router";
 
 const Monitoramento2: React.FC = () => {
+  const navigate = useNavigate();
+
+  const Retornar = () => {
+    navigate("/List");
+  }
+
   return (    
     <div className="profile-container">
       
       <div className="header-icons">
-        <img src={Return} alt="Botao de voltar" className="icon-return"/>
+        <img src={Return} alt="Botao de voltar" className="icon-return" onClick={Retornar}/>
         <div className="header-right">
             <div className="notification">
                 <Bell className="bell-icon" />
