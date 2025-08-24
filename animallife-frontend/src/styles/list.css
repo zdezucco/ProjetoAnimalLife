@@ -103,6 +103,7 @@
   overflow-y: auto;
   border: 2px #c5c5c5;
   background-color: var(--bg-secundary-color);
+  border-radius: 8px;
 }
 
 .animal-item {
