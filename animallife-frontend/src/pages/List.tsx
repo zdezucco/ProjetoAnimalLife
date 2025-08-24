@@ -8,6 +8,7 @@ import OrangeTemp from "../assets/orange-term.svg";
 import GrayTemp from "../assets/gray-term.svg";
 import { useNavigate } from "react-router";
 import FooterBar from "../components/FooterBar";
+import Return from '../assets/return.svg';
 
 
 const animals = [
@@ -45,8 +46,13 @@ export default function AnimalList() {
     navigate("/Monitoramento");
   }
 
+  const Retornar = () => {
+    navigate("/List");
+  }
+
   return (
     <div className="TelaAnimal">
+      <img src={Return} alt="Botão de voltar" className="icon-return" onClick={Retornar}/>
       <div id="background-list">
       <div id="top-header">
         <h1 className="header">Animais</h1>
