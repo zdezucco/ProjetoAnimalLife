@@ -47,12 +47,13 @@ export default function AnimalList() {
   return (
     <div className="TelaAnimal">
       <div id="background-list">
-      <div className="notification">
-            <Bell className="bell-icon" />
-            <span className="notification-count">2</span>
-      </div>
+
       <div id="top-header">
         <h1 className="header">Animais</h1>
+          <div className="notification">
+          <Bell className="bell-icon" />
+          <span className="notification-count">2</span>
+      </div>
       </div>
 
 
