@@ -159,8 +159,9 @@
 }
 
 .gender {
-  font-size: 14px;
-  margin-left: 6px;
+  width: 17px;
+  height: 17px;
+  margin-left: 4px;
 }
 
 .temp-container {

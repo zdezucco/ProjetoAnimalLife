@@ -8,17 +8,18 @@ import OrangeTemp from "../assets/orange-term.svg";
 import GrayTemp from "../assets/gray-term.svg";
 import { useNavigate } from "react-router";
 import FooterBar from "../components/FooterBar";
-import Male from "../assets/male-icon.svg";
-import Female from "../assets/female-icon.svg";
+import FemaleIcon from "@/assets/female-icon.svg";
+import MaleIcon from "@/assets/male-icon.svg";
+
 
 
 const animals = [
-  { name: "INDIRA", species: "Onça Pintada", avatar: "/avatars/indira.png", temp: 39.5, gender: Female, status: "normal", starred: true },
-  { name: "LIRA", species: "Lobo-Guará", avatar: "/avatars/lira.png", temp: 39.7, gender: Female, status: "normal" },
-  { name: "JUSSARA", species: "Anta", avatar: "/avatars/jussara.png", temp: 35.9, gender: Female, status: "low" },
-  { name: "LITA", species: "Onça Pintada", avatar: "/avatars/lita.png", temp: 40.2, gender: Female, status: "high" },
-  { name: "TINO", species: "Onça Pintada", avatar: "/avatars/tino.png", temp: 39.1, gender: Male, status: "normal" },
-  { name: "LECO", species: "Onça Pintada", avatar: "/avatars/leco.png", temp: 41.1, gender: Male, status: "high" },
+  { name: "INDIRA", species: "Onça Pintada", avatar: "/avatars/indira.png", temp: 39.5, gender: "♀", status: "normal", starred: true },
+  { name: "LIRA", species: "Lobo-Guará", avatar: "/avatars/lira.png", temp: 39.7, gender: "♀", status: "normal" },
+  { name: "JUSSARA", species: "Anta", avatar: "/avatars/jussara.png", temp: 35.9, gender: "♀", status: "low" },
+  { name: "LITA", species: "Onça Pintada", avatar: "/avatars/lita.png", temp: 40.2, gender: "♀", status: "high" },
+  { name: "TINO", species: "Onça Pintada", avatar: "/avatars/tino.png", temp: 39.1, gender: "♂", status: "normal" },
+  { name: "LECO", species: "Onça Pintada", avatar: "/avatars/leco.png", temp: 41.1, gender: "♂", status: "high" },
   { name: "53020", species: "Onça Pintada", avatar: "/avatars/default.png", temp: 0.0, gender: "?", status: "unknown" },
 ];
 
@@ -84,9 +85,15 @@ export default function AnimalList() {
                       {animal.starred && <img src={StarIcon} alt="Estrela" className="star-icon" />}
                     </div>
                     <div className="animal-type">
-                      {animal.species}
-                      <span className="gender">{animal.gender}</span>
-                    </div>
+                    {animal.species}
+                    <span className="gender">
+                      {animal.gender === "♀" ? (
+                        <img src={FemaleIcon} alt="Fêmea" className="gender-icon" />
+                      ) : animal.gender === "♂" ? (
+                        <img src={MaleIcon} alt="Macho" className="gender-icon" />
+                      ) : null}
+                    </span>
+                  </div>
                   </div>
                   <div className="temp-container">
                     <img src={TempIcon} alt="Temperature" className="temp-icon" />
