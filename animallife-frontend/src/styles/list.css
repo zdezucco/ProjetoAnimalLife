@@ -159,9 +159,9 @@
 }
 
 .gender {
-  width: 14px;
-  height: 14px;
-  margin-left: 3px;
+  width: 17px;
+  height: 17px;
+  overflow: hidden;
 }
 
 .temp-container {
