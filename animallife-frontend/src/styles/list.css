@@ -42,6 +42,7 @@
 .notification {
   display: flex;
   justify-content: end;
+  align-items: end;
 }
 
 .bell-icon {
