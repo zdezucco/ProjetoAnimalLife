@@ -11,13 +11,13 @@ import FooterBar from "../components/FooterBar";
 
 
 const animals = [
-  { name: "INDIRA", temp: 39.5, gender: "♀", status: "normal", starred: true },
-  { name: "LIRA", temp: 39.7, gender: "♀", status: "normal" },
-  { name: "JUSSARA", temp: 35.9, gender: "♀", status: "low" },
-  { name: "LITA", temp: 40.2, gender: "♀", status: "high" },
-  { name: "TINO", temp: 39.1, gender: "♂", status: "normal" },
-  { name: "LECO", temp: 41.1, gender: "♂", status: "high" },
-  { name: "53020", temp: 0.0, gender: "?", status: "unknown" },
+  { name: "INDIRA", species: "Onça Pintada", avatar: "/avatars/indira.png", temp: 39.5, gender: "♀", status: "normal", starred: true },
+  { name: "LIRA", species: "Lobo-Guará", avatar: "/avatars/lira.png", temp: 39.7, gender: "♀", status: "normal" },
+  { name: "JUSSARA", species: "Anta", avatar: "/avatars/jussara.png", temp: 35.9, gender: "♀", status: "low" },
+  { name: "LITA", species: "Onça Pintada", avatar: "/avatars/lita.png", temp: 40.2, gender: "♀", status: "high" },
+  { name: "TINO", species: "Onça Pintada", avatar: "/avatars/tino.png", temp: 39.1, gender: "♂", status: "normal" },
+  { name: "LECO", species: "Onça Pintada", avatar: "/avatars/leco.png", temp: 41.1, gender: "♂", status: "high" },
+  { name: "53020", species: "Onça Pintada", avatar: "/avatars/default.png", temp: 0.0, gender: "?", status: "unknown" },
 ];
 
 const getStatusIcon = (status = "") => {
@@ -73,20 +73,18 @@ export default function AnimalList() {
             return (
               <div key={index} className="animal-item" onClick={acessarMonitoramento}>
                 <div className="animal-card">
-                  <div className="animal-avatar" />
+                  <div className="animal-avatar">
+                    <img src={animal.avatar} alt={animal.name} />
+                  </div>
                   <div className="animal-info">
                     <div className="animal-name">
                       {animal.name}
-                      {animal.starred && (
-                        <img 
-                          src={StarIcon} 
-                          alt="Estrela" 
-                          className="star-icon" 
-                          style={{ width: '16px', height: '16px', marginLeft: '4px' }}
-                        />
-                      )}
+                      {animal.starred && <img src={StarIcon} alt="Estrela" className="star-icon" />}
                     </div>
-                    <div className="animal-type">Onça Pintada</div>
+                    <div className="animal-type">
+                      {animal.species}
+                      <span className="gender">{animal.gender}</span>
+                    </div>
                   </div>
                   <div className="temp-container">
                     <img src={TempIcon} alt="Temperature" className="temp-icon" />
