@@ -22,8 +22,10 @@
 }
 
 #top-header {
-  justify-content: space-between;
+  flex-direction: column;
   margin-bottom: 40px;
+  align-items: end;
+  display: flex;
 }
 
 .header {
