@@ -4,12 +4,18 @@ import Return from '../assets/return.svg';
 import FavIcon from '../assets/fav-icon.svg';
 import animalImage from '../assets/animal.svg';
 import '../styles/header.css';
+import { useNavigate } from "react-router";
 
 const Header = () => {
+  const navigate = useNavigate();
+
+  const Retornar = () => {
+    navigate("/List");
+  }
   return (
     <>
     <div className="header-container">
-        <img src={Return} alt="Botão de voltar" className="icon-return" />
+        <img src={Return} alt="Botão de voltar" className="icon-return" onClick={Retornar}/>
     <div className="header-right">
         <div className="notification">
             <Bell className="bell-icon" />

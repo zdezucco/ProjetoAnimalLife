@@ -9,6 +9,7 @@ import FooterBar from "../components/FooterBar";
 
 
 const Monitoramento = () => {
+  
   return (
     <>
       <PageContainer>
