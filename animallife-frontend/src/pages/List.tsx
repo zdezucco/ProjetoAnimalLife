@@ -52,7 +52,6 @@ export default function AnimalList() {
 
   return (
     <div className="TelaAnimal">
-      <img src={Return} alt="Botão de voltar" className="icon-return" onClick={Retornar}/>
       <div id="background-list">
       <div id="top-header">
         <h1 className="header">Animais</h1>
