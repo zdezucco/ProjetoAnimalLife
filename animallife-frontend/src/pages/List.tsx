@@ -11,12 +11,12 @@ import FooterBar from "../components/FooterBar";
 
 
 const animals = [
-  { name: "INDIRA", species: "Onça Pintada", avatar: "/avatars/indira.png", temp: 39.5, gender: "../assets/female-icon.svg", status: "normal", starred: true },
-  { name: "LIRA", species: "Lobo-Guará", avatar: "/avatars/lira.png", temp: 39.7, gender: "../assets/female-icon.svg", status: "normal" },
-  { name: "JUSSARA", species: "Anta", avatar: "/avatars/jussara.png", temp: 35.9, gender: "../assets/female-icon.svg", status: "low" },
-  { name: "LITA", species: "Onça Pintada", avatar: "/avatars/lita.png", temp: 40.2, gender: "../assets/female-icon.svg", status: "high" },
-  { name: "TINO", species: "Onça Pintada", avatar: "/avatars/tino.png", temp: 39.1, gender: "../assets/male-icon.svg", status: "normal" },
-  { name: "LECO", species: "Onça Pintada", avatar: "/avatars/leco.png", temp: 41.1, gender: "../assets/male-icon.svg", status: "high" },
+  { name: "INDIRA", species: "Onça Pintada", avatar: "/avatars/indira.png", temp: 39.5, gender: "genders/female-icon.svg", status: "normal", starred: true },
+  { name: "LIRA", species: "Lobo-Guará", avatar: "/avatars/lira.png", temp: 39.7, gender: "genders/female-icon.svg", status: "normal" },
+  { name: "JUSSARA", species: "Anta", avatar: "/avatars/jussara.png", temp: 35.9, gender: "genders/female-icon.svg", status: "low" },
+  { name: "LITA", species: "Onça Pintada", avatar: "/avatars/lita.png", temp: 40.2, gender: "genders/female-icon.svg", status: "high" },
+  { name: "TINO", species: "Onça Pintada", avatar: "/avatars/tino.png", temp: 39.1, gender: "genders/male-icon.svg", status: "normal" },
+  { name: "LECO", species: "Onça Pintada", avatar: "/avatars/leco.png", temp: 41.1, gender: "genders/male-icon.svg", status: "high" },
   { name: "53020", species: "Onça Pintada", avatar: "/avatars/default.png", temp: 0.0, gender: "?", status: "unknown" },
 ];
 
