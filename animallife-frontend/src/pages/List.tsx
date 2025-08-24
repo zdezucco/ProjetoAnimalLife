@@ -8,7 +8,6 @@ import OrangeTemp from "../assets/orange-term.svg";
 import GrayTemp from "../assets/gray-term.svg";
 import { useNavigate } from "react-router";
 import FooterBar from "../components/FooterBar";
-import Return from '../assets/return.svg';
 
 
 const animals = [
@@ -44,10 +43,6 @@ export default function AnimalList() {
 
   const acessarMonitoramento = () => {
     navigate("/Monitoramento");
-  }
-
-  const Retornar = () => {
-    navigate("/List");
   }
 
   return (
