@@ -29,7 +29,9 @@ export default Monitoramento;
 
 const PageContainer = styled.div`
   background-color:var(--bg-primary-color);
-  width: 390px;
+  width: 100%; 
+  max-width: 480px;
+  min-height: 100vh;
   border-radius: 25px;
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
   margin: auto;
