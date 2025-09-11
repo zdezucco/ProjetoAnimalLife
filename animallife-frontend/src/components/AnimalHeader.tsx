@@ -1,11 +1,12 @@
 import styled from "styled-components";
+import refresh from "../assets/refresh.svg";
 import { FaVenus, FaSyncAlt } from "react-icons/fa";
 
 const AnimalHeader = () => {
   return (
     <HeaderContainer>
       <RefreshButton>
-        <FaSyncAlt size={20} color="#57ab23" />
+        <img src={refresh} alt="Refresh"/>
       </RefreshButton>
       <AnimalInfo>
         <AnimalName>INDIRA</AnimalName>
@@ -33,6 +34,8 @@ const HeaderContainer = styled.div`
 `;
 
 const RefreshButton = styled.button`
+  width: 1.313rem;
+  height: 1.125rem;
   background: 2.188rem 2.188rem #C2E5AD;
   border: none;
   cursor: pointer;
