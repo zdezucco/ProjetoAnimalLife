@@ -1,7 +1,6 @@
 import styled from "styled-components";
 import refresh from "../assets/refresh.svg";
 import female from "../assets/female-icon.svg";
-import { FaVenus, FaSyncAlt } from "react-icons/fa";
 
 const AnimalHeader = () => {
   return (
