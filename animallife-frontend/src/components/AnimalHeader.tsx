@@ -36,8 +36,8 @@ const HeaderContainer = styled.div`
 `;
 
 const RefreshButton = styled.button`
-  width: 2.513rem;
-  height: 2.325rem;
+  width: 3rem;
+  height: 3rem;
   background: 4.188rem 4.188rem #C2E5AD;
   border: none;
   cursor: pointer;
@@ -62,7 +62,7 @@ const Species = styled.p`
 const GenderSection = styled.div`
   display: flex;
   align-items: center;
-  gap: 2px;
+  gap: 5px;
   flex-direction: column;
   width: 25.2px;
   height: 25.2px;
