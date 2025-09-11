@@ -1,7 +1,3 @@
-*{
-  overflow: hidden;
-}
-
 .reset-container {
     height: 100vh;
     display: flex;
@@ -11,6 +7,7 @@
     background: linear-gradient(to top right, #227504, #2CA400);
     font-family: Arial, sans-serif;
     padding: 0px;
+    overflow: hidden;
   }
   
   .reset-logo {
