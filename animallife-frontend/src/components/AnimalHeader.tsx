@@ -57,6 +57,7 @@ const GenderIcon = styled.div`
   display: flex;
   align-items: center;
   gap: 5px;
+  flex-direction: column;
 `;
 
 const GenderText = styled.span`
