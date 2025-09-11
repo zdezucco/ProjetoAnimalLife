@@ -247,8 +247,8 @@ body {
 
 @media (max-width: 400px) {
   .animal-photo {
-    width: 100px;
-    height: 100px;
+    width: 9.375rem;
+    height: 9.375rem;
   }
 
   .temp-value {
@@ -256,8 +256,8 @@ body {
   }
 
   .edit-icon {
-    width: 32px;
-    height: 32px;
+    width: 2.3rem;
+    height: 2.3rem;
     top: 70%;   /* reposiciona melhor */
   }
 }
