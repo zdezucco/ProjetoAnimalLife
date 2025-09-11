@@ -22,7 +22,7 @@ const AnimalHeader = () => {
 export default AnimalHeader;
 
 const HeaderContainer = styled.div`
-  background-color: #206b12;
+  background-color: #227504;
   color: white;
   padding: 15px;
   display: flex;
@@ -33,7 +33,7 @@ const HeaderContainer = styled.div`
 `;
 
 const RefreshButton = styled.button`
-  background: none;
+  background-color: #C2E5AD;
   border: none;
   cursor: pointer;
 `;
