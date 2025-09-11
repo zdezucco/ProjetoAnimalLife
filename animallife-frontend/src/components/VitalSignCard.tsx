@@ -9,8 +9,8 @@ const VitalSignCard = () => {
         <LeftSection>
           <FaThermometerHalf size={20} color="var(--secondary-color)" />
           <Temperature>39.5°c</Temperature>
+          <Average>Média: 38.2°c</Average>
         </LeftSection>
-        <Average>Média: 38.2°c</Average>
         <Status>Saudável</Status>
       </CardContent>
     </CardContainer>
@@ -50,6 +50,7 @@ const LeftSection = styled.div`
   display: flex;
   align-items: center;
   gap: 5px;
+  flex-direction: column;
 `;
 
 const Temperature = styled.span`
