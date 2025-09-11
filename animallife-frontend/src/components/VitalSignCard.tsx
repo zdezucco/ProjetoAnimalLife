@@ -52,10 +52,12 @@ const LeftSection = styled.div`
   display: flex;
   align-items: center;
   gap: 5px;
-  flex-direction: column;
 `;
 
 const TemperateMedium = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 5px;
   flex-direction: column;
 `;
 
