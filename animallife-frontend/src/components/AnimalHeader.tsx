@@ -5,7 +5,7 @@ const AnimalHeader = () => {
   return (
     <HeaderContainer>
       <RefreshButton>
-        <FaSyncAlt size={20} color="white" />
+        <FaSyncAlt size={20} color="#57ab23" />
       </RefreshButton>
       <AnimalInfo>
         <AnimalName>INDIRA</AnimalName>
