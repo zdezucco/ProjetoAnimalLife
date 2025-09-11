@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import refresh from "../assets/refresh.svg";
-import female from "../assets/female-icon.svg";
+import female from "../assets/female-icon-white.svg";
 
 const AnimalHeader = () => {
   return (
@@ -36,9 +36,9 @@ const HeaderContainer = styled.div`
 `;
 
 const RefreshButton = styled.button`
-  width: 1.513rem;
-  height: 1.325rem;
-  background: 3.188rem 3.188rem #C2E5AD;
+  width: 2.513rem;
+  height: 2.325rem;
+  background: 4.188rem 4.188rem #C2E5AD;
   border: none;
   cursor: pointer;
   border-radius:  25%;
@@ -69,9 +69,8 @@ const GenderSection = styled.div`
 `;
 
 const GenderIcon = styled.div`
-  width: 25.2px;
-  height: 25.2px;
-  color: white;
+  width: 3rem;
+  height: 3rem;
 `;
 
 const GenderText = styled.span`
