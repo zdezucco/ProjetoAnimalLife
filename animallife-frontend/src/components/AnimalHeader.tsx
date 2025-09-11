@@ -33,9 +33,10 @@ const HeaderContainer = styled.div`
 `;
 
 const RefreshButton = styled.button`
-  background-color: #C2E5AD;
+  background: 2.188rem 2.188rem #C2E5AD;
   border: none;
   cursor: pointer;
+  border-radius: 50%;
 `;
 
 const AnimalInfo = styled.div`
