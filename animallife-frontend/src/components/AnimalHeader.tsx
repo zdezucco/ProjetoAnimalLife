@@ -36,12 +36,12 @@ const HeaderContainer = styled.div`
 `;
 
 const RefreshButton = styled.button`
-  width: 1.313rem;
-  height: 1.125rem;
-  background: 2.188rem 2.188rem #C2E5AD;
+  width: 1.513rem;
+  height: 1.325rem;
+  background: 3.188rem 3.188rem #C2E5AD;
   border: none;
   cursor: pointer;
-  border-radius: 50%;
+  border-radius:  25%;
 `;
 
 const AnimalInfo = styled.div`
@@ -62,7 +62,7 @@ const Species = styled.p`
 const GenderSection = styled.div`
   display: flex;
   align-items: center;
-  gap: 5px;
+  gap: 2px;
   flex-direction: column;
   width: 25.2px;
   height: 25.2px;
@@ -71,6 +71,7 @@ const GenderSection = styled.div`
 const GenderIcon = styled.div`
   width: 25.2px;
   height: 25.2px;
+  color: white;
 `;
 
 const GenderText = styled.span`
