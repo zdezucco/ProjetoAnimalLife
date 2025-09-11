@@ -6,8 +6,8 @@ const VitalSignCard = () => {
     <CardContainer>
       <CardHeader>Temperatura:</CardHeader>
       <CardContent>
+        <FaThermometerHalf size={20} color="var(--secondary-color)" />
         <LeftSection>
-          <FaThermometerHalf size={20} color="var(--secondary-color)" />
           <Temperature>39.5°c</Temperature>
           <Average>Média: 38.2°c</Average>
         </LeftSection>
