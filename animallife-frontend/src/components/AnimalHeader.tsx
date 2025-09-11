@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import refresh from "../assets/refresh.svg";
+import female from "../assets/female-icon.svg";
 import { FaVenus, FaSyncAlt } from "react-icons/fa";
 
 const AnimalHeader = () => {
@@ -12,10 +13,12 @@ const AnimalHeader = () => {
         <AnimalName>INDIRA</AnimalName>
         <Species>Onça Pintada</Species>
       </AnimalInfo>
-      <GenderIcon>
-        <FaVenus size={20} color="white" />
+      <GenderSection>
+        <GenderIcon>
+          <img src={female} alt="Female"/>
+        </GenderIcon>
         <GenderText>Fêmea</GenderText>
-      </GenderIcon>
+      </GenderSection>
     </HeaderContainer>
   );
 };
@@ -57,11 +60,18 @@ const Species = styled.p`
   font-size: 12px;
 `;
 
-const GenderIcon = styled.div`
+const GenderSection = styled.div`
   display: flex;
   align-items: center;
   gap: 5px;
   flex-direction: column;
+  width: 25.2px;
+  height: 25.2px;
+`;
+
+const GenderIcon = styled.div`
+  width: 25.2px;
+  height: 25.2px;
 `;
 
 const GenderText = styled.span`
