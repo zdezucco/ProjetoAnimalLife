@@ -1,9 +1,10 @@
 .TelaAnimal {
-  width: 375px;
-  height: 812px;
+  width: 100%;
+  max-width: 480px;   /* limite para não esticar demais em tablets grandes */
+  height: 100vh;      /* ocupa altura total da tela */
   margin: 0 auto;
   background-color: var(--bg-primary-color);
-  border-radius: 10px;
+  border-radius: 0.625rem;
   box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 6px;
   position: relative;
   overflow: hidden;
@@ -11,11 +12,11 @@
 
 #background-list {
   background-color: var(--bg-primary-color);
-  border-color: 2px var(#c5c5c5);
+  border-color: 0.125rem var(#c5c5c5);
   width: 100%;
   height: 100%;
-  border-radius: 0 0 10px 10px;
-  padding: 16px;
+  border-radius: 0 0 0.625rem 0.625rem;
+  padding: 1rem;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
@@ -23,16 +24,16 @@
 
 #top-header {
   flex-direction: column;
-  margin-bottom: 40px;
+  margin-bottom: 2rem;
   align-items: end;
   display: flex;
 }
 
 .header {
   position: absolute;
-  inset-block-start: 20px;
-  inset-inline-start: 135px;
-  font-size: 24px;
+  inset-block-start: 1.25rem;
+  inset-inline-start: 8.438rem;
+  font-size: 1.5rem;
   font-weight: var(--fw-bold);
   color: var(--primary-color);
   margin: 0;
@@ -53,36 +54,36 @@
 
 .notification-count {
   position: absolute;
-  inset-inline-end: 12px;
-  inset-block-start: 6px;
+  inset-inline-end: 0.75rem;
+  inset-block-start: 0.375rem;
   background: red;
   color: white;
   border-radius: 50%;
-  width: 18px;
-  height: 18px;
+  width: 1.125rem;
+  height: 1.125rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 10px;
+  font-size: 0.625rem;
 }
 
 #search-container {
-  margin-bottom: 8px;
+  margin-bottom: 0.5rem;
   background-color: var(--primary-color);
-  border-radius: 8px 8px 0px 0px;
+  border-radius: 0.5rem 0.5rem 0rem 0rem;
 }
 
 #searchbar {
-  border-radius: 8px;
-  padding: 8px;
+  border-radius: 0.5rem;
+  padding: 0.5rem;
 }
 
 .search-bar {
   display: flex;
   align-items: center;
   background: white;
-  border-radius: 6px;
-  padding: 8px 12px;
+  border-radius: 0.375rem;
+  padding: 0.5rem 0.75rem;
 }
 
 .search-input {
@@ -90,8 +91,8 @@
   border: none;
   background: transparent;
   outline: none;
-  margin: 0 8px;
-  font-size: 14px;
+  margin: 0 0.5rem;
+  font-size: 0.875rem;
 }
 
 .icon {
@@ -103,28 +104,28 @@
   overflow-y: auto;
   border: 2px #c5c5c5;
   background-color: var(--bg-secundary-color);
-  border-radius: 8px;
+  border-radius: 0.5rem;
 }
 
 .animal-item {
-  margin-bottom: 12px;
+  margin-bottom: 0.75rem;
 }
 
 .animal-card {
   display: flex;
   align-items: center;
   background: var(--second-text-color);
-  border-radius: 8px;
-  padding: 12px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  border-radius: 0.5rem;
+  padding: 0.75rem;
+  box-shadow: 0 0.125rem 0.25rem rgba(0,0,0,0.05);
 }
 
 .animal-avatar {
-  width: 48px;
-  height: 48px;
+  width: 3rem;
+  height: 3rem;
   border-radius: 50%;
   overflow: hidden;
-  margin-right: 12px;
+  margin-right: 0.75rem;
   flex-shrink: 0;
 }
 
@@ -139,7 +140,7 @@
 }
 
 .animal-name {
-  font-size: 16px;
+  font-size: 1rem;
   font-weight: var(--fw-bold);
   color: var(--text-color);
   display: flex;
@@ -147,11 +148,11 @@
 }
 
 .star-icon {
-  margin-left: 4px;
+  margin-left: 0.25rem;
 }
 
 .animal-type {
-  font-size: 12px;
+  font-size: 0.75rem;
   color: var(--primary-text-color);
   display: flex;
   align-items: flex-start;
@@ -159,8 +160,8 @@
 }
 
 .gender {
-  width: 17px;
-  height: 17px;
+  width: 1.063rem;
+  height: 1.063rem;
   overflow: hidden;
 }
 
@@ -170,11 +171,26 @@
 }
 
 .temp-icon {
-  height: 40px;
-  margin-right: 10px;
+  height: 2.5rem;
+  margin-right: 0.625rem;
 }
 
 .animal-temp {
-  font-size: 18px;
+  font-size: 1.125rem;
   font-weight: var(--fw-bold);
+}
+
+@media (max-width: 400px) {
+  .header {
+    font-size: 1.2rem;
+  }
+
+  .animal-card {
+    padding: 0.5rem;
+  }
+
+  .animal-avatar {
+    width: 2.5rem;
+    height: 2.5rem;
+  }
 }

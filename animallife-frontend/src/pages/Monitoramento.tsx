@@ -34,7 +34,6 @@ const PageContainer = styled.div`
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
   margin: auto;
   padding: 5px
-  overflow: scroll;
 `;
 
 const Content = styled.div`
