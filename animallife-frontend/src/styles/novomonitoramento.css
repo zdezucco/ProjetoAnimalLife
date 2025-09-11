@@ -21,3 +21,225 @@ body {
   overflow-x: hidden;
   padding-bottom: 65px;
 }
+
+.profile-container {
+  font-family: Arial, sans-serif;
+  padding: 15px;
+  background-color: #f2f2f2;
+  min-height: 100vh;
+}
+
+.header-icons {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.icon{
+  background-color: #ffffff33;
+}
+
+.icon-return {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.icon-star{
+  display: flex;
+  flex-direction: column;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  position: relative;
+  flex-direction: column;
+}
+
+.notification {
+  display: flex;
+  justify-content: end;
+}
+
+.bell-icon {
+  color: var(--primary-color);
+}
+
+.notification-count {
+  position: absolute;
+  top: -9%;
+  right: -10%;
+  background: red;
+  color: white;
+  border-radius: 50%;
+  width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+}
+
+.animal-photo-section {
+  text-align: center;
+  position: relative;
+  margin-top: 10px;
+}
+
+.animal-photo {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.animal-id {
+  margin: 5px 0;
+  font-weight: bold;
+}
+
+.edit-icon {
+  position: absolute;
+  /* Ajuste os valores para um posicionamento perfeito sobre a borda */
+  bottom: 0px;
+  right: 0px;
+  background-color: white;
+  border-radius: 50%;
+  padding: 6px;
+  width: 42px;
+  height: 42px;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  /* Transform pode ajudar a centralizar o ícone na borda */
+  transform: translate(25%, 25%);
+}
+
+.edit-icon{
+  right: 6%;
+  top: 64%;
+}
+
+.animal-name-box {
+  background-color: #2CA400;
+  color: white;
+  padding: 10px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 15px 0;
+}
+
+.animal-name-info{
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.animal-name-info h2 {
+  margin: 0;
+}
+
+.animal-name-info p {
+  margin: 0;
+  font-size: 14px;
+}
+
+.animal-sex{
+  flex-direction: column;
+}
+.sex-badge {
+  background-color: #ffffff33;
+  padding-right: 10px;
+  flex-direction: column;
+}
+
+.sex-text{
+  padding-right: 10px;
+}
+
+.temperature-box {
+  background-color: #D6F5C9;
+  padding: 10px;
+  border-radius: 6px;
+  color: #227504;
+  margin-bottom: 15px;
+  flex-direction: row;
+}
+
+.icon-container{
+  flex-direction: column;
+}
+
+.temperature-status{
+    flex-direction: column;
+}
+
+.temp-value {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.status {
+  color: #2CA400;
+  font-weight: bold;
+}
+
+.average {
+  font-size: 12px;
+  color: #666;
+}
+
+.info-box h3 {
+  margin-bottom: 10px;
+}
+
+.info-form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.info-form input {
+  padding: 8px;
+  border-radius: 6px;
+}
+
+.row {
+  display: flex;
+  gap: 10px;
+}
+
+.checkboxes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 10px;
+  border-top: 4px;
+  margin-top: 10px;
+  background-color: #fff;
+}
+
+.checkboxes label {
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.register-box {
+  margin-top: 20px;
+}
+
+.register-box textarea {
+  width: 100%;
+  height: 120px;
+  padding: 10px;
+  resize: none;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+}
