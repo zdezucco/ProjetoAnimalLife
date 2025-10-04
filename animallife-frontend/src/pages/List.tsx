@@ -10,6 +10,8 @@ import { useNavigate } from "react-router";
 import FooterBar from "../components/FooterBar";
 import FemaleIcon from "../assets/female-icon.png";
 import MaleIcon from "../assets/male-icon.png";
+import { useState } from "react";
+import NotificationPopup, { NotificationItem } from "../components/NotificationPopup";
 
 
 
@@ -21,6 +23,12 @@ const animals = [
   { name: "TINO", species: "Onça Pintada", avatar: "/avatars/tino.png", temp: 39.1, gender: "♂", status: "normal" },
   { name: "LECO", species: "Onça Pintada", avatar: "/avatars/leco.png", temp: 41.1, gender: "♂", status: "high" },
   { name: "53020", species: "Onça Pintada", avatar: "/avatars/default.png", temp: 0.0, gender: "?", status: "unknown" },
+];
+
+const notifications: NotificationItem[] = [
+  { id: 1, level: "URGENTE", message: "Alerta Extremo de saúde! Clique para verificar os dados!", image: "/avatars/jussara.png", collar: "003" },
+  { id: 2, level: "ATENÇÃO", message: "Alerta de saúde! Clique para verificar os dados!", image: "/avatars/lira.png", collar: "004" },
+  { id: 3, level: "URGENTE", message: "Alerta Extremo de saúde! Clique para verificar os dados!", image: "/avatars/leco.png", collar: "006" },
 ];
 
 const getStatusIcon = (status = "") => {
@@ -43,6 +51,7 @@ const getStatusColor = (status = "") => {
 
 export default function AnimalList() {
   const navigate = useNavigate();
+  const [showNotifications, setShowNotifications] = useState(false);
 
   const acessarMonitoramento = () => {
     navigate("/Monitoramento");
@@ -53,7 +62,7 @@ export default function AnimalList() {
       <div id="background-list">
       <div id="top-header">
         <h1 className="header">Animais</h1>
-          <div className="notification">
+          <div className="notification" onClick={() => setShowNotifications(true)}>
           <Bell className="bell-icon" />
           <span className="notification-count">2</span>
       </div>
@@ -108,6 +117,12 @@ export default function AnimalList() {
         </div>
       </div>
       <FooterBar />
+
+      <NotificationPopup
+        isOpen={showNotifications}
+        onClose={() => setShowNotifications(false)}
+        notifications={notifications}
+      />
     </div>
   );
 }

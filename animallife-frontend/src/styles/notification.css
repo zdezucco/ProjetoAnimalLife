@@ -1,0 +1,92 @@
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+}
+
+.popup-container {
+  background: #f5f5f5;
+  border-radius: 12px;
+  width: 420px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.3);
+  padding: 16px;
+}
+
+.popup-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 2px solid #ddd;
+  margin-bottom: 12px;
+}
+
+.popup-header h2 {
+  margin: 0;
+  font-size: 18px;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.popup-content {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.notification-card {
+  display: flex;
+  align-items: center;
+  border-radius: 12px;
+  padding: 10px;
+  gap: 10px;
+}
+
+.notification-card.urgent {
+  background: #f8d7da;
+  color: #b71c1c;
+}
+
+.notification-card.warning {
+  background: #fff3cd;
+  color: #e65100;
+}
+
+.animal-img {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.notification-text h3 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.notification-text p {
+  margin: 0;
+  font-size: 14px;
+}
+
+.collar {
+  font-size: 12px;
+  font-weight: bold;
+  margin-top: 5px;
+  display: block;
+  text-align: right;
+}
