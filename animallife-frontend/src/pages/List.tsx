@@ -72,20 +72,9 @@ export default function AnimalList() {
         <div id="search-container">
           <div id="searchbar">
             <div className="search-bar">
-              <button type="button" className="search-icon" aria-label="Pesquisar">
-                <Search size={16} />
-              </button>
-
-              <input
-                type="text"
-                placeholder="Pesquisar"
-                className="search-input"
-                aria-label="Campo de pesquisa"
-              />
-
-              <button type="button" className="filter-icon" aria-label="Filtrar">
-                <Filter size={14} />
-              </button>
+              <Search className="icon search-icon" size={16} />
+              <input type="text" placeholder="Pesquisar" className="search-input" />
+              <Filter className="icon filter-icon" size={16} />
             </div>
           </div>
         </div>
