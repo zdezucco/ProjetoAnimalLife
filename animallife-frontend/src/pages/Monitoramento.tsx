@@ -49,7 +49,7 @@ const Monitoramento = () => {
         <Content>
           <VitalSignCard monitoramentos={monitoramentos}/>
         </Content>
-        <InfoBox />
+        <InfoBox animalId={animal.id}/>
       </PageContainer>
       <FooterBar />
   </>

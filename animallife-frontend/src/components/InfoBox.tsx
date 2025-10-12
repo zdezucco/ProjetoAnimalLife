@@ -1,76 +1,200 @@
-import '../styles/infobox.css';
+import { useEffect, useState } from "react";
+import { supabase } from "../supabaseClient"; // ajusta o caminho conforme tua estrutura
+import "../styles/infobox.css";
 
-const registerText = `19/09/2023: Animal capturado, avaliado e registrado (Indira). Coleira AnimalLife implantada.
-14/09/2023: Animal encontrado em condições saudáveis, entre a área 22 e 23, sem foto registrada:`;
 
+interface InfoBoxProps {
+  animalId: number;
+}
 
-const InfoBox = () => {
+const InfoBox = ({ animalId }: InfoBoxProps) => {
+  const [animal, setAnimal] = useState<any>(null);
+  const [isEditing, setIsEditing] = useState(false);
+  const [formData, setFormData] = useState<any>({});
+  const [monitoramento, setMonitoramento] = useState<any[]>([]);
+
+  // Busca os dados do animal e registros
+  useEffect(() => {
+    const fetchAnimalData = async () => {
+      const { data: animalData, error: animalError } = await supabase
+        .from("animal")
+        .select("*")
+        .eq("id", animalId)
+        .single();
+
+      if (animalError) console.error(animalError);
+      else {
+        setAnimal(animalData);
+        setFormData(animalData);
+      }
+
+      const { data: monitorData, error: monitorError } = await supabase
+        .from("monitoramento")
+        .select("*")
+        .eq("id_animal", animalId)
+        .order("data_monitoramento", { ascending: false });
+
+      if (monitorError) console.error(monitorError);
+      else setMonitoramento(monitorData);
+    };
+
+    if (animalId) fetchAnimalData();
+  }, [animalId]);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { id, value } = e.target;
+    setFormData({ ...formData, [id]: value });
+  };
+
+  const handleSave = async () => {
+    const { error } = await supabase
+      .from("animal")
+      .update({
+        nome: formData.nome,
+        especie: formData.especie,
+        raca: formData.raca,
+        peso: formData.peso,
+        altura: formData.altura,
+        comprimento: formData.comprimento,
+      })
+      .eq("id", animalId);
+
+    if (error) {
+      alert("Erro ao atualizar informações: " + error.message);
+    } else {
+      alert("Informações atualizadas com sucesso!");
+      setAnimal(formData);
+      setIsEditing(false);
+    }
+  };
+
+  if (!animal) return <p>Carregando informações...</p>;
+
   return (
     <>
-    <div className="info-box-container">
-      <h4>Informações</h4>
-      <form className="info-form">
-        <div className="form-group">
-          <label htmlFor="name">Nome:</label>
-          <input id="name" type="text" value="Indira" readOnly />
-        </div>
+      <div className="info-box-container">
+        <h4>Informações</h4>
 
-        <div className="form-group">
-          <label htmlFor="species">Espécie:</label>
-          <input id="species" type="text" value="Panthera Onca" readOnly />
-        </div>
-
-        <div className="form-group">
-          <label htmlFor="breed">Raça:</label>
-          <input id="breed" type="text" value="Onça Pintada" readOnly />
-        </div>
-
-        <div className="form-row">
+        <form className="info-form">
           <div className="form-group">
-            <label htmlFor="weight">Peso:</label>
-            <input id="weight" type="text" value="86 Kg" readOnly />
+            <label htmlFor="nome">Nome:</label>
+            <input
+              id="nome"
+              type="text"
+              value={formData.nome || ""}
+              onChange={handleChange}
+              readOnly={!isEditing}
+            />
           </div>
-          <div className="form-group">
-            <label htmlFor="length">Comprimento:</label>
-            <input id="length" type="text" value="1,70 Metros" readOnly />
-          </div>
-        </div>
 
-        <div className="form-row">
           <div className="form-group">
-            <label htmlFor="age">Idade:</label>
-            <input id="age" type="text" placeholder="Digite" />
+            <label htmlFor="especie">Espécie:</label>
+            <input
+              id="especie"
+              type="text"
+              value={formData.especie || ""}
+              onChange={handleChange}
+              readOnly={!isEditing}
+            />
           </div>
-          <div className="form-group">
-            <label htmlFor="height">Altura:</label>
-            <input id="height" type="text" placeholder="Digite" />
-          </div>
-        </div>
-      </form>
-    </div>
 
-    <div className="checkboxes-section">
-      <div className="checkbox-group">
-        <label className="group-label">Dieta:</label>
-        <div className="options">
-          <label><input type="checkbox" /> Herbívoro</label>
-          <label><input type="checkbox" checked /> Carnívoro</label>
-          <label><input type="checkbox" /> Onívoro</label>
+          <div className="form-group">
+            <label htmlFor="raca">Raça:</label>
+            <input
+              id="raca"
+              type="text"
+              value={formData.raca || ""}
+              onChange={handleChange}
+              readOnly={!isEditing}
+            />
+          </div>
+
+          <div className="form-row">
+            <div className="form-group">
+              <label htmlFor="peso">Peso (Kg):</label>
+              <input
+                id="peso"
+                type="text"
+                value={formData.peso || ""}
+                onChange={handleChange}
+                readOnly={!isEditing}
+              />
+            </div>
+            <div className="form-group">
+              <label htmlFor="comprimento">Comprimento (m):</label>
+              <input
+                id="comprimento"
+                type="text"
+                value={formData.comprimento || ""}
+                onChange={handleChange}
+                readOnly={!isEditing}
+              />
+            </div>
+          </div>
+
+          <div className="form-row">
+            <div className="form-group">
+              <label htmlFor="idade">Idade:</label>
+              <input id="idade" type="text" value={formData.idade || ""} readOnly />
+            </div>
+            <div className="form-group">
+              <label htmlFor="altura">Altura (m):</label>
+              <input
+                id="altura"
+                type="text"
+                value={formData.altura || ""}
+                onChange={handleChange}
+                readOnly={!isEditing}
+              />
+            </div>
+          </div>
+        </form>
+
+        <div className="button-row">
+          {!isEditing ? (
+            <button onClick={() => setIsEditing(true)}>Editar</button>
+          ) : (
+            <button onClick={handleSave}>Salvar alterações</button>
+          )}
         </div>
       </div>
-      <div className="checkbox-group">
-        <label className="group-label">Sexo:</label>
-        <div className="options">
-          <label><input type="checkbox" /> Macho</label>
-          <label><input type="checkbox" checked /> Fêmea</label>
+
+      <div className="checkboxes-section">
+        <div className="checkbox-group">
+          <label className="group-label">Dieta:</label>
+          <div className="options">
+            <label><input type="checkbox" checked={animal.dieta === "Herbívoro"} readOnly /> Herbívoro</label>
+            <label><input type="checkbox" checked={animal.dieta === "Carnívoro"} readOnly /> Carnívoro</label>
+            <label><input type="checkbox" checked={animal.dieta === "Onívoro"} readOnly /> Onívoro</label>
+          </div>
+        </div>
+        <div className="checkbox-group">
+          <label className="group-label">Sexo:</label>
+          <div className="options">
+            <label><input type="checkbox" checked={animal.sexo === "Macho"} readOnly /> Macho</label>
+            <label><input type="checkbox" checked={animal.sexo === "Fêmea"} readOnly /> Fêmea</label>
+          </div>
         </div>
       </div>
-    </div>
 
-    <div className="register-box">
-      <h3>Registro:</h3>
-      <textarea readOnly value={registerText}></textarea>
-    </div>
+      <div className="register-box">
+        <h3>Registro:</h3>
+        <textarea
+          readOnly
+          value={
+            monitoramento.length > 0
+              ? monitoramento
+                  .map(
+                    (m) =>
+                      `${new Date(m.data_monitoramento).toLocaleDateString()}: ${
+                        m.observacoes || "Sem observações."
+                      }`
+                  )
+                  .join("\n")
+              : "Nenhum registro encontrado."
+          }
+        ></textarea>
+      </div>
     </>
   );
 };
