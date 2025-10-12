@@ -78,6 +78,7 @@ export default function AnimalList() {
   const navigate = useNavigate();
   const [showNotifications, setShowNotifications] = useState(false);
   const [animals, setAnimals] = useState<Animal[]>([]);
+  const [notifications, setNotifications] = useState<NotificationItem[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
@@ -112,6 +113,34 @@ export default function AnimalList() {
       });
 
       setAnimals(mergedData);
+          // 🔔 Gera notificações automáticas
+      const generatedNotifications: NotificationItem[] = mergedData
+        .filter((a) => {
+          const t = a.monitoramento?.valor_temperatura;
+          return (
+            t !== undefined &&
+            t !== null &&
+            ((t <= 35) || (t > 35 && t < 36) || (t >= 40))
+          );
+        })
+        .map((a, index) => {
+          const temp = a.monitoramento?.valor_temperatura || 0;
+          const level =
+            temp <= 35 || temp > 41 ? "URGENTE" : "ATENÇÃO";
+
+          return {
+            id: index + 1,
+            level,
+            message:
+              level === "URGENTE"
+                ? `${a.nome} está com alerta extremo de saúde!`
+                : `${a.nome} apresenta variação de temperatura.`,
+            image: a.avatar || "/avatars/default.png",
+            collar: a.id.toString().padStart(3, "0"),
+          };
+        });
+
+      setNotifications(generatedNotifications);
     };
 
     fetchAnimals();
@@ -130,9 +159,16 @@ export default function AnimalList() {
       <div id="background-list">
         <div id="top-header">
           <h1 className="header">Animais</h1>
-          <div className="notification" onClick={() => setShowNotifications(true)}>
+          
+          <div
+            className="notification"
+            onClick={() => setShowNotifications(true)}
+          >
             <Bell className="bell-icon" />
-            <span className="notification-count">2</span>
+            {/* 🔔 Contador dinâmico */}
+            {notifications.length > 0 && (
+              <span className="notification-count">{notifications.length}</span>
+            )}
           </div>
         </div>
 
@@ -204,6 +240,7 @@ export default function AnimalList() {
 
       <FooterBar />
 
+      {/* 🔔 Notificações dinâmicas */}
       <NotificationPopup
         isOpen={showNotifications}
         onClose={() => setShowNotifications(false)}
