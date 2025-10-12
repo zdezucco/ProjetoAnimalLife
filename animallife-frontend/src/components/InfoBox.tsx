@@ -8,10 +8,22 @@ interface InfoBoxProps {
 
 // Função para formatar nome da espécie (ex: "panthera_onca" → "Panthera Onca")
 const formatEspecie = (text: string) => {
-  if (!text) return "";
-  return text
-    .replace(/_/g, " ") // troca _ por espaço
-    .replace(/\b\w/g, (char) => char.toUpperCase()); // deixa iniciais maiúsculas
+    if (!text) return "Desconhecido";
+
+  switch (text.toUpperCase()) {
+    case "ONCA_PINTADA":
+      return "Onça Pintada";
+    case "LOBO_GUARA":
+      return "Lobo-Guará";
+    case "ANTA":
+      return "Anta";
+    default:
+      // Transforma algo como "MACACO_PREGO" → "Macaco Prego"
+      return text
+        .toLowerCase()
+        .replace(/_/g, " ")
+        .replace(/\b\w/g, (c) => c.toUpperCase());
+  }
 };
 
 const InfoBox = ({ animalId }: InfoBoxProps) => {
