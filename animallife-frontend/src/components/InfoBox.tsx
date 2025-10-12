@@ -26,17 +26,28 @@ const formatEspecie = (text: string) => {
   }
 };
 
+// Normaliza para salvar no banco (ex: "Onça Pintada" → "ONCA_PINTADA")
 const normalizeEspecie = (text: string) => {
   if (!text) return "";
   return text.toUpperCase().replace(/\s+/g, "_");
 };
+
+// Normaliza dieta (ex: "Herbívoro" → "HERBIVORO")
+const normalizeDieta = (text: string) => {
+  if (!text) return "";
+  return text
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toUpperCase();
+};
+
 
 const InfoBox = ({ animalId }: InfoBoxProps) => {
   const [animal, setAnimal] = useState<any>(null);
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState<any>({});
 
-  // 🔹 Buscar dados do animal no Supabase
+  // 🔹 Buscar dados do animal
   useEffect(() => {
     const fetchAnimal = async () => {
       const { data, error } = await supabase
@@ -66,12 +77,12 @@ const InfoBox = ({ animalId }: InfoBoxProps) => {
     setFormData({ ...formData, [id]: value });
   };
 
-  // 🔹 Atualiza os checkboxes de dieta e sexo
+  // 🔹 Atualiza checkboxes de dieta e sexo
   const handleCheckboxChange = (field: string, value: string) => {
     setFormData({ ...formData, [field]: value });
   };
 
-  // 🔹 Salvar alterações no banco
+  // 🔹 Salvar alterações
   const handleSave = async () => {
     const { error } = await supabase
       .from("animal")
@@ -82,9 +93,8 @@ const InfoBox = ({ animalId }: InfoBoxProps) => {
         peso: formData.peso,
         altura: formData.altura,
         comprimento: formData.comprimento,
-        dieta: formData.dieta,
+        dieta: normalizeDieta(formData.dieta),
         sexo: formData.sexo,
-        registro: formData.registro,
       })
       .eq("id", animalId);
 
@@ -164,12 +174,7 @@ const InfoBox = ({ animalId }: InfoBoxProps) => {
           <div className="form-row">
             <div className="form-group">
               <label htmlFor="idade">Idade:</label>
-              <input
-                id="idade"
-                type="text"
-                value={formData.idade || ""}
-                readOnly
-              />
+              <input id="idade" type="text" value={formData.idade || ""} readOnly />
             </div>
 
             <div className="form-group">
@@ -182,18 +187,6 @@ const InfoBox = ({ animalId }: InfoBoxProps) => {
                 readOnly={!isEditing}
               />
             </div>
-          </div>
-
-          {/* 🔹 Campo de registro */}
-          <div className="form-group">
-            <label htmlFor="registro">Registro:</label>
-            <input
-              id="registro"
-              type="text"
-              value={formData.registro || ""}
-              onChange={handleChange}
-              readOnly={!isEditing}
-            />
           </div>
         </form>
 
@@ -241,6 +234,12 @@ const InfoBox = ({ animalId }: InfoBoxProps) => {
             ))}
           </div>
         </div>
+      </div>
+
+      {/* 🔹 REGISTRO (somente leitura) */}
+      <div className="register-box">
+        <h3>Registro:</h3>
+        <textarea readOnly value={animal.registro || "Sem registros"}></textarea>
       </div>
     </>
   );
