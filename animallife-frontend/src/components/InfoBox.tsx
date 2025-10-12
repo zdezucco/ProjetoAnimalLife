@@ -26,66 +26,72 @@ const formatEspecie = (text: string) => {
   }
 };
 
+const normalizeEspecie = (text: string) => {
+  if (!text) return "";
+  return text.toUpperCase().replace(/\s+/g, "_");
+};
+
 const InfoBox = ({ animalId }: InfoBoxProps) => {
   const [animal, setAnimal] = useState<any>(null);
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState<any>({});
-  const [monitoramento, setMonitoramento] = useState<any[]>([]);
 
-  // Busca dados do animal + registros
+  // 🔹 Buscar dados do animal no Supabase
   useEffect(() => {
-    const fetchAnimalData = async () => {
-      const { data: animalData, error: animalError } = await supabase
+    const fetchAnimal = async () => {
+      const { data, error } = await supabase
         .from("animal")
         .select("*")
         .eq("id", animalId)
         .single();
 
-      if (animalError) console.error(animalError);
-      else {
-        setAnimal(animalData);
-        setFormData({
-          ...animalData,
-          especie: formatEspecie(animalData.especie),
-        });
+      if (error) {
+        console.error("Erro ao buscar animal:", error);
+        return;
       }
 
-      const { data: monitorData, error: monitorError } = await supabase
-        .from("monitoramento")
-        .select("*")
-        .eq("id_animal", animalId)
-        .order("data_monitoramento", { ascending: false });
-
-      if (monitorError) console.error(monitorError);
-      else setMonitoramento(monitorData);
+      setAnimal(data);
+      setFormData({
+        ...data,
+        especie: formatEspecie(data.especie),
+      });
     };
 
-    if (animalId) fetchAnimalData();
+    if (animalId) fetchAnimal();
   }, [animalId]);
 
+  // 🔹 Atualiza valores ao digitar
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { id, value } = e.target;
     setFormData({ ...formData, [id]: value });
   };
 
+  // 🔹 Atualiza os checkboxes de dieta e sexo
+  const handleCheckboxChange = (field: string, value: string) => {
+    setFormData({ ...formData, [field]: value });
+  };
+
+  // 🔹 Salvar alterações no banco
   const handleSave = async () => {
     const { error } = await supabase
       .from("animal")
       .update({
         nome: formData.nome,
-        especie: formData.especie.replace(/\s+/g, "_").toLowerCase(), // salva com "_" novamente
+        especie: normalizeEspecie(formData.especie),
         raca: formData.raca,
         peso: formData.peso,
         altura: formData.altura,
         comprimento: formData.comprimento,
+        dieta: formData.dieta,
+        sexo: formData.sexo,
+        registro: formData.registro,
       })
       .eq("id", animalId);
 
     if (error) {
-      alert("Erro ao atualizar informações: " + error.message);
+      alert("❌ Erro ao atualizar: " + error.message);
     } else {
-      alert("Informações atualizadas com sucesso!");
-      setAnimal(formData);
+      alert("✅ Dados atualizados com sucesso!");
       setIsEditing(false);
     }
   };
@@ -142,6 +148,7 @@ const InfoBox = ({ animalId }: InfoBoxProps) => {
                 readOnly={!isEditing}
               />
             </div>
+
             <div className="form-group">
               <label htmlFor="comprimento">Comprimento (m):</label>
               <input
@@ -157,8 +164,14 @@ const InfoBox = ({ animalId }: InfoBoxProps) => {
           <div className="form-row">
             <div className="form-group">
               <label htmlFor="idade">Idade:</label>
-              <input id="idade" type="text" value={formData.idade || ""} readOnly />
+              <input
+                id="idade"
+                type="text"
+                value={formData.idade || ""}
+                readOnly
+              />
             </div>
+
             <div className="form-group">
               <label htmlFor="altura">Altura (m):</label>
               <input
@@ -169,6 +182,18 @@ const InfoBox = ({ animalId }: InfoBoxProps) => {
                 readOnly={!isEditing}
               />
             </div>
+          </div>
+
+          {/* 🔹 Campo de registro */}
+          <div className="form-group">
+            <label htmlFor="registro">Registro:</label>
+            <input
+              id="registro"
+              type="text"
+              value={formData.registro || ""}
+              onChange={handleChange}
+              readOnly={!isEditing}
+            />
           </div>
         </form>
 
@@ -181,41 +206,41 @@ const InfoBox = ({ animalId }: InfoBoxProps) => {
         </div>
       </div>
 
+      {/* 🔹 DIETA e SEXO */}
       <div className="checkboxes-section">
         <div className="checkbox-group">
           <label className="group-label">Dieta:</label>
           <div className="options">
-            <label><input type="checkbox" checked={animal.dieta === "Herbívoro"} readOnly /> Herbívoro</label>
-            <label><input type="checkbox" checked={animal.dieta === "Carnívoro"} readOnly /> Carnívoro</label>
-            <label><input type="checkbox" checked={animal.dieta === "Onívoro"} readOnly /> Onívoro</label>
+            {["Herbívoro", "Carnívoro", "Onívoro"].map((d) => (
+              <label key={d}>
+                <input
+                  type="checkbox"
+                  checked={formData.dieta === d}
+                  disabled={!isEditing}
+                  onChange={() => handleCheckboxChange("dieta", d)}
+                />
+                {d}
+              </label>
+            ))}
           </div>
         </div>
+
         <div className="checkbox-group">
           <label className="group-label">Sexo:</label>
           <div className="options">
-            <label><input type="checkbox" checked={animal.sexo === "Macho"} readOnly /> Macho</label>
-            <label><input type="checkbox" checked={animal.sexo === "Fêmea"} readOnly /> Fêmea</label>
+            {["Macho", "Fêmea"].map((s) => (
+              <label key={s}>
+                <input
+                  type="checkbox"
+                  checked={formData.sexo === s}
+                  disabled={!isEditing}
+                  onChange={() => handleCheckboxChange("sexo", s)}
+                />
+                {s}
+              </label>
+            ))}
           </div>
         </div>
-      </div>
-
-      <div className="register-box">
-        <h3>Registro:</h3>
-        <textarea
-          readOnly
-          value={
-            monitoramento.length > 0
-              ? monitoramento
-                  .map(
-                    (m) =>
-                      `${new Date(m.data_monitoramento).toLocaleDateString()}: ${
-                        m.observacoes || "Sem observações."
-                      }`
-                  )
-                  .join("\n")
-              : "Nenhum registro encontrado."
-          }
-        ></textarea>
       </div>
     </>
   );
