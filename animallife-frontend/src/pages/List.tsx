@@ -55,6 +55,25 @@ const getStatusColor = (temp: number | undefined) => {
   return 'var(--green-temp)';
 };
 
+const getSpeciesName = (especie: string) => {
+  if (!especie) return "Desconhecido";
+
+  switch (especie.toUpperCase()) {
+    case "ONCA_PINTADA":
+      return "Onça Pintada";
+    case "LOBO_GUARA":
+      return "Lobo-Guará";
+    case "ANTA":
+      return "Anta";
+    default:
+      // Transforma algo como "MACACO_PREGO" → "Macaco Prego"
+      return especie
+        .toLowerCase()
+        .replace(/_/g, " ")
+        .replace(/\b\w/g, (c) => c.toUpperCase());
+  }
+};
+
 export default function AnimalList() {
   const navigate = useNavigate();
   const [showNotifications, setShowNotifications] = useState(false);
@@ -137,6 +156,7 @@ export default function AnimalList() {
           {filteredAnimals.map((animal) => {
             const temp = animal.monitoramento?.valor_temperatura;
             const TempIcon = getStatusIcon(temp);
+            const speciesName = getSpeciesName(animal.especie);
 
             return (
               <div
@@ -159,11 +179,11 @@ export default function AnimalList() {
                       )}
                     </div>
                     <div className="animal-type">
-                      {animal.especie}
+                      {speciesName}
                       <span className="gender">
-                        {animal.sexo === "F" ? (
+                        {animal.sexo === "FEMEA" ? (
                           <img src={FemaleIcon} alt="Fêmea" className="gender-icon" />
-                        ) : animal.sexo === "M" ? (
+                        ) : animal.sexo === "MACHO" ? (
                           <img src={MaleIcon} alt="Macho" className="gender-icon" />
                         ) : null}
                       </span>
