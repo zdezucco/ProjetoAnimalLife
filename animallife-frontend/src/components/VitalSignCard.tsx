@@ -25,7 +25,7 @@ const VitalSignCard: React.FC<VitalSignCardProps> = ({ monitoramentos }) => {
     );
   }
 
-  const ultimo = monitoramentos[monitoramentos.length - 1];
+  const ultimo = monitoramentos[monitoramentos.length];
   const media =
     monitoramentos.reduce((acc, m) => acc + m.valor_temperatura, 0) /
     monitoramentos.length;
