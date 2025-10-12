@@ -114,6 +114,7 @@ export default function AnimalList() {
           return (
             t !== undefined &&
             t !== null &&
+            t !== 0 &&
             ((t <= 35) || (t > 35 && t < 36) || (t >= 40))
           );
         })
