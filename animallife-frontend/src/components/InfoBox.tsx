@@ -2,10 +2,17 @@ import { useEffect, useState } from "react";
 import { supabase } from "../supabaseClient"; // ajusta o caminho conforme tua estrutura
 import "../styles/infobox.css";
 
-
 interface InfoBoxProps {
   animalId: number;
 }
+
+// Função para formatar nome da espécie (ex: "panthera_onca" → "Panthera Onca")
+const formatEspecie = (text: string) => {
+  if (!text) return "";
+  return text
+    .replace(/_/g, " ") // troca _ por espaço
+    .replace(/\b\w/g, (char) => char.toUpperCase()); // deixa iniciais maiúsculas
+};
 
 const InfoBox = ({ animalId }: InfoBoxProps) => {
   const [animal, setAnimal] = useState<any>(null);
@@ -13,7 +20,7 @@ const InfoBox = ({ animalId }: InfoBoxProps) => {
   const [formData, setFormData] = useState<any>({});
   const [monitoramento, setMonitoramento] = useState<any[]>([]);
 
-  // Busca os dados do animal e registros
+  // Busca dados do animal + registros
   useEffect(() => {
     const fetchAnimalData = async () => {
       const { data: animalData, error: animalError } = await supabase
@@ -25,7 +32,10 @@ const InfoBox = ({ animalId }: InfoBoxProps) => {
       if (animalError) console.error(animalError);
       else {
         setAnimal(animalData);
-        setFormData(animalData);
+        setFormData({
+          ...animalData,
+          especie: formatEspecie(animalData.especie),
+        });
       }
 
       const { data: monitorData, error: monitorError } = await supabase
@@ -51,7 +61,7 @@ const InfoBox = ({ animalId }: InfoBoxProps) => {
       .from("animal")
       .update({
         nome: formData.nome,
-        especie: formData.especie,
+        especie: formData.especie.replace(/\s+/g, "_").toLowerCase(), // salva com "_" novamente
         raca: formData.raca,
         peso: formData.peso,
         altura: formData.altura,
