@@ -1,22 +1,40 @@
 import styled from "styled-components";
 import refresh from "../assets/refresh.svg";
 import female from "../assets/female-icon-white.svg";
+import male from "../assets/male-icon.svg";
 
-const AnimalHeader = () => {
+interface Animal {
+  id: string;
+  nome: string;
+  especie: string;
+  sexo: string;
+}
+
+interface AnimalHeaderProps {
+  animal: Animal;
+  onRefresh?: () => void; // opcional, caso queira atualizar dados futuramente
+}
+
+const AnimalHeader: React.FC<AnimalHeaderProps> = ({ animal, onRefresh }) => {
   return (
     <HeaderContainer>
-      <RefreshButton>
-        <img src={refresh} alt="Refresh"/>
+      <RefreshButton onClick={onRefresh}>
+        <img src={refresh} alt="Atualizar" />
       </RefreshButton>
+
       <AnimalInfo>
-        <AnimalName>INDIRA</AnimalName>
-        <Species>Onça Pintada</Species>
+        <AnimalName>{animal.nome}</AnimalName>
+        <Species>{animal.especie}</Species>
       </AnimalInfo>
+
       <GenderSection>
         <GenderIcon>
-          <img src={female} alt="Female"/>
+          <img
+            src={animal.sexo.toLowerCase() === "fêmea" ? female : male}
+            alt={animal.sexo}
+          />
         </GenderIcon>
-        <GenderText>Fêmea</GenderText>
+        <GenderText>{animal.sexo}</GenderText>
       </GenderSection>
     </HeaderContainer>
   );

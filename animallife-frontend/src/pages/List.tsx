@@ -6,24 +6,26 @@ import GreenTemp from "../assets/green-term.svg";
 import RedTemp from "../assets/red-term.svg";
 import OrangeTemp from "../assets/orange-term.svg";
 import GrayTemp from "../assets/gray-term.svg";
-import { useNavigate } from "react-router";
-import FooterBar from "../components/FooterBar";
 import FemaleIcon from "../assets/female-icon.png";
 import MaleIcon from "../assets/male-icon.png";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router";
+import FooterBar from "../components/FooterBar";
 import NotificationPopup, { NotificationItem } from "../components/NotificationPopup";
+import { supabase } from "../supabaseClient";
 
-
-
-const animals = [
-  { name: "INDIRA", species: "Onça Pintada", avatar: "/avatars/indira.png", temp: 39.5, gender: "♀", status: "normal", starred: true },
-  { name: "LIRA", species: "Lobo-Guará", avatar: "/avatars/lira.png", temp: 39.7, gender: "♀", status: "normal" },
-  { name: "JUSSARA", species: "Anta", avatar: "/avatars/jussara.png", temp: 35.9, gender: "♀", status: "low" },
-  { name: "LITA", species: "Onça Pintada", avatar: "/avatars/lita.png", temp: 40.2, gender: "♀", status: "high" },
-  { name: "TINO", species: "Onça Pintada", avatar: "/avatars/tino.png", temp: 39.1, gender: "♂", status: "normal" },
-  { name: "LECO", species: "Onça Pintada", avatar: "/avatars/leco.png", temp: 41.1, gender: "♂", status: "high" },
-  { name: "53020", species: "Onça Pintada", avatar: "/avatars/default.png", temp: 0.0, gender: "?", status: "unknown" },
-];
+interface Animal {
+  id: number;
+  nome: string;
+  especie: string;
+  sexo: string;
+  registro: string;
+  starred?: boolean;
+  avatar?: string;
+  monitoramento?: {
+    valor_temperatura: number;
+  };
+}
 
 const notifications: NotificationItem[] = [
   { id: 1, level: "URGENTE", message: "Alerta Extremo de saúde! Clique para verificar os dados!", image: "/avatars/jussara.png", collar: "003" },
@@ -31,83 +33,138 @@ const notifications: NotificationItem[] = [
   { id: 3, level: "URGENTE", message: "Alerta Extremo de saúde! Clique para verificar os dados!", image: "/avatars/leco.png", collar: "006" },
 ];
 
-const getStatusIcon = (status = "") => {
-  switch (status) {
-    case "normal": return GreenTemp;
-    case "low": return RedTemp;
-    case "high": return OrangeTemp;
-    default: return GrayTemp;
-  }
+const getStatusIcon = (temp: number | undefined) => {
+  if (temp === undefined) return GrayTemp;
+  if (temp < 36) return RedTemp;
+  if (temp > 40) return OrangeTemp;
+  return GreenTemp;
 };
 
-const getStatusColor = (status = "") => {
-  switch (status) {
-    case "normal": return "#4CAF50";
-    case "low": return "#E53935";
-    case "high": return "#FF9800";
-    default: return "#757575";
-  }
+const getStatusColor = (temp: number | undefined) => {
+  if (temp === undefined) return "#757575";
+  if (temp < 36) return "#E53935";
+  if (temp > 40) return "#FF9800";
+  return "#4CAF50";
 };
 
 export default function AnimalList() {
   const navigate = useNavigate();
   const [showNotifications, setShowNotifications] = useState(false);
+  const [animals, setAnimals] = useState<Animal[]>([]);
+  const [searchTerm, setSearchTerm] = useState("");
 
-  const acessarMonitoramento = () => {
-    navigate("/Monitoramento");
-  }
+  useEffect(() => {
+    const fetchAnimals = async () => {
+      // Busca todos os animais
+      const { data: animalData, error: animalError } = await supabase
+        .from("animal")
+        .select("*");
+
+      if (animalError) {
+        console.error("Erro ao buscar animais:", animalError);
+        return;
+      }
+
+      // Busca os monitoramentos mais recentes
+      const { data: monitoramentoData, error: monitoramentoError } = await supabase
+        .from("monitoramento")
+        .select("id_animal, valor_temperatura, data_monitoramento")
+        .order("data_monitoramento", { ascending: false });
+
+      if (monitoramentoError) {
+        console.error("Erro ao buscar monitoramentos:", monitoramentoError);
+        return;
+      }
+
+      // Combina animal + último monitoramento
+      const mergedData = animalData.map((animal) => {
+        const monitoramento = monitoramentoData.find(
+          (m) => m.id_animal === animal.id
+        );
+        return { ...animal, monitoramento };
+      });
+
+      setAnimals(mergedData);
+    };
+
+    fetchAnimals();
+  }, []);
+
+  const acessarMonitoramento = (animalId: number) => {
+    navigate(`/Monitoramento?id=${animalId}`);
+  };
+
+  const filteredAnimals = animals.filter((a) =>
+    a.nome.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   return (
     <div className="TelaAnimal">
       <div id="background-list">
-      <div id="top-header">
-        <h1 className="header">Animais</h1>
+        <div id="top-header">
+          <h1 className="header">Animais</h1>
           <div className="notification" onClick={() => setShowNotifications(true)}>
-          <Bell className="bell-icon" />
-          <span className="notification-count">2</span>
-      </div>
-      </div>
-
+            <Bell className="bell-icon" />
+            <span className="notification-count">2</span>
+          </div>
+        </div>
 
         <div id="search-container">
           <div id="searchbar">
             <div className="search-bar">
               <Search className="icon search-icon" size={16} />
-              <input type="text" placeholder="Pesquisar" className="search-input" />
+              <input
+                type="text"
+                placeholder="Pesquisar"
+                className="search-input"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
               <Filter className="icon filter-icon" size={16} />
             </div>
           </div>
         </div>
 
         <div className="animal-list">
-          {animals.map((animal, index) => {
-            const TempIcon = getStatusIcon(animal.status);
+          {filteredAnimals.map((animal) => {
+            const temp = animal.monitoramento?.valor_temperatura;
+            const TempIcon = getStatusIcon(temp);
+
             return (
-              <div key={index} className="animal-item" onClick={acessarMonitoramento}>
+              <div
+                key={animal.id}
+                className="animal-item"
+                onClick={() => acessarMonitoramento(animal.id)}
+              >
                 <div className="animal-card">
                   <div className="animal-avatar">
-                    <img src={animal.avatar} alt={animal.name} />
+                    <img
+                      src={animal.avatar || "/avatars/default.png"}
+                      alt={animal.nome}
+                    />
                   </div>
                   <div className="animal-info">
                     <div className="animal-name">
-                      {animal.name}
-                      {animal.starred && <img src={StarIcon} alt="Estrela" className="star-icon" />}
+                      {animal.nome}
+                      {animal.starred && (
+                        <img src={StarIcon} alt="Estrela" className="star-icon" />
+                      )}
                     </div>
                     <div className="animal-type">
-                    {animal.species}
-                    <span className="gender">
-                      {animal.gender === "♀" ? (
-                        <img src={FemaleIcon} alt="Fêmea" className="gender-icon" />
-                      ) : animal.gender === "♂" ? (
-                        <img src={MaleIcon} alt="Macho" className="gender-icon" />
-                      ) : null}
-                    </span>
-                  </div>
+                      {animal.especie}
+                      <span className="gender">
+                        {animal.sexo === "F" ? (
+                          <img src={FemaleIcon} alt="Fêmea" className="gender-icon" />
+                        ) : animal.sexo === "M" ? (
+                          <img src={MaleIcon} alt="Macho" className="gender-icon" />
+                        ) : null}
+                      </span>
+                    </div>
                   </div>
                   <div className="temp-container">
                     <img src={TempIcon} alt="Temperature" className="temp-icon" />
-                    <span className="animal-temp" style={{ color: getStatusColor(animal.status) }}>
-                      {animal.temp.toFixed(1)}°c
+                    <span className="animal-temp" style={{ color: getStatusColor(temp) }}>
+                      {temp ? `${temp.toFixed(1)}°c` : "--°c"}
                     </span>
                   </div>
                 </div>
@@ -116,6 +173,7 @@ export default function AnimalList() {
           })}
         </div>
       </div>
+
       <FooterBar />
 
       <NotificationPopup

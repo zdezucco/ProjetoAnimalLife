@@ -1,7 +1,42 @@
 import styled from "styled-components";
 import { FaThermometerHalf } from "react-icons/fa";
 
-const VitalSignCard = () => {
+interface Monitoramento {
+  id: string;
+  valor_temperatura: number;
+  data_monitoramento: string;
+  id_animal: string;
+  observacoes?: string;
+}
+
+interface VitalSignCardProps {
+  monitoramentos: Monitoramento[];
+}
+
+const VitalSignCard: React.FC<VitalSignCardProps> = ({ monitoramentos }) => {
+  if (!monitoramentos || monitoramentos.length === 0) {
+    return (
+      <CardContainer>
+        <CardHeader>Temperatura:</CardHeader>
+        <CardContent>
+          <span>Nenhum dado disponível</span>
+        </CardContent>
+      </CardContainer>
+    );
+  }
+
+  const ultimo = monitoramentos[monitoramentos.length - 1];
+  const media =
+    monitoramentos.reduce((acc, m) => acc + m.valor_temperatura, 0) /
+    monitoramentos.length;
+
+  const status =
+    ultimo.valor_temperatura < 37
+      ? "Baixa"
+      : ultimo.valor_temperatura > 40
+      ? "Alta"
+      : "Saudável";
+
   return (
     <CardContainer>
       <CardHeader>Temperatura:</CardHeader>
@@ -9,11 +44,11 @@ const VitalSignCard = () => {
         <LeftSection>
           <FaThermometerHalf size={20} color="var(--secondary-color)" />
           <TemperateMedium>
-            <Temperature>39.5°c</Temperature>
-            <Average>Média: 38.2°c</Average>
+            <Temperature>{ultimo.valor_temperatura.toFixed(1)}°c</Temperature>
+            <Average>Média: {media.toFixed(1)}°c</Average>
           </TemperateMedium>
         </LeftSection>
-        <Status>Saudável</Status>
+        <Status>{status}</Status>
       </CardContent>
     </CardContainer>
   );
