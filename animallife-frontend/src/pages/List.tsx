@@ -38,9 +38,9 @@ const getStatusIcon = (temp: number | undefined) => {
   if (temp === 0) return GrayTemp;
   if (temp === null) return GrayTemp;
   if (temp <= 34) return RedTemp;
-  if (temp <= 36) return OrangeTemp;
-  if (temp >= 40) return OrangeTemp;
-  if (temp >= 41) return RedTemp;
+  if (temp <= 36 && temp >= 34.1) return OrangeTemp;
+  if (temp >= 40 && temp <= 41) return OrangeTemp;
+  if (temp >= 41.1) return RedTemp;
   return GreenTemp;
 };
 
@@ -49,8 +49,8 @@ const getStatusColor = (temp: number | undefined) => {
   if (temp === 0) return 'var(--gray-temp)';
   if (temp === null) return 'var(--gray-temp)';
   if (temp <= 34) return 'var(--red-temp)';
-  if (temp <= 36) return 'var(--orange-temp)';
-  if (temp >= 40) return 'var(--orange-temp)';
+  if (temp <= 36 && temp >= 34.1) return 'var(--orange-temp)';
+  if (temp >= 40 && temp <= 41) return 'var(--orange-temp)';
   if (temp >= 41) return 'var(--red-temp)';
   return 'var(--green-temp)';
 };
