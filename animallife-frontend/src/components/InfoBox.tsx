@@ -26,13 +26,15 @@ const formatEspecie = (text: string) => {
   }
 };
 
-// Normaliza para salvar no banco (ex: "Onça Pintada" → "ONCA_PINTADA")
 const normalizeEspecie = (text: string) => {
   if (!text) return "";
-  return text.toUpperCase().replace(/\s+/g, "_");
+  return text
+    .normalize("NFD") // remove acentos
+    .replace(/[\u0300-\u036f]/g, "")
+    .toUpperCase()
+    .replace(/\s+/g, "_"); // troca espaços por "_"
 };
 
-// ✅ Normaliza dieta e sexo para formato aceito pelo banco
 const normalizeToDb = (text: string) => {
   if (!text) return "";
   return text
@@ -99,29 +101,35 @@ const InfoBox = ({ animalId }: InfoBoxProps) => {
 
   // 🔹 Salvar alterações no Supabase
   const handleSave = async () => {
-    const updateData = {
-      nome: formData.nome,
-      especie: normalizeEspecie(formData.especie),
-      raca: formData.raca,
-      peso: formData.peso,
-      altura: formData.altura,
-      comprimento: formData.comprimento,
-      dieta: normalizeToDb(formData.dieta), // HERBIVORO / CARNIVORO / ONIVORO
-      sexo: normalizeToDb(formData.sexo), // MACHO / FEMEA
-    };
+  // 🧠 Se a espécie não foi alterada, mantém a original (formato do banco)
+  const especieFinal =
+    formData.especie === formatEspecie(animal.especie)
+      ? animal.especie // já está normalizado no banco
+      : normalizeEspecie(formData.especie);
 
-    const { error } = await supabase
-      .from("animal")
-      .update(updateData)
-      .eq("id", animalId);
-
-    if (error) {
-      alert("❌ Erro ao atualizar: " + error.message);
-    } else {
-      alert("✅ Dados atualizados com sucesso!");
-      setIsEditing(false);
-    }
+  const updateData = {
+    nome: formData.nome,
+    especie: especieFinal, // ✅ agora garantido no formato do banco
+    raca: formData.raca,
+    peso: formData.peso,
+    altura: formData.altura,
+    comprimento: formData.comprimento,
+    dieta: normalizeToDb(formData.dieta), // ✅ HERBIVORO / CARNIVORO / ONIVORO
+    sexo: normalizeToDb(formData.sexo), // ✅ MACHO / FEMEA
   };
+
+  const { error } = await supabase
+    .from("animal")
+    .update(updateData)
+    .eq("id", animalId);
+
+  if (error) {
+    alert("❌ Erro ao atualizar: " + error.message);
+  } else {
+    alert("✅ Dados atualizados com sucesso!");
+    setIsEditing(false);
+  }
+};
 
   if (!animal) return <p>Carregando informações...</p>;
 
