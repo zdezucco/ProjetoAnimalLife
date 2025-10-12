@@ -15,6 +15,26 @@ interface AnimalHeaderProps {
   onRefresh?: () => void; // opcional, caso queira atualizar dados futuramente
 }
 
+
+const getSpeciesName = (especie: string) => {
+  if (!especie) return "Desconhecido";
+
+  switch (especie.toUpperCase()) {
+    case "ONCA_PINTADA":
+      return "Onça Pintada";
+    case "LOBO_GUARA":
+      return "Lobo-Guará";
+    case "ANTA":
+      return "Anta";
+    default:
+      // Transforma algo como "MACACO_PREGO" → "Macaco Prego"
+      return especie
+        .toLowerCase()
+        .replace(/_/g, " ")
+        .replace(/\b\w/g, (c) => c.toUpperCase());
+  }
+};
+
 const AnimalHeader: React.FC<AnimalHeaderProps> = ({ animal, onRefresh }) => {
   return (
     <HeaderContainer>
@@ -24,7 +44,7 @@ const AnimalHeader: React.FC<AnimalHeaderProps> = ({ animal, onRefresh }) => {
 
       <AnimalInfo>
         <AnimalName>{animal.nome}</AnimalName>
-        <Species>{animal.especie}</Species>
+        <Species>{getSpeciesName(animal.especie)}</Species>
       </AnimalInfo>
 
       <GenderSection>

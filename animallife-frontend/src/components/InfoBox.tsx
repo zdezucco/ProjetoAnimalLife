@@ -32,8 +32,8 @@ const normalizeEspecie = (text: string) => {
   return text.toUpperCase().replace(/\s+/g, "_");
 };
 
-// Normaliza dieta (ex: "Herbívoro" → "HERBIVORO")
-const normalizeDieta = (text: string) => {
+// ✅ Normaliza dieta e sexo para formato aceito pelo banco
+const normalizeToDb = (text: string) => {
   if (!text) return "";
   return text
     .normalize("NFD")
@@ -61,17 +61,32 @@ const InfoBox = ({ animalId }: InfoBoxProps) => {
         return;
       }
 
+      // Formatamos para exibição amigável
       setAnimal(data);
       setFormData({
         ...data,
         especie: formatEspecie(data.especie),
+        dieta:
+          data.dieta === "HERBIVORO"
+            ? "Herbívoro"
+            : data.dieta === "CARNIVORO"
+            ? "Carnívoro"
+            : data.dieta === "ONIVORO"
+            ? "Onívoro"
+            : "",
+        sexo:
+          data.sexo === "MACHO"
+            ? "Macho"
+            : data.sexo === "FEMEA"
+            ? "Fêmea"
+            : "",
       });
     };
 
     if (animalId) fetchAnimal();
   }, [animalId]);
 
-  // 🔹 Atualiza valores ao digitar
+  // 🔹 Atualiza campos editáveis
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { id, value } = e.target;
     setFormData({ ...formData, [id]: value });
@@ -82,20 +97,22 @@ const InfoBox = ({ animalId }: InfoBoxProps) => {
     setFormData({ ...formData, [field]: value });
   };
 
-  // 🔹 Salvar alterações
+  // 🔹 Salvar alterações no Supabase
   const handleSave = async () => {
+    const updateData = {
+      nome: formData.nome,
+      especie: normalizeEspecie(formData.especie),
+      raca: formData.raca,
+      peso: formData.peso,
+      altura: formData.altura,
+      comprimento: formData.comprimento,
+      dieta: normalizeToDb(formData.dieta), // HERBIVORO / CARNIVORO / ONIVORO
+      sexo: normalizeToDb(formData.sexo), // MACHO / FEMEA
+    };
+
     const { error } = await supabase
       .from("animal")
-      .update({
-        nome: formData.nome,
-        especie: normalizeEspecie(formData.especie),
-        raca: formData.raca,
-        peso: formData.peso,
-        altura: formData.altura,
-        comprimento: formData.comprimento,
-        dieta: normalizeDieta(formData.dieta),
-        sexo: formData.sexo,
-      })
+      .update(updateData)
       .eq("id", animalId);
 
     if (error) {
@@ -236,7 +253,7 @@ const InfoBox = ({ animalId }: InfoBoxProps) => {
         </div>
       </div>
 
-      {/* 🔹 REGISTRO (somente leitura) */}
+      {/* 🔹 REGISTRO — somente leitura */}
       <div className="register-box">
         <h3>Registro:</h3>
         <textarea readOnly value={animal.registro || "Sem registros"}></textarea>
