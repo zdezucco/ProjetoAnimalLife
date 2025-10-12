@@ -45,10 +45,10 @@ const getStatusIcon = (temp: number | undefined) => {
 };
 
 const getStatusColor = (temp: number | undefined) => {
-  if (temp === undefined) return GrayTemp;
-  if (temp < 36) return  RedTemp;
-  if (temp > 40) return OrangeTemp;
-  return GreenTemp;
+  if (temp === undefined) return "#757575";
+  if (temp < 36) return "#E53935";
+  if (temp > 40) return "#FF9800";
+  return "#4CAF50";
 };
 
 export default function AnimalList() {
