@@ -27,12 +27,6 @@ interface Animal {
   };
 }
 
-const notifications: NotificationItem[] = [
-  { id: 1, level: "URGENTE", message: "Alerta Extremo de saúde! Clique para verificar os dados!", image: "/avatars/jussara.png", collar: "003" },
-  { id: 2, level: "ATENÇÃO", message: "Alerta de saúde! Clique para verificar os dados!", image: "/avatars/lira.png", collar: "004" },
-  { id: 3, level: "URGENTE", message: "Alerta Extremo de saúde! Clique para verificar os dados!", image: "/avatars/leco.png", collar: "006" },
-];
-
 const getStatusIcon = (temp: number | undefined) => {
   if (temp === undefined ) return GrayTemp;
   if (temp === 0) return GrayTemp;
