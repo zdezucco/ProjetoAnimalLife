@@ -34,9 +34,13 @@ const notifications: NotificationItem[] = [
 ];
 
 const getStatusIcon = (temp: number | undefined) => {
-  if (temp === undefined) return GrayTemp;
-  if (temp < 36) return RedTemp;
-  if (temp > 40) return OrangeTemp;
+  if (temp === undefined ) return GrayTemp;
+  if (temp === 0) return GrayTemp;
+  if (temp === null) return GrayTemp;
+  if (temp <= 34) return RedTemp;
+  if (temp <= 36) return OrangeTemp;
+  if (temp >= 40) return OrangeTemp;
+  if (temp >= 41) return RedTemp;
   return GreenTemp;
 };
 
