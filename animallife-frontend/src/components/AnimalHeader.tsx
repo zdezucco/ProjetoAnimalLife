@@ -38,7 +38,7 @@ const AnimalHeader: React.FC<AnimalHeaderProps> = ({ animal }) => {
   return (
     <HeaderContainer>
       <RefreshButton onClick={() => window.location.reload()}>
-        <img src={refresh} alt="Atualizar" />
+        <RefreshIcon> <img src={refresh} alt="Atualizar" /> </RefreshIcon>
       </RefreshButton>
 
       <AnimalInfo>
@@ -73,15 +73,19 @@ const HeaderContainer = styled.div`
 `;
 
 const RefreshButton = styled.button`
-  width: 3.5rem;
-  height: 3.5rem;
+  width: 3rem;
+  height: 3rem;
   background: #C2E5AD;
   border: none;
   cursor: pointer;
   border-radius:  25%;
-  align-items: center;
-
 `;
+
+const RefreshIcon = styled.img`
+  width: 1.5rem;
+  height: 1.5rem;
+  align-items: center;
+`; 
 
 const AnimalInfo = styled.div`
   text-align: center;
@@ -106,8 +110,8 @@ const GenderSection = styled.div`
 `;
 
 const GenderIcon = styled.div`
-  width: 3.5rem;
-  height: 3.5rem;
+  width: 3rem;
+  height: 3rem;
 `;
 
 const GenderText = styled.span`
