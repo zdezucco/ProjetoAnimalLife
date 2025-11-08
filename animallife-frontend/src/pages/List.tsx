@@ -1,4 +1,4 @@
-import { Bell, Search, Filter } from "lucide-react";
+import { Bell, Search } from "lucide-react";
 import "../styles/index.css";
 import "../styles/list.css";
 import StarIcon from "../assets/fav-icon.svg";
