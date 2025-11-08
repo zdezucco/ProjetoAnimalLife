@@ -49,7 +49,7 @@ const AnimalHeader: React.FC<AnimalHeaderProps> = ({ animal }) => {
       <GenderSection>
         <GenderIcon>
           <img
-            src={animal.sexo.toLowerCase() === "fêmea" ? female : male}
+            src={animal.sexo.toLowerCase() === "FEMEA" ? female : male}
             alt={animal.sexo}
           />
         </GenderIcon>
