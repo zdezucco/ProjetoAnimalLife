@@ -34,6 +34,13 @@ const getSpeciesName = (especie: string) => {
   }
 };
 
+// Função auxiliar para identificar o gênero corretamente
+const isFemale = (sexo: string) => {
+  if (!sexo) return false;
+  const normalized = sexo.normalize("NFD").replace(/[\u0300-\u036f]/g, ""); // remove acentos
+  return ["f", "femea", "fêmea"].includes(normalized.toLowerCase());
+};
+
 const AnimalHeader: React.FC<AnimalHeaderProps> = ({ animal }) => {
   return (
     <HeaderContainer>
@@ -49,7 +56,7 @@ const AnimalHeader: React.FC<AnimalHeaderProps> = ({ animal }) => {
       <GenderSection>
         <GenderIcon>
           <img
-            src={animal.sexo.toLowerCase() === "FEMEA" ? female : male}
+            src={isFemale(animal.sexo) ? female : male}
             alt={animal.sexo}
           />
         </GenderIcon>
