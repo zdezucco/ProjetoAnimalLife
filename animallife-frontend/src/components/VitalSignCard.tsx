@@ -40,36 +40,36 @@ const VitalSignCard: React.FC<VitalSignCardProps> = ({ monitoramentos }) => {
   const getTempStatus = (temp: number) => {
     if (temp === undefined || temp === null || temp === 0)
       return {
-        color: "var(--gray-temp)",
+        color: "var(--second-text-color)",
         status: "INVÁLIDO",
         icon: grayTerm,
       };
     if (temp <= 35)
       return {
-        color: "var(--red-temp)",
+        color: "var(--warning-secundary)",
         status: "URGENTE",
         icon: redTerm,
       };
     if (temp >= 35.1 && temp <= 36)
       return {
-        color: "var(--orange-temp)",
+        color: "var(--attention-secundary)",
         status: "ATENÇÃO",
         icon: orangeTerm,
       };
     if (temp >= 40 && temp <= 41)
       return {
-        color: "var(--orange-temp)",
+        color: "var(--attention-secundary)",
         status: "ATENÇÃO",
         icon: orangeTerm,
       };
     if (temp > 41)
       return {
-        color: "var(--red-temp)",
+        color: "var(--warning-secundary)",
         status: "URGENTE",
         icon: redTerm,
       };
     return {
-      color: "var(--green-temp)",
+      color: "var(--healty-color)",
       status: "SAUDÁVEL",
       icon: greenTerm,
     };
