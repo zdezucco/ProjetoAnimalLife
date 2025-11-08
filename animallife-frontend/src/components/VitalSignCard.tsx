@@ -1,5 +1,8 @@
 import styled from "styled-components";
-import { FaThermometerHalf } from "react-icons/fa";
+import grayTerm from "../assets/gray-term-monit.svg";
+import greenTerm from "../assets/green-term-monit.svg";
+import redTerm from "../assets/red-term-monit.svg";
+import orangeTerm from "../assets/orange-term-monit.svg";
 
 interface Monitoramento {
   id: string;
@@ -16,8 +19,10 @@ interface VitalSignCardProps {
 const VitalSignCard: React.FC<VitalSignCardProps> = ({ monitoramentos }) => {
   if (!monitoramentos || monitoramentos.length === 0) {
     return (
-      <CardContainer>
-        <CardHeader>Temperatura:</CardHeader>
+      <CardContainer style={{ backgroundColor: "var(--gray-temp)" }}>
+        <CardHeader style={{ backgroundColor: "var(--gray-temp)" }}>
+          Temperatura:
+        </CardHeader>
         <CardContent>
           <span>Nenhum dado disponível</span>
         </CardContent>
@@ -26,25 +31,60 @@ const VitalSignCard: React.FC<VitalSignCardProps> = ({ monitoramentos }) => {
   }
 
   const ultimo = monitoramentos[monitoramentos.length - 1];
+  const temp = ultimo.valor_temperatura;
   const media =
     monitoramentos.reduce((acc, m) => acc + m.valor_temperatura, 0) /
     monitoramentos.length;
 
-  const status =
-    ultimo.valor_temperatura < 37
-      ? "Baixa"
-      : ultimo.valor_temperatura > 40
-      ? "Alta"
-      : "Saudável";
+  // Função que define o status, cor e ícone com base na temperatura
+  const getTempStatus = (temp: number) => {
+    if (temp === undefined || temp === null || temp === 0)
+      return {
+        color: "var(--gray-temp)",
+        status: "INVÁLIDO",
+        icon: grayTerm,
+      };
+    if (temp <= 35)
+      return {
+        color: "var(--red-temp)",
+        status: "URGENTE",
+        icon: redTerm,
+      };
+    if (temp >= 35.1 && temp <= 36)
+      return {
+        color: "var(--orange-temp)",
+        status: "ATENÇÃO",
+        icon: orangeTerm,
+      };
+    if (temp >= 40 && temp <= 41)
+      return {
+        color: "var(--orange-temp)",
+        status: "ATENÇÃO",
+        icon: orangeTerm,
+      };
+    if (temp > 41)
+      return {
+        color: "var(--red-temp)",
+        status: "URGENTE",
+        icon: redTerm,
+      };
+    return {
+      color: "var(--green-temp)",
+      status: "SAUDÁVEL",
+      icon: greenTerm,
+    };
+  };
+
+  const { color, status, icon } = getTempStatus(temp);
 
   return (
-    <CardContainer>
-      <CardHeader>Temperatura:</CardHeader>
+    <CardContainer style={{ backgroundColor: color }}>
+      <CardHeader style={{ backgroundColor: color }}>Temperatura:</CardHeader>
       <CardContent>
         <LeftSection>
-          <FaThermometerHalf size={20} color="var(--secondary-color)" />
+          <img src={icon} alt="Ícone Termômetro" width={24} height={24} />
           <TemperateMedium>
-            <Temperature>{ultimo.valor_temperatura.toFixed(1)}°c</Temperature>
+            <Temperature>{temp.toFixed(1)}°c</Temperature>
             <Average>Média: {media.toFixed(1)}°c</Average>
           </TemperateMedium>
         </LeftSection>
