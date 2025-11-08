@@ -75,7 +75,7 @@ const VitalSignCard: React.FC<VitalSignCardProps> = ({ monitoramentos }) => {
       };
     return {
       color: "var(--healty-color)",
-      textcolor: "var(--orange-temp)",  
+      textcolor: "var(--green-temp)",  
       status: "SAUDÁVEL",
       icon: greenTerm,
     };
