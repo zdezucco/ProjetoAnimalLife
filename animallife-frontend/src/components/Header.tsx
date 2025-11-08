@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Bell, X } from "lucide-react";
+import { Bell } from "lucide-react";
 import Editicon from "../assets/edit-icon.svg";
 import Return from "../assets/return.svg";
 import FavIcon from "../assets/fav-icon.svg";
@@ -25,7 +25,7 @@ const Header = () => {
   const navigate = useNavigate();
   const [showNotifications, setShowNotifications] = useState(false);
   const [notifications, setNotifications] = useState<NotificationItem[]>([]);
-  const [animals, setAnimals] = useState<Animal[]>([]);
+  const [_, setAnimals] = useState<Animal[]>([]);
 
   const Retornar = () => {
     navigate("/List");
