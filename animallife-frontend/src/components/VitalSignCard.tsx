@@ -41,41 +41,47 @@ const VitalSignCard: React.FC<VitalSignCardProps> = ({ monitoramentos }) => {
     if (temp === undefined || temp === null || temp === 0)
       return {
         color: "var(--second-text-color)",
+        textcolor: "var(--gray-temp)",
         status: "INVÁLIDO",
         icon: grayTerm,
       };
     if (temp <= 35)
       return {
         color: "var(--warning-secundary)",
+        textcolor: "var(--red-temp)",
         status: "URGENTE",
         icon: redTerm,
       };
     if (temp >= 35.1 && temp <= 36)
       return {
         color: "var(--attention-secundary)",
+        textcolor: "var(--orange-temp)",
         status: "ATENÇÃO",
         icon: orangeTerm,
       };
     if (temp >= 40 && temp <= 41)
       return {
         color: "var(--attention-secundary)",
+        textcolor: "var(--orange-temp)",
         status: "ATENÇÃO",
         icon: orangeTerm,
       };
     if (temp > 41)
       return {
         color: "var(--warning-secundary)",
+        textcolor: "var(--red-temp)",
         status: "URGENTE",
         icon: redTerm,
       };
     return {
       color: "var(--healty-color)",
+      textcolor: "var(--orange-temp)",  
       status: "SAUDÁVEL",
       icon: greenTerm,
     };
   };
 
-  const { color, status, icon } = getTempStatus(temp);
+  const { color, textcolor, status, icon } = getTempStatus(temp);
 
   return (
     <CardContainer style={{ backgroundColor: color }}>
@@ -84,11 +90,11 @@ const VitalSignCard: React.FC<VitalSignCardProps> = ({ monitoramentos }) => {
         <LeftSection>
           <img src={icon} alt="Ícone Termômetro" width={24} height={24} />
           <TemperateMedium>
-            <Temperature style={{ color }}>{temp.toFixed(1)}°c</Temperature>
-            <Average style={{ color }}>Média: {media.toFixed(1)}°c</Average>
+            <Temperature style={{ color: textcolor }}>{temp.toFixed(1)}°c</Temperature>
+            <Average style={{ color: textcolor }}>Média: {media.toFixed(1)}°c</Average>
           </TemperateMedium>
         </LeftSection>
-        <Status style={{ color }}>{status}</Status>
+        <Status style={{ color: textcolor }}>{status}</Status>
       </CardContent>
     </CardContainer>
   );
