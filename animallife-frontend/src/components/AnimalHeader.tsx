@@ -12,7 +12,6 @@ interface Animal {
 
 interface AnimalHeaderProps {
   animal: Animal;
-  onRefresh?: () => void; // opcional, caso queira atualizar dados futuramente
 }
 
 
@@ -35,10 +34,10 @@ const getSpeciesName = (especie: string) => {
   }
 };
 
-const AnimalHeader: React.FC<AnimalHeaderProps> = ({ animal, onRefresh }) => {
+const AnimalHeader: React.FC<AnimalHeaderProps> = ({ animal }) => {
   return (
     <HeaderContainer>
-      <RefreshButton onClick={onRefresh}>
+      <RefreshButton onClick={() => window.location.reload()}>
         <img src={refresh} alt="Atualizar" />
       </RefreshButton>
 
