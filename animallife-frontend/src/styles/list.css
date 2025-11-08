@@ -25,7 +25,7 @@
 #top-header {
   position: relative;
   width: 100%;
-  padding: 1rem 1.5rem;
+  padding: 0rem 1rem 1rem;
   display: flex;
   align-items: center;
   justify-content: center; /* centraliza o conteúdo (h1) */
