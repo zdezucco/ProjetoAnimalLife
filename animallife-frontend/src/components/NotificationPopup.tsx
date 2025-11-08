@@ -13,38 +13,66 @@ type NotificationPopupProps = {
   isOpen: boolean;
   onClose: () => void;
   notifications: NotificationItem[];
+  onNotificationClick?: (notification: NotificationItem) => void;
 };
 
 const NotificationPopup: React.FC<NotificationPopupProps> = ({
   isOpen,
   onClose,
   notifications,
+  onNotificationClick,
 }) => {
   if (!isOpen) return null;
 
+  const getLevelColor = (level: string) => {
+    switch (level) {
+      case "URGENTE":
+        return 'var(--red-temp)'; // vermelho
+      case "ATENÇÃO":
+        return 'var(--orange-temp)'; // laranja
+      default:
+        return 'var(--gray-temp)';
+    }
+  };
+
   return (
-    <div className="popup-overlay">
-      <div className="popup-container">
+    <div className="notification-popup-overlay" onClick={onClose}>
+      <div
+        className="notification-popup"
+        onClick={(e) => e.stopPropagation()} // impede fechamento ao clicar dentro
+      >
         <div className="popup-header">
-          <h2>Notificações</h2>
-          <button className="close-btn" onClick={onClose}>✖</button>
+          <h3>Notificações</h3>
+          <button className="close-btn" onClick={onClose}>
+            ✕
+          </button>
         </div>
 
-        <div className="popup-content">
-          {notifications.map((n) => (
-            <div
-              key={n.id}
-              className={`notification-card ${n.level === "URGENTE" ? "urgent" : "warning"}`}
-            >
-              <img src={n.image} alt="animal" className="animal-img" />
-              <div className="notification-text">
-                <h3>{n.level}!</h3>
-                <p>{n.message}</p>
-                <span className="collar">Coleira {n.collar}</span>
-              </div>
-            </div>
-          ))}
-        </div>
+        {notifications.length === 0 ? (
+          <p className="no-notifications">Nenhuma notificação no momento.</p>
+        ) : (
+          <ul className="notification-list">
+            {notifications.map((n) => (
+              <li
+                key={n.id}
+                className="notification-item"
+                onClick={() => onNotificationClick && onNotificationClick(n)} // 👈 ao clicar, abre monitoramento
+              >
+                <img src={n.image} alt="Animal" className="notification-img" />
+                <div className="notification-info">
+                  <strong
+                    className="notification-level"
+                    style={{ color: getLevelColor(n.level) }}
+                  >
+                    {n.level}
+                  </strong>
+                  <p className="notification-message">{n.message}</p>
+                  <span className="notification-collar">ID: {n.collar}</span>
+                </div>
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
     </div>
   );

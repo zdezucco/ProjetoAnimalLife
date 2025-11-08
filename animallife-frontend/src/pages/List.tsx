@@ -107,7 +107,10 @@ export default function AnimalList() {
       });
 
       setAnimals(mergedData);
-          // 🔔 Gera notificações automáticas
+
+
+
+// 🔔 Gera notificações automáticas
       const generatedNotifications: NotificationItem[] = mergedData
         .filter((a) => {
           const t = a.monitoramento?.valor_temperatura;
@@ -115,13 +118,12 @@ export default function AnimalList() {
             t !== undefined &&
             t !== null &&
             t !== 0 &&
-            ((t <= 35) || (t > 35 && t < 36) || (t >= 40))
+            (t <= 35 || (t > 35 && t < 36) || t >= 40)
           );
         })
         .map((a, index) => {
           const temp = a.monitoramento?.valor_temperatura || 0;
-          const level =
-            temp <= 35 || temp > 41 ? "URGENTE" : "ATENÇÃO";
+          const level = temp <= 35 || temp > 41 ? "URGENTE" : "ATENÇÃO";
 
           return {
             id: index + 1,
@@ -143,6 +145,15 @@ export default function AnimalList() {
 
   const acessarMonitoramento = (animalId: number) => {
     navigate(`/Monitoramento?id=${animalId}`);
+  };
+
+    // 🟡 Ao clicar em uma notificação, abrir a tela do respectivo animal
+  const handleNotificationClick = (notification: NotificationItem) => {
+    const animalId = Number(notification.collar);
+    if (animalId) {
+      setShowNotifications(false);
+      navigate(`/Monitoramento?id=${animalId}`);
+    }
   };
 
   const filteredAnimals = animals.filter((a) =>
@@ -235,11 +246,12 @@ export default function AnimalList() {
 
       <FooterBar />
 
-      {/* 🔔 Notificações dinâmicas */}
+      {/* 🔔 Modal de notificações com ação de clique */}
       <NotificationPopup
         isOpen={showNotifications}
         onClose={() => setShowNotifications(false)}
         notifications={notifications}
+        onNotificationClick={handleNotificationClick} // 👈 Adicionado
       />
     </div>
   );
