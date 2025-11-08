@@ -81,11 +81,13 @@ const RefreshButton = styled.button`
   border-radius:  25%;
 `;
 
-const RefreshIcon = styled.img`
+const RefreshIcon = styled.div`
   width: 1.5rem;
   height: 1.5rem;
+  display: flex;
   align-items: center;
-`; 
+  justify-content: center;
+`;
 
 const AnimalInfo = styled.div`
   text-align: center;
