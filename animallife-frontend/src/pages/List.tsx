@@ -189,7 +189,6 @@ export default function AnimalList() {
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
-              <Filter className="icon filter-icon" size={16} />
             </div>
           </div>
         </div>
