@@ -84,11 +84,11 @@ const VitalSignCard: React.FC<VitalSignCardProps> = ({ monitoramentos }) => {
         <LeftSection>
           <img src={icon} alt="Ícone Termômetro" width={24} height={24} />
           <TemperateMedium>
-            <Temperature>{temp.toFixed(1)}°c</Temperature>
-            <Average>Média: {media.toFixed(1)}°c</Average>
+            <Temperature style={{ color }}>{temp.toFixed(1)}°c</Temperature>
+            <Average style={{ color }}>Média: {media.toFixed(1)}°c</Average>
           </TemperateMedium>
         </LeftSection>
-        <Status>{status}</Status>
+        <Status style={{ color }}>{status}</Status>
       </CardContent>
     </CardContainer>
   );

@@ -24,12 +24,12 @@ html, body {
   --bg-primary-color: #F0F0F0;
   --bg-secundary-color: #EBEBEB;
 
-  
 
-  --red-temp: #E53935;
-  --orange-temp: #FF9800;
-  --green-temp: #4CAF50;
-  --gray-temp: #757575;
+
+  --red-temp: #FF2828;
+  --orange-temp: #F67D0D;
+  --green-temp: #57AB23;
+  --gray-temp: #5A5A5B;
 
 
   --ff-sans: "Barlow Semi Condensed", system-ui, sans-serif;
