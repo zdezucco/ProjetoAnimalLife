@@ -82,9 +82,8 @@ const RefreshButton = styled.button`
 `;
 
 const RefreshIcon = styled.div`
-  width: 1.5rem;
-  height: 1.5rem;
-  display: flex;
+  width: 1.8rem;
+  height: 1.8rem;
   align-items: center;
   justify-content: center;
 `;
