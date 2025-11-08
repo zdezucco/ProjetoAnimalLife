@@ -73,12 +73,14 @@ const HeaderContainer = styled.div`
 `;
 
 const RefreshButton = styled.button`
-  width: 3rem;
-  height: 3rem;
+  width: 3.2rem;
+  height: 3.2rem;
   background: #C2E5AD;
   border: none;
   cursor: pointer;
   border-radius:  25%;
+  align-items: center;
+
 `;
 
 const AnimalInfo = styled.div`
@@ -110,4 +112,5 @@ const GenderIcon = styled.div`
 
 const GenderText = styled.span`
   font-size: 12px;
+  align-items: center;
 `;
