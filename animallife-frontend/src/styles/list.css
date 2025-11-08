@@ -22,46 +22,85 @@
   flex-direction: column;
 }
 
-#top-header {
-  margin-bottom: 2rem;
-  align-items: end;
-  display: flex;
-  justify-content: center;
-}
-
-.header {
-  position: absolute;
-  inset-block-start: 1.25rem;
-  font-size: 1.5rem;
-  font-weight: var(--fw-bold);
-  color: var(--primary-color);
+/* reset básico — sem margem global */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
   margin: 0;
+  padding: 0;
+}
+html, body {
+  height: 100%;
 }
 
-.notification {
+:root {
+  --bg-color: linear-gradient( 45deg, #227504, #57AB23);
+  --text-color: #5A5A5B;
+  --second-text-color: #D9D9D9;
+  --primary-color: #227504;
+  --secondary-color: #57AB23;
+  --attention-color: #F67D0D;
+  --attention-secundary: #FEDAB9;
+  --warning-color: #FF2828;
+  --warning-secundary: #FFBCBC;
+  --healty-color: #C2E5AD;
+  --bg-primary-color: #F0F0F0;
+  --bg-secundary-color: #EBEBEB;
+
+
+
+  --red-temp: #FF2828;
+  --orange-temp: #F67D0D;
+  --green-temp: #57AB23;
+  --gray-temp: #5A5A5B;
+
+
+  --ff-sans: "Barlow Semi Condensed", system-ui, sans-serif;
+  --fw-base: 400;
+  --fw-md: 500;
+  --fw-bold: 800;
+
+}
+
+html {
+  background-color: var(--bg-color);
+  font-family: var(--ff-sans);
+  font-weight: var(--fw-base);
+  font-size: var(--fs-base);
+  line-height: 1.6;
+  color: var(--text-color);
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+}
+
+
+footer {
+  box-shadow: 0px 5px 35px var(--second-text-color);
+  width: 100%;
+}
+
+#footer_content{
+  background-color: var(--primary-color);
   display: flex;
-  justify-content: end;
-  align-items: end;
-}
-
-.bell-icon {
-  color: var(--primary-color);
-}
-
-.notification-count {
-  position: absolute;
-  inset-inline-end: 0.75rem;
-  inset-block-start: 0.375rem;
-  background: red;
-  color: white;
-  border-radius: 50%;
-  width: 1.125rem;
-  height: 1.125rem;
-  display: flex;
-  align-items: center;
+  padding: 0.8rem;
   justify-content: center;
-  font-size: 0.625rem;
 }
+
+@media screen and (max-width: 768px){
+  #footer_content{
+      gap: 2rem;
+  }
+}
+
+@media screen and (max-width: 426px){
+  #footer_content{
+      padding: 0.8rem;
+      max-width: 500px;
+  }
+}
+
+
 
 #search-container {
   margin-bottom: 0.5rem;
