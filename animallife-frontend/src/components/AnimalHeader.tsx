@@ -73,8 +73,8 @@ const HeaderContainer = styled.div`
 `;
 
 const RefreshButton = styled.button`
-  width: 3.2rem;
-  height: 3.2rem;
+  width: 3.5rem;
+  height: 3.5rem;
   background: #C2E5AD;
   border: none;
   cursor: pointer;
@@ -106,8 +106,8 @@ const GenderSection = styled.div`
 `;
 
 const GenderIcon = styled.div`
-  width: 3rem;
-  height: 3rem;
+  width: 3.5rem;
+  height: 3.5rem;
 `;
 
 const GenderText = styled.span`
