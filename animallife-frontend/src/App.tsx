@@ -4,7 +4,7 @@ import Acess from "./pages/AcessScreen";
 import Monitoramento from "./pages/Monitoramento";
 import RecuperaSenha from "./pages/Recuperasenha";
 import NovaSenha from "./pages/Novasenha";
-import LoadingScreen from "./pages/Loadinscreen";
+import LoadingScreen from "./pages/Loadingscreen";
 
 
 function App() {

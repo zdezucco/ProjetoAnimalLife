@@ -9,6 +9,7 @@ import FooterBar from "../components/FooterBar";
 import { useSearchParams } from "react-router"
 import { useEffect, useState } from "react";
 import { supabase } from "../supabaseClient";
+import LoadingScreen from "../pages/Loadingscreen";
 
 const Monitoramento = () => {
   const [searchParams] = useSearchParams();
@@ -39,7 +40,7 @@ const Monitoramento = () => {
     fetchData();
   }, [animalId]);
 
-  if (!animal) return <p>Carregando...</p>;
+  if (!animal) return <LoadingScreen />;
 
   return (
     <>
