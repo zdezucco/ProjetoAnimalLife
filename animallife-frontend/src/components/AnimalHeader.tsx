@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import refresh from "../assets/refresh.svg";
 import female from "../assets/female-icon-white.svg";
-import male from "../assets/male-icon.svg";
+import male from "../assets/male-icon-white.svg";
 
 interface Animal {
   id: string;
@@ -114,5 +114,5 @@ const GenderIcon = styled.div`
 
 const GenderText = styled.span`
   font-size: 12px;
-  align-items: center;
+  padding-right: 2rem;
 `;
