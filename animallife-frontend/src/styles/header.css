@@ -20,8 +20,9 @@
 }
 
 .notification {
-  position: fixed;
+  position: absolute;
   display: flex;
+  top: -15px;
   align-items: center;
   overflow-x: hidden;
   width: max-content;
@@ -54,8 +55,11 @@
 
 .icon-star {
   cursor: pointer;
-  width: 28px;
-  height: 28px;
+  width: 45px;
+  height: 26px;
+  top: 20px;
+  right: 0px;
+  position: absolute;
   color: #FFC107; /* Cor da estrela */
 }
 

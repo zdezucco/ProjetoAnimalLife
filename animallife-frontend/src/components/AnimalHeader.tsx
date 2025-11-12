@@ -89,8 +89,8 @@ const RefreshButton = styled.button`
 `;
 
 const RefreshIcon = styled.div`
-  width: 2rem;
-  height: 2rem;
+  width: 48px;
+  height: 20px;
 `;
 
 const AnimalInfo = styled.div`
