@@ -116,11 +116,10 @@ const CardHeader = styled.div`
   color: var(--text-color);
   font-size: 14px;
   position: absolute;
-  top: -8px;
-  left: 10px;
+  top: -13px;
   background: var(--healty-color);
   padding: 5px 10px;
-  border-top-left-radius: 10px;
+  border-radius: 10px;
 `;
 
 const CardContent = styled.div`
