@@ -105,7 +105,7 @@ export default TempSignCard;
 const CardContainer = styled.div`
   background-color: var(--healty-color);
   padding: 10px;
-  margin: 5px 0px 10px 0px;
+  margin: 5px 0px 20px 0px;
   border-radius: 10px;
   width: 100%;
   position: relative;
