@@ -1,6 +1,5 @@
 import styled from "styled-components";
 import AnimalHeader from "../components/AnimalHeader";
-import VitalSignCard from "../components/TempSignCard";
 import "../styles/index.css";
 import InfoBox from "../components/InfoBox";
 import Header from "../components/Header";
@@ -11,6 +10,7 @@ import { useEffect, useState } from "react";
 import { supabase } from "../supabaseClient";
 import LoadingScreen from "../pages/Loadingscreen";
 import TempSignCard from "../components/TempSignCard";
+import VitalSignCard from "../components/VitalSignCard";
 import BloodSignCard from "../components/BloodSignCard";
 
 const Monitoramento = () => {
