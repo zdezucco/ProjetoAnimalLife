@@ -1,8 +1,8 @@
 import styled from "styled-components";
-import grayHeart from "../assets/gray-heart.svg";
-import greenHeart from "../assets/green-heart.svg";
-import redHeart from "../assets/red-heart.svg";
-import orangeHeart from "../assets/orange-heart.svg"
+import grayTerm from "../assets/gray-term-monit.svg";
+import greenTerm from "../assets/green-term-monit.svg";
+import redTerm from "../assets/red-term-monit.svg";
+import orangeTerm from "../assets/orange-term-monit.svg";
 
 interface Monitoramento {
   id: string;
@@ -12,16 +12,16 @@ interface Monitoramento {
   observacoes?: string;
 }
 
-interface VitalSignCardProps {
+interface BloodSignCardProps {
   monitoramentos: Monitoramento[];
 }
 
-const VitalSignCard: React.FC<VitalSignCardProps> = ({ monitoramentos }) => {
+const BloodSignCard: React.FC<BloodSignCardProps> = ({ monitoramentos }) => {
   if (!monitoramentos || monitoramentos.length === 0) {
     return (
       <CardContainer style={{ backgroundColor: "var(--gray-temp)" }}>
         <CardHeader style={{ backgroundColor: "var(--gray-temp)" }}>
-          Pulsação:
+          Saturação de Oxigênio:
         </CardHeader>
         <CardContent>
           <span>Nenhum dado disponível</span>
@@ -37,61 +37,61 @@ const VitalSignCard: React.FC<VitalSignCardProps> = ({ monitoramentos }) => {
     monitoramentos.length;
 
   // Função que define o status, cor e ícone com base na temperatura
-  const getVitalStatus = (temp: number) => {
+  const getBloodStatus = (temp: number) => {
     if (temp === undefined || temp === null || temp === 0)
       return {
         color: "var(--second-text-color)",
         textcolor: "var(--gray-temp)",
         status: "INVÁLIDO",
-        icon: grayHeart,
+        icon: grayTerm,
       };
     if (temp <= 35)
       return {
         color: "var(--warning-secundary)",
         textcolor: "var(--red-temp)",
         status: "URGENTE",
-        icon: redHeart,
+        icon: redTerm,
       };
     if (temp >= 35.1 && temp <= 36)
       return {
         color: "var(--attention-secundary)",
         textcolor: "var(--orange-temp)",
         status: "ATENÇÃO",
-        icon: orangeHeart,
+        icon: orangeTerm,
       };
     if (temp >= 40 && temp <= 41)
       return {
         color: "var(--attention-secundary)",
         textcolor: "var(--orange-temp)",
         status: "ATENÇÃO",
-        icon: orangeHeart,
+        icon: orangeTerm,
       };
     if (temp > 41)
       return {
         color: "var(--warning-secundary)",
         textcolor: "var(--red-temp)",
         status: "URGENTE",
-        icon: redHeart,
+        icon: redTerm,
       };
     return {
       color: "var(--healty-color)",
       textcolor: "var(--green-temp)",  
       status: "SAUDÁVEL",
-      icon: greenHeart,
+      icon: greenTerm,
     };
   };
 
-  const { color, textcolor, status, icon } = getVitalStatus(temp);
+  const { color, textcolor, status, icon } = getBloodStatus(temp);
 
   return (
     <CardContainer style={{ backgroundColor: color }}>
-      <CardHeader style={{ backgroundColor: color }}>Pulsação:</CardHeader>
+      <CardHeader style={{ backgroundColor: color }}>Saturação de Oxigênio:</CardHeader>
       <CardContent>
         <LeftSection>
-          <img src={icon} alt="Ícone Frequência Cardíaca" width={34} height={34} />
+          <img src={icon} alt="Ícone Saturação de Oxigênio" width={34} height={34} />
           <TemperateMedium>
-            <Temperature style={{ color: textcolor }}>{temp.toFixed(1)}bpm</Temperature>
-            <Average style={{ color: textcolor }}>Média: {media.toFixed(1)}bpm</Average>
+            <Temperature style={{ color: textcolor }}>{temp.toFixed(1)}%</Temperature>
+            <Average style={{ color: textcolor }}>Média: {media.toFixed(1)}%</Average>
           </TemperateMedium>
         </LeftSection>
         <Status style={{ color: textcolor }}>{status}</Status>
@@ -100,7 +100,7 @@ const VitalSignCard: React.FC<VitalSignCardProps> = ({ monitoramentos }) => {
   );
 };
 
-export default VitalSignCard;
+export default BloodSignCard;
 
 const CardContainer = styled.div`
   background-color: var(--healty-color);
