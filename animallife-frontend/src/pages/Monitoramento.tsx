@@ -75,6 +75,7 @@ const PageContainer = styled.div`
 `;
 
 const Content = styled.div`
-  padding: 10px;
-  margin-top: 5px;
+  padding: 0px;
+  margin-top: 20px;
+  margin-bottom: -10px;
 `;

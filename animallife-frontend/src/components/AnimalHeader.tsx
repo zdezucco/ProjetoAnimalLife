@@ -89,7 +89,8 @@ const RefreshButton = styled.button`
 `;
 
 const RefreshIcon = styled.div`
-
+  width: 2rem;
+  height: 2rem;
 `;
 
 const AnimalInfo = styled.div`
@@ -117,9 +118,10 @@ const GenderSection = styled.div`
 const GenderIcon = styled.div`
   width: 3rem;
   height: 3rem;
+  margin-bottom: -6px;
 `;
 
 const GenderText = styled.span`
   font-size: 12px;
-  padding-right: 2rem;
+  padding-right: 25px;
 `;
