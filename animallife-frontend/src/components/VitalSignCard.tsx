@@ -117,6 +117,7 @@ const CardHeader = styled.div`
   font-size: 14px;
   position: absolute;
   top: -13px;
+  left: 0px;
   background: var(--healty-color);
   padding: 5px 10px;
   border-radius: 10px;
