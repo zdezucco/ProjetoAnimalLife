@@ -27,7 +27,7 @@
   overflow-x: hidden;
   width: max-content;
   height: max-content;
-  /* Removido o background que estava sendo aplicado indevidamente */
+  border-radius: 15%;
 }
 
 .bell-icon {
