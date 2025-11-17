@@ -22,7 +22,7 @@
 .notification {
   position: absolute;
   display: flex;
-  top: 8px;
+  top: -5px;
   align-items: center;
   overflow-x: hidden;
   width: max-content;
