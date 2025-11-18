@@ -13,33 +13,83 @@ import TempSignCard from "../components/TempSignCard";
 import VitalSignCard from "../components/VitalSignCard";
 import BloodSignCard from "../components/BloodSignCard";
 
-const Monitoramento = () => {
+  const Monitoramento = () => {
   const [searchParams] = useSearchParams();
   const [animal, setAnimal] = useState<any>(null);
   const [monitoramentos, setMonitoramentos] = useState<any[]>([]);
   const animalId = searchParams.get("id");
 
+  // 🔵 Função que atualiza dados do animal
+  const fetchAnimal = async () => {
+    if (!animalId) return;
+
+    const { data } = await supabase
+      .from("animal")
+      .select("*")
+      .eq("id", animalId)
+      .single();
+
+    setAnimal(data);
+  };
+
+  // 🔵 Função que atualiza monitoramentos
+  const fetchMonitoramentos = async () => {
+    if (!animalId) return;
+
+    const { data } = await supabase
+      .from("monitoramento")
+      .select("*")
+      .eq("id_animal", animalId)
+      .order("data_monitoramento", { ascending: false });
+
+    setMonitoramentos(data || []);
+  };
+
+   // 🔵 Carrega dados iniciais
   useEffect(() => {
-    const fetchData = async () => {
-      if (!animalId) return;
+    fetchAnimal();
+    fetchMonitoramentos();
+  }, [animalId]);
 
-      const { data: animalData } = await supabase
-        .from("animal")
-        .select("*")
-        .eq("id", animalId)
-        .single();
+  // 🟣 --- SUPABASE REALTIME ATIVO ---  
+  useEffect(() => {
+    if (!animalId) return;
 
-      const { data: monitoramentoData } = await supabase
-        .from("monitoramento")
-        .select("*")
-        .eq("id_animal", animalId)
-        .order("data_monitoramento", { ascending: false });
+    // 📌 Realtime para ANIMAL (foto, nome, sexo, registro)
+    const animalChannel = supabase
+      .channel(`animal_changes_${animalId}`)
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "animal", filter: `id=eq.${animalId}` },
+        (payload) => {
+          console.log("Realtime → Animal atualizado:", payload);
+          fetchAnimal(); // atualiza automaticamente
+        }
+      )
+      .subscribe();
 
-      setAnimal(animalData);
-      setMonitoramentos(monitoramentoData || []);
+    // 📌 Realtime para MONITORAMENTO (temperatura, pressão, oxigenação)
+    const monitorChannel = supabase
+      .channel(`monitor_changes_${animalId}`)
+      .on(
+        "postgres_changes",
+        {
+          event: "*",
+          schema: "public",
+          table: "monitoramento",
+          filter: `id_animal=eq.${animalId}`,
+        },
+        (payload) => {
+          console.log("Realtime → Monitoramento atualizado:", payload);
+          fetchMonitoramentos(); // atualiza automaticamente
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(animalChannel);
+      supabase.removeChannel(monitorChannel);
     };
-
-    fetchData();
   }, [animalId]);
 
   if (!animal) return <LoadingScreen />;
@@ -50,14 +100,14 @@ const Monitoramento = () => {
         <Header />
         <AnimalHeader animal={animal} />
         <Content>
-          <TempSignCard monitoramentos={monitoramentos}/>
-          <VitalSignCard monitoramentos={monitoramentos}/>
-          <BloodSignCard monitoramentos={monitoramentos}/>
+          <TempSignCard monitoramentos={monitoramentos} />
+          <VitalSignCard monitoramentos={monitoramentos} />
+          <BloodSignCard monitoramentos={monitoramentos} />
         </Content>
-        <InfoBox animalId={animal.id}/>
+        <InfoBox animalId={animal.id} />
       </PageContainer>
       <FooterBar />
-  </>
+    </>
   );
 };
 
