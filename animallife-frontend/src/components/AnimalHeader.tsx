@@ -101,6 +101,7 @@ const GenderSection = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin-top: 5px;
   min-width: 40px;  /* largura mínima para não quebrar o layout */
 `;
 
