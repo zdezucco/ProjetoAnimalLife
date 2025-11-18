@@ -1,8 +1,7 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Bell } from "lucide-react";
 import Editicon from "../assets/edit-icon.svg";
 import Return from "../assets/return.svg";
-import animalImage from "../assets/animal.svg";
 import "../styles/header.css";
 import { useNavigate } from "react-router";
 import NotificationPopup, { NotificationItem } from "../components/NotificationPopup";
@@ -24,50 +23,43 @@ const Header = () => {
   const navigate = useNavigate();
   const [showNotifications, setShowNotifications] = useState(false);
   const [notifications, setNotifications] = useState<NotificationItem[]>([]);
-  const [_, setAnimals] = useState<Animal[]>([]);
+  const [animals, setAnimals] = useState<Animal[]>([]);
+  const [selectedAnimal, setSelectedAnimal] = useState<Animal | null>(null);
 
-  const Retornar = () => {
-    navigate("/List");
-  };
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // 🔄 Alterna o modal de notificações
+  const Retornar = () => navigate("/List");
+
   const toggleNotifications = () => setShowNotifications((prev) => !prev);
 
+  // 🟦 Carrega animais + monitoramentos
   useEffect(() => {
     const fetchAnimals = async () => {
-      // Busca todos os animais
       const { data: animalData, error: animalError } = await supabase
         .from("animal")
         .select("*");
 
-      if (animalError) {
-        console.error("Erro ao buscar animais:", animalError);
-        return;
-      }
+      if (animalError) return console.error(animalError);
 
-      // Busca os monitoramentos mais recentes
-      const { data: monitoramentoData, error: monitoramentoError } = await supabase
+      const { data: monData, error: monError } = await supabase
         .from("monitoramento")
         .select("id_animal, valor_temperatura, data_monitoramento")
         .order("data_monitoramento", { ascending: false });
 
-      if (monitoramentoError) {
-        console.error("Erro ao buscar monitoramentos:", monitoramentoError);
-        return;
-      }
+      if (monError) return console.error(monError);
 
-      // Combina animal + último monitoramento
-      const mergedData = animalData.map((animal) => {
-        const monitoramento = monitoramentoData.find(
-          (m) => m.id_animal === animal.id
-        );
-        return { ...animal, monitoramento };
-      });
+      const merged = animalData.map((a) => ({
+        ...a,
+        monitoramento: monData.find((m) => m.id_animal === a.id),
+      }));
 
-      setAnimals(mergedData);
+      setAnimals(merged);
 
-      // 🔔 Gera notificações automáticas (igual à tela de Listagem)
-      const generatedNotifications: NotificationItem[] = mergedData
+      // Define primeiro animal como selecionado
+      if (merged.length > 0) setSelectedAnimal(merged[0]);
+
+      // Notificações automáticas (igual list)
+      const generated: NotificationItem[] = merged
         .filter((a) => {
           const t = a.monitoramento?.valor_temperatura;
           return (
@@ -93,35 +85,71 @@ const Header = () => {
           };
         });
 
-      setNotifications(generatedNotifications);
+      setNotifications(generated);
     };
 
     fetchAnimals();
   }, []);
 
-  // 🟡 Ao clicar em uma notificação, abrir a tela do respectivo animal
+  // 🟦 Ao clicar em notificação → abre o animal
   const handleNotificationClick = (notification: NotificationItem) => {
-    const animalId = Number(notification.collar);
-    if (animalId) {
-      setShowNotifications(false);
-      navigate(`/Monitoramento?id=${animalId}`);
+    const id = Number(notification.collar);
+    setSelectedAnimal(animals.find((a) => a.id === id) || null);
+    setShowNotifications(false);
+    navigate(`/Monitoramento?id=${id}`);
+  };
+
+  // 🟧 Abrir seletor ao clicar no ícone de edição
+  const openFilePicker = () => {
+    fileInputRef.current?.click();
+  };
+
+  // 🟧 Upload no Supabase ao trocar imagem
+  const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (!event.target.files || !selectedAnimal) return;
+
+    const file = event.target.files[0];
+    const fileExt = file.name.split(".").pop();
+    const fileName = `animal_${selectedAnimal.id}.${fileExt}`;
+    const filePath = `${fileName}`;
+
+    // 🔵 Upload no STORAGE
+    const { error: uploadError } = await supabase.storage
+      .from("avatars")
+      .upload(filePath, file, { upsert: true });
+
+    if (uploadError) {
+      console.error("Erro ao fazer upload:", uploadError);
+      return;
     }
+
+    // 🔵 Pegar URL pública
+    const { data } = supabase.storage.from("avatars").getPublicUrl(filePath);
+    const publicUrl = data.publicUrl;
+
+    // 🔵 Atualizar no banco
+    const { error: updateError } = await supabase
+      .from("animal")
+      .update({ avatar: publicUrl })
+      .eq("id", selectedAnimal.id);
+
+    if (updateError) {
+      console.error("Erro ao atualizar avatar:", updateError);
+      return;
+    }
+
+    // Atualiza localmente
+    setSelectedAnimal((prev) => (prev ? { ...prev, avatar: publicUrl } : prev));
   };
 
   return (
     <>
       <div className="header-container">
-        <img
-          src={Return}
-          alt="Botão de voltar"
-          className="icon-return"
-          onClick={Retornar}
-        />
+        <img src={Return} alt="Botão de voltar" className="icon-return" onClick={Retornar} />
 
         <div className="header-right">
           <div className="notification" onClick={toggleNotifications}>
             <Bell className="bell-icon" />
-            {/* 🔔 Contador dinâmico */}
             {notifications.length > 0 && (
               <span className="notification-count">{notifications.length}</span>
             )}
@@ -129,15 +157,39 @@ const Header = () => {
         </div>
       </div>
 
+      {/* 🟩 FOTO DO ANIMAL */}
       <div className="animal-photo-section">
         <div className="photo-wrapper">
-          <img src={animalImage} alt="Animal" className="animal-photo" />
-          <img src={Editicon} alt="Editar" className="edit-icon" />
+          <img
+            src={selectedAnimal?.avatar || "/avatars/default.png"}
+            alt="Animal"
+            className="animal-photo"
+          />
+
+          {/* Ícone de editar */}
+          <img
+            src={Editicon}
+            alt="Editar"
+            className="edit-icon"
+            onClick={openFilePicker}
+            style={{ cursor: "pointer" }}
+          />
+
+          {/* Input oculto */}
+          <input
+            type="file"
+            accept="image/*"
+            ref={fileInputRef}
+            onChange={handleImageUpload}
+            style={{ display: "none" }}
+          />
         </div>
-        <p className="animal-id">{}</p>
+
+        <p className="animal-id">
+          {selectedAnimal ? `ID: ${selectedAnimal.id}` : ""}
+        </p>
       </div>
 
-      {/* 🔔 Popup de notificações idêntico à tela de Listagem */}
       <NotificationPopup
         isOpen={showNotifications}
         onClose={() => setShowNotifications(false)}

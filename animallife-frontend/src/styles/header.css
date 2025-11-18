@@ -81,11 +81,22 @@
 }
 
 .animal-photo {
-  width: 100%; /* Ocupa 100% do wrapper */
-  height: 100%; /* Ocupa 100% do wrapper */
+  width: 120px;
+  height: 120px;
   border-radius: 50%;
   object-fit: cover;
-  border: 4px solid #fff;
+  border: 3px solid var(--primary-color);
+}
+
+.edit-icon {
+  position: absolute;
+  bottom: 5px;
+  right: 5px;
+  background: white;
+  border-radius: 50%;
+  padding: 6px;
+  box-shadow: 0 0 5px rgba(0,0,0,0.2);
+  cursor: pointer;
 }
 
 .animal-id {
@@ -93,21 +104,6 @@
   font-weight: bold;
   font-size: 1.1em;
   color: #444;
-}
-
-.edit-icon {
-  position: absolute;
-  /* Ajuste os valores para um posicionamento perfeito sobre a borda */
-  bottom: 0px;
-  right: 0px;
-  background-color: white;
-  border-radius: 50%;
-  padding: 6px;
-  width: 32px;
-  height: 32px;
-  cursor: pointer;
-  /* Transform pode ajudar a centralizar o ícone na borda */
-  transform: translate(25%, 25%);
 }
 
 .notification-popup-overlay {
