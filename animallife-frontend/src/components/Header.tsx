@@ -28,18 +28,109 @@ const Header = () => {
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  const [showPreview, setShowPreview] = useState(false); // 🟦 PREVIEW DA IMAGEM
+
   const Retornar = () => navigate("/List");
   const toggleNotifications = () => setShowNotifications((prev) => !prev);
 
-  // 🟦 Carregar animais + monitoramentos
+  // 🟦 Função para reduzir imagem antes do upload
+  const resizeImage = (file: File, maxWidth = 500, maxHeight = 500): Promise<File> => {
+    return new Promise((resolve) => {
+      const img = new Image();
+      const reader = new FileReader();
+
+      reader.onload = (e) => {
+        img.src = e.target?.result as string;
+      };
+
+      img.onload = () => {
+        const canvas = document.createElement("canvas");
+        let width = img.width;
+        let height = img.height;
+
+        if (width > height) {
+          if (width > maxWidth) {
+            height = (height * maxWidth) / width;
+            width = maxWidth;
+          }
+        } else {
+          if (height > maxHeight) {
+            width = (width * maxHeight) / height;
+            height = maxHeight;
+          }
+        }
+
+        canvas.width = width;
+        canvas.height = height;
+
+        const ctx = canvas.getContext("2d");
+        ctx?.drawImage(img, 0, 0, width, height);
+
+        canvas.toBlob(
+          (blob) => {
+            if (!blob) return resolve(file);
+
+            const compressedFile = new File([blob], file.name, {
+              type: "image/jpeg",
+              lastModified: Date.now(),
+            });
+
+            resolve(compressedFile);
+          },
+          "image/jpeg",
+          0.8
+        );
+      };
+
+      reader.readAsDataURL(file);
+    });
+  };
+
+  // 🟧 UPLOAD + compressão + atualização
+  const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (!event.target.files || !selectedAnimal) return;
+
+    const originalFile = event.target.files[0];
+
+    // 🔵 Comprime a imagem antes do upload
+    const compressedFile = await resizeImage(originalFile);
+
+    const fileExt = compressedFile.name.split(".").pop();
+    const fileName = `animal_${selectedAnimal.id}_${Date.now()}.${fileExt}`;
+    const filePath = fileName;
+
+    const { error: uploadError } = await supabase.storage
+      .from("avatars")
+      .upload(filePath, compressedFile, { upsert: true });
+
+    if (uploadError) {
+      console.error("Erro ao fazer upload:", uploadError);
+      return;
+    }
+
+    // URL pública
+    const { data: urlData } = supabase.storage.from("avatars").getPublicUrl(filePath);
+    const publicUrl = urlData.publicUrl;
+
+    // Atualiza no banco
+    await supabase.from("animal").update({ avatar: publicUrl }).eq("id", selectedAnimal.id);
+
+    // Atualiza em tela
+    setSelectedAnimal((prev) => (prev ? { ...prev, avatar: publicUrl } : prev));
+    setAnimals((prev) =>
+      prev.map((a) => (a.id === selectedAnimal.id ? { ...a, avatar: publicUrl } : a))
+    );
+  };
+
   useEffect(() => {
-    const fetchAnimals = async () => {
+  const fetchAnimals = async () => {
+    try {
       const { data: animalData, error: animalError } = await supabase
         .from("animal")
         .select("*");
 
       if (animalError) {
-        console.error(animalError);
+        console.error("Erro ao buscar animais:", animalError);
         return;
       }
 
@@ -49,30 +140,33 @@ const Header = () => {
         .order("data_monitoramento", { ascending: false });
 
       if (monError) {
-        console.error(monError);
+        console.error("Erro ao buscar monitoramentos:", monError);
         return;
       }
 
-      const merged = animalData.map((a) => ({
+      // usa array vazio como fallback caso alguma das respostas seja null/undefined
+      const animalsArray = Array.isArray(animalData) ? animalData : [];
+      const monArray = Array.isArray(monData) ? monData : [];
+
+      const merged = animalsArray.map((a) => ({
         ...a,
-        monitoramento: monData.find((m) => m.id_animal === a.id),
+        monitoramento: monArray.find((m) => m.id_animal === a.id) || null,
       }));
 
       setAnimals(merged);
 
+      // seleciona animal pela url (se houver) — mesmo fallback seguro
       const params = new URLSearchParams(window.location.search);
       const urlId = Number(params.get("id"));
-
       if (urlId) {
-        const found = merged.find((a) => a.id === urlId);
+        const found = merged.find((x) => x.id === urlId);
         if (found) setSelectedAnimal(found);
-        else setSelectedAnimal(merged[0]); // fallback
-      } else {
-        // Caso não tenha id na URL, pega o primeiro mesmo
-        if (merged.length > 0) setSelectedAnimal(merged[0]);
+        else if (merged.length > 0) setSelectedAnimal(merged[0]);
+      } else if (merged.length > 0) {
+        setSelectedAnimal(merged[0]);
       }
 
-      // 🟥 NOTIFICAÇÕES
+      // gera notificações com base no monitoramento (se existir)
       const generated: NotificationItem[] = merged
         .filter((a) => {
           const t = a.monitoramento?.valor_temperatura;
@@ -88,7 +182,7 @@ const Header = () => {
           const level = temp <= 35 || temp > 41 ? "URGENTE" : "ATENÇÃO";
 
           return {
-            id: a.id, // 👈 agora o ID do animal é usado corretamente
+            id: a.id,
             level,
             message:
               level === "URGENTE"
@@ -100,76 +194,24 @@ const Header = () => {
         });
 
       setNotifications(generated);
-    };
+    } catch (err) {
+      console.error("Erro inesperado ao buscar dados:", err);
+    }
+  };
 
-    fetchAnimals();
-  }, []);
+  fetchAnimals();
+}, []);
 
-  // 🟦 Ao clicar em notificação → abrir animal
+
+  // 🟦 Ao clicar em notificação → abre monitoramento
   const handleNotificationClick = (notification: NotificationItem) => {
     const id = Number(notification.collar);
-
-    const selected = animals.find((a) => a.id === id) || null;
-    setSelectedAnimal(selected);
+    setSelectedAnimal(animals.find((a) => a.id === id) || null);
     setShowNotifications(false);
-
     navigate(`/Monitoramento?id=${id}`);
   };
 
-  // 🟧 Abrir seletor ao clicar no ícone de edição
-  const openFilePicker = () => {
-    fileInputRef.current?.click();
-  };
-
-  // 🟧 UPLOAD + atualização do banco
-  const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (!event.target.files || !selectedAnimal) return;
-
-    const file = event.target.files[0];
-    const fileExt = file.name.split(".").pop();
-    const fileName = `animal_${selectedAnimal.id}_${Date.now()}.${fileExt}`;
-    const filePath = fileName;
-
-    // 🔵 Upload
-    const { error: uploadError } = await supabase.storage
-      .from("avatars")
-      .upload(filePath, file, { upsert: true });
-
-    if (uploadError) {
-      console.error("Erro ao fazer upload:", uploadError);
-      return;
-    }
-
-    // 🔵 URL pública
-    const { data: urlData } = supabase.storage
-      .from("avatars")
-      .getPublicUrl(filePath);
-
-    const publicUrl = urlData.publicUrl;
-
-    // 🔵 Atualizar banco
-    const { error: updateError } = await supabase
-      .from("animal")
-      .update({ avatar: publicUrl })
-      .eq("id", selectedAnimal.id);
-
-    if (updateError) {
-      console.error("Erro ao atualizar avatar:", updateError);
-      return;
-    }
-
-    // Atualiza em tela
-    setSelectedAnimal((prev) =>
-      prev ? { ...prev, avatar: publicUrl } : prev
-    );
-
-    // Atualiza lista
-    setAnimals((prev) =>
-      prev.map((a) =>
-        a.id === selectedAnimal.id ? { ...a, avatar: publicUrl } : a
-      )
-    );
-  };
+  const openFilePicker = () => fileInputRef.current?.click();
 
   return (
     <>
@@ -188,7 +230,7 @@ const Header = () => {
 
       {/* FOTO DO ANIMAL */}
       <div className="animal-photo-section">
-        <div className="photo-wrapper">
+        <div className="photo-wrapper" onClick={() => setShowPreview(true)}>
           <img
             src={selectedAnimal?.avatar || "/avatars/default.png"}
             alt="Animal"
@@ -200,8 +242,10 @@ const Header = () => {
             src={Editicon}
             alt="Editar"
             className="edit-icon"
-            onClick={openFilePicker}
-            style={{ cursor: "pointer" }}
+            onClick={(e) => {
+              e.stopPropagation();
+              openFilePicker();
+            }}
           />
 
           {/* Input oculto */}
@@ -214,6 +258,18 @@ const Header = () => {
           />
         </div>
       </div>
+
+      {/* 🟦 MODAL DE PRÉ-VISUALIZAÇÃO */}
+      {showPreview && (
+        <div className="preview-overlay" onClick={() => setShowPreview(false)}>
+          <img
+            src={selectedAnimal?.avatar}
+            alt="Preview"
+            className="preview-image"
+            onClick={(e) => e.stopPropagation()}
+          />
+        </div>
+      )}
 
       <NotificationPopup
         isOpen={showNotifications}
