@@ -60,7 +60,17 @@ const Header = () => {
 
       setAnimals(merged);
 
-      if (merged.length > 0) setSelectedAnimal(merged[0]);
+      const params = new URLSearchParams(window.location.search);
+      const urlId = Number(params.get("id"));
+
+      if (urlId) {
+        const found = merged.find((a) => a.id === urlId);
+        if (found) setSelectedAnimal(found);
+        else setSelectedAnimal(merged[0]); // fallback
+      } else {
+        // Caso não tenha id na URL, pega o primeiro mesmo
+        if (merged.length > 0) setSelectedAnimal(merged[0]);
+      }
 
       // 🟥 NOTIFICAÇÕES
       const generated: NotificationItem[] = merged
