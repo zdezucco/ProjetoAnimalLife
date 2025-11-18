@@ -184,10 +184,6 @@ const Header = () => {
             style={{ display: "none" }}
           />
         </div>
-
-        <p className="animal-id">
-          {selectedAnimal ? `ID: ${selectedAnimal.id}` : ""}
-        </p>
       </div>
 
       <NotificationPopup
