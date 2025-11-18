@@ -23,7 +23,7 @@ const BloodSignCard: React.FC<BloodSignCardProps> = ({ monitoramentos }) => {
     return (
       <CardContainer style={{ backgroundColor: "var(--gray-temp)" }}>
         <CardHeader style={{ backgroundColor: "var(--gray-temp)" }}>
-          Saturação de Oxigênio:
+          Oxigenação no sangue:
         </CardHeader>
         <CardContent>
           <span>Nenhum dado disponível</span>
@@ -87,7 +87,7 @@ const BloodSignCard: React.FC<BloodSignCardProps> = ({ monitoramentos }) => {
 
   return (
     <CardContainer style={{ backgroundColor: color }}>
-      <CardHeader style={{ backgroundColor: color }}>Saturação de Oxigênio:</CardHeader>
+      <CardHeader style={{ backgroundColor: color }}>Oxigenação no sangue</CardHeader>
       <CardContent>
         <LeftSection>
           <img src={icon} alt="Ícone Saturação de Oxigênio" width={34} height={34} />

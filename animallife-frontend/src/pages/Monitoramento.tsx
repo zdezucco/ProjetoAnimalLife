@@ -19,6 +19,14 @@ const Monitoramento = () => {
   const [monitoramentos, setMonitoramentos] = useState<any[]>([]);
   const animalId = searchParams.get("id");
 
+const monitoramentosOrdenados = [...monitoramentos]
+  .sort((a, b) =>
+    new Date(a.data_monitoramento).getTime() -
+    new Date(b.data_monitoramento).getTime()
+  );
+
+
+
   // ===== FUNÇÃO DE CARREGAR DADOS =====
   const fetchData = async () => {
     if (!animalId) return;
@@ -100,9 +108,9 @@ const Monitoramento = () => {
         <Header />
         <AnimalHeader animal={animal} />
         <Content>
-          <TempSignCard monitoramentos={monitoramentos} />
-          <VitalSignCard monitoramentos={monitoramentos} />
-          <BloodSignCard monitoramentos={monitoramentos} />
+          <TempSignCard monitoramentos={monitoramentosOrdenados} />
+          <VitalSignCard monitoramentos={monitoramentosOrdenados} />
+          <BloodSignCard monitoramentos={monitoramentosOrdenados} />
         </Content>
         <InfoBox animalId={animal.id} />
       </PageContainer>
