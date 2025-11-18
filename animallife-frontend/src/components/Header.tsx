@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { Bell } from "lucide-react";
 import Editicon from "../assets/edit-icon.svg";
 import Return from "../assets/return.svg";
-import FavIcon from "../assets/fav-icon.svg";
 import animalImage from "../assets/animal.svg";
 import "../styles/header.css";
 import { useNavigate } from "react-router";
