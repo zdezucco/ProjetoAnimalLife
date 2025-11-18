@@ -14,8 +14,9 @@
 .popup-container {
   background: #f5f5f5;
   border-radius: 12px;
-  width: 420px;
-  max-height: 90vh;
+  width: 95%;
+  max-width: 420px;
+  max-height: 85vh;
   overflow-y: auto;
   box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.3);
   padding: 16px;
@@ -50,9 +51,11 @@
 .notification-card {
   display: flex;
   align-items: center;
-  border-radius: 12px;
   padding: 10px;
-  gap: 10px;
+  gap: 12px;
+  border-radius: 12px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .notification-card.urgent {
@@ -66,27 +69,59 @@
 }
 
 .animal-img {
-  width: 60px;
-  height: 60px;
+  width: 55px;
+  height: 55px;
+  flex-shrink: 0;
   border-radius: 50%;
   object-fit: cover;
+  background-color: #ddd; /* fallback */
+}
+
+.notification-text {
+  flex: 1;
+  min-width: 0; /* permite quebrar texto corretamente */
 }
 
 .notification-text h3 {
   margin: 0;
-  font-size: 16px;
-  font-weight: bold;
+  font-size: 15px;
+  font-weight: 600;
+  word-break: break-word;
 }
 
 .notification-text p {
   margin: 0;
-  font-size: 14px;
+  font-size: 13px;
+  opacity: 0.9;
 }
+
+/* -------- CÓDIGO DA COLEIRA -------- */
 
 .collar {
   font-size: 12px;
   font-weight: bold;
-  margin-top: 5px;
-  display: block;
   text-align: right;
+  white-space: nowrap;
+}
+
+/* MODO SUPER RESPONSIVO (telas muito pequenas ≤ 360px) */
+
+@media (max-width: 360px) {
+  .animal-img {
+    width: 45px;
+    height: 45px;
+  }
+
+  .notification-card {
+    padding: 8px;
+    gap: 8px;
+  }
+
+  .notification-text h3 {
+    font-size: 14px;
+  }
+
+  .notification-text p {
+    font-size: 12px;
+  }
 }
