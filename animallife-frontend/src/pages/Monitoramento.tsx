@@ -3,9 +3,9 @@ import AnimalHeader from "../components/AnimalHeader";
 import "../styles/index.css";
 import InfoBox from "../components/InfoBox";
 import Header from "../components/Header";
-import "../styles/novomonitoramento.css"
+import "../styles/novomonitoramento.css";
 import FooterBar from "../components/FooterBar";
-import { useSearchParams } from "react-router"
+import { useSearchParams } from "react-router";
 import { useEffect, useState } from "react";
 import { supabase } from "../supabaseClient";
 import LoadingScreen from "../pages/Loadingscreen";
@@ -13,64 +13,63 @@ import TempSignCard from "../components/TempSignCard";
 import VitalSignCard from "../components/VitalSignCard";
 import BloodSignCard from "../components/BloodSignCard";
 
-  const Monitoramento = () => {
+const Monitoramento = () => {
   const [searchParams] = useSearchParams();
   const [animal, setAnimal] = useState<any>(null);
   const [monitoramentos, setMonitoramentos] = useState<any[]>([]);
   const animalId = searchParams.get("id");
 
-  // 🔵 Função que atualiza dados do animal
-  const fetchAnimal = async () => {
+  // ===== FUNÇÃO DE CARREGAR DADOS =====
+  const fetchData = async () => {
     if (!animalId) return;
 
-    const { data } = await supabase
+    const { data: animalData } = await supabase
       .from("animal")
       .select("*")
       .eq("id", animalId)
       .single();
 
-    setAnimal(data);
-  };
-
-  // 🔵 Função que atualiza monitoramentos
-  const fetchMonitoramentos = async () => {
-    if (!animalId) return;
-
-    const { data } = await supabase
+    const { data: monitoramentoData } = await supabase
       .from("monitoramento")
       .select("*")
       .eq("id_animal", animalId)
       .order("data_monitoramento", { ascending: false });
 
-    setMonitoramentos(data || []);
+    setAnimal(animalData);
+    setMonitoramentos(monitoramentoData || []);
   };
 
-   // 🔵 Carrega dados iniciais
+  // ===== CARREGAMENTO INICIAL =====
   useEffect(() => {
-    fetchAnimal();
-    fetchMonitoramentos();
+    fetchData();
   }, [animalId]);
 
-  // 🟣 --- SUPABASE REALTIME ATIVO ---  
+
+  // ======= SUPABASE REALTIME LISTENERS =======
   useEffect(() => {
     if (!animalId) return;
 
-    // 📌 Realtime para ANIMAL (foto, nome, sexo, registro)
+    // Atualizações na tabela *animal*
     const animalChannel = supabase
-      .channel(`animal_changes_${animalId}`)
+      .channel(`animal-updates-${animalId}`)
       .on(
         "postgres_changes",
-        { event: "*", schema: "public", table: "animal", filter: `id=eq.${animalId}` },
-        (payload) => {
-          console.log("Realtime → Animal atualizado:", payload);
-          fetchAnimal(); // atualiza automaticamente
+        {
+          event: "*",
+          schema: "public",
+          table: "animal",
+          filter: `id=eq.${animalId}`,
+        },
+        () => {
+          console.log("🐶 Animal atualizado — recarregando...");
+          fetchData();
         }
       )
       .subscribe();
 
-    // 📌 Realtime para MONITORAMENTO (temperatura, pressão, oxigenação)
-    const monitorChannel = supabase
-      .channel(`monitor_changes_${animalId}`)
+    // Atualizações na tabela *monitoramento*
+    const monitoramentoChannel = supabase
+      .channel(`monitoramento-updates-${animalId}`)
       .on(
         "postgres_changes",
         {
@@ -79,16 +78,17 @@ import BloodSignCard from "../components/BloodSignCard";
           table: "monitoramento",
           filter: `id_animal=eq.${animalId}`,
         },
-        (payload) => {
-          console.log("Realtime → Monitoramento atualizado:", payload);
-          fetchMonitoramentos(); // atualiza automaticamente
+        () => {
+          console.log("📡 Monitoramento atualizado — recarregando...");
+          fetchData();
         }
       )
       .subscribe();
 
+    // Cleanup para evitar vazamento de memória
     return () => {
       supabase.removeChannel(animalChannel);
-      supabase.removeChannel(monitorChannel);
+      supabase.removeChannel(monitoramentoChannel);
     };
   }, [animalId]);
 
@@ -113,15 +113,16 @@ import BloodSignCard from "../components/BloodSignCard";
 
 export default Monitoramento;
 
+
 const PageContainer = styled.div`
-  background-color:var(--bg-primary-color);
-  width: 100%; 
+  background-color: var(--bg-primary-color);
+  width: 100%;
   max-width: 480px;
   min-height: 100vh;
   border-radius: 25px;
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
   margin: auto;
-  padding: 5px
+  padding: 5px;
 `;
 
 const Content = styled.div`
