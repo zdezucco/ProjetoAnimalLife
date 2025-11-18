@@ -29,24 +29,29 @@ const Header = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const Retornar = () => navigate("/List");
-
   const toggleNotifications = () => setShowNotifications((prev) => !prev);
 
-  // 🟦 Carrega animais + monitoramentos
+  // 🟦 Carregar animais + monitoramentos
   useEffect(() => {
     const fetchAnimals = async () => {
       const { data: animalData, error: animalError } = await supabase
         .from("animal")
         .select("*");
 
-      if (animalError) return console.error(animalError);
+      if (animalError) {
+        console.error(animalError);
+        return;
+      }
 
       const { data: monData, error: monError } = await supabase
         .from("monitoramento")
         .select("id_animal, valor_temperatura, data_monitoramento")
         .order("data_monitoramento", { ascending: false });
 
-      if (monError) return console.error(monError);
+      if (monError) {
+        console.error(monError);
+        return;
+      }
 
       const merged = animalData.map((a) => ({
         ...a,
@@ -55,10 +60,9 @@ const Header = () => {
 
       setAnimals(merged);
 
-      // Define primeiro animal como selecionado
       if (merged.length > 0) setSelectedAnimal(merged[0]);
 
-      // Notificações automáticas (igual list)
+      // 🟥 NOTIFICAÇÕES
       const generated: NotificationItem[] = merged
         .filter((a) => {
           const t = a.monitoramento?.valor_temperatura;
@@ -69,19 +73,19 @@ const Header = () => {
             (t <= 35 || (t > 35 && t < 36) || t >= 40)
           );
         })
-        .map((a, index) => {
+        .map((a) => {
           const temp = a.monitoramento?.valor_temperatura || 0;
           const level = temp <= 35 || temp > 41 ? "URGENTE" : "ATENÇÃO";
 
           return {
-            id: index + 1,
+            id: a.id, // 👈 agora o ID do animal é usado corretamente
             level,
             message:
               level === "URGENTE"
                 ? `${a.nome} está com alerta extremo de saúde!`
                 : `${a.nome} apresenta variação de temperatura.`,
             image: a.avatar || "/avatars/default.png",
-            collar: a.id.toString().padStart(3, "0"),
+            collar: a.id.toString(),
           };
         });
 
@@ -91,11 +95,14 @@ const Header = () => {
     fetchAnimals();
   }, []);
 
-  // 🟦 Ao clicar em notificação → abre o animal
+  // 🟦 Ao clicar em notificação → abrir animal
   const handleNotificationClick = (notification: NotificationItem) => {
     const id = Number(notification.collar);
-    setSelectedAnimal(animals.find((a) => a.id === id) || null);
+
+    const selected = animals.find((a) => a.id === id) || null;
+    setSelectedAnimal(selected);
     setShowNotifications(false);
+
     navigate(`/Monitoramento?id=${id}`);
   };
 
@@ -104,16 +111,16 @@ const Header = () => {
     fileInputRef.current?.click();
   };
 
-  // 🟧 Upload no Supabase ao trocar imagem
+  // 🟧 UPLOAD + atualização do banco
   const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     if (!event.target.files || !selectedAnimal) return;
 
     const file = event.target.files[0];
     const fileExt = file.name.split(".").pop();
-    const fileName = `animal_${selectedAnimal.id}.${fileExt}`;
-    const filePath = `${fileName}`;
+    const fileName = `animal_${selectedAnimal.id}_${Date.now()}.${fileExt}`;
+    const filePath = fileName;
 
-    // 🔵 Upload no STORAGE
+    // 🔵 Upload
     const { error: uploadError } = await supabase.storage
       .from("avatars")
       .upload(filePath, file, { upsert: true });
@@ -123,11 +130,14 @@ const Header = () => {
       return;
     }
 
-    // 🔵 Pegar URL pública
-    const { data } = supabase.storage.from("avatars").getPublicUrl(filePath);
-    const publicUrl = data.publicUrl;
+    // 🔵 URL pública
+    const { data: urlData } = supabase.storage
+      .from("avatars")
+      .getPublicUrl(filePath);
 
-    // 🔵 Atualizar no banco
+    const publicUrl = urlData.publicUrl;
+
+    // 🔵 Atualizar banco
     const { error: updateError } = await supabase
       .from("animal")
       .update({ avatar: publicUrl })
@@ -138,14 +148,23 @@ const Header = () => {
       return;
     }
 
-    // Atualiza localmente
-    setSelectedAnimal((prev) => (prev ? { ...prev, avatar: publicUrl } : prev));
+    // Atualiza em tela
+    setSelectedAnimal((prev) =>
+      prev ? { ...prev, avatar: publicUrl } : prev
+    );
+
+    // Atualiza lista
+    setAnimals((prev) =>
+      prev.map((a) =>
+        a.id === selectedAnimal.id ? { ...a, avatar: publicUrl } : a
+      )
+    );
   };
 
   return (
     <>
       <div className="header-container">
-        <img src={Return} alt="Botão de voltar" className="icon-return" onClick={Retornar} />
+        <img src={Return} alt="Voltar" className="icon-return" onClick={Retornar} />
 
         <div className="header-right">
           <div className="notification" onClick={toggleNotifications}>
@@ -157,7 +176,7 @@ const Header = () => {
         </div>
       </div>
 
-      {/* 🟩 FOTO DO ANIMAL */}
+      {/* FOTO DO ANIMAL */}
       <div className="animal-photo-section">
         <div className="photo-wrapper">
           <img
@@ -166,7 +185,7 @@ const Header = () => {
             className="animal-photo"
           />
 
-          {/* Ícone de editar */}
+          {/* Ícone editar */}
           <img
             src={Editicon}
             alt="Editar"
