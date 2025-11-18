@@ -27,11 +27,11 @@ const NotificationPopup: React.FC<NotificationPopupProps> = ({
   const getLevelColor = (level: string) => {
     switch (level) {
       case "URGENTE":
-        return 'var(--red-temp)'; // vermelho
+        return "var(--red-temp)";
       case "ATENÇÃO":
-        return 'var(--orange-temp)'; // laranja
+        return "var(--orange-temp)";
       default:
-        return 'var(--gray-temp)';
+        return "var(--gray-temp)";
     }
   };
 
@@ -39,7 +39,7 @@ const NotificationPopup: React.FC<NotificationPopupProps> = ({
     <div className="notification-popup-overlay" onClick={onClose}>
       <div
         className="notification-popup"
-        onClick={(e) => e.stopPropagation()} // impede fechamento ao clicar dentro
+        onClick={(e) => e.stopPropagation()}
       >
         <div className="popup-header">
           <h3>Notificações</h3>
@@ -56,9 +56,16 @@ const NotificationPopup: React.FC<NotificationPopupProps> = ({
               <li
                 key={n.id}
                 className="notification-item"
-                onClick={() => onNotificationClick && onNotificationClick(n)} // 👈 ao clicar, abre monitoramento
+                onClick={() =>
+                  onNotificationClick && onNotificationClick(n)
+                }
               >
-                <img src={n.image} alt="Animal" className="notification-img" />
+                <img
+                  src={n.image}
+                  alt="Animal"
+                  className="notification-img"
+                />
+
                 <div className="notification-info">
                   <strong
                     className="notification-level"
@@ -66,8 +73,12 @@ const NotificationPopup: React.FC<NotificationPopupProps> = ({
                   >
                     {n.level}
                   </strong>
+
                   <p className="notification-message">{n.message}</p>
-                  <span className="notification-collar">ID: {n.collar}</span>
+
+                  <span className="notification-collar">
+                    ID: {n.collar}
+                  </span>
                 </div>
               </li>
             ))}

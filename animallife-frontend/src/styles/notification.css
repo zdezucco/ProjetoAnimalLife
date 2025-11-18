@@ -51,11 +51,11 @@
 .notification-card {
   display: flex;
   align-items: center;
-  border-radius: 12px;
-  padding: 10px;
-  gap: 12px;
-  width: 100%;
-  box-sizing: border-box;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  background: var(--second-text-color);
+  border-radius: 0.5rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
   overflow: hidden;
 }
 
@@ -69,13 +69,27 @@
   color: #e65100;
 }
 
-.animal-img {
-  width: 55px;
+.notification-img {
+  width: 55px;           /* Ajuste conforme seu layout */
   height: 55px;
-  border-radius: 50%;
-  object-fit: cover;
-  flex-shrink: 0;
+  border-radius: 50%;    /* imagem circular */
+  object-fit: cover;     /* corta sem distorcer */
+  flex-shrink: 0;        /* impede que cresça junto com o texto */
+  border: 2px solid #fff;
   background-color: #ddd;
+}
+
+.notification-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 10px;
+  border-radius: 12px;
+}
+
+.notification-popup {
+  max-height: 80vh;      /* impede modal gigante */
+  overflow-y: auto;      /* scroll interno */
 }
 
 
