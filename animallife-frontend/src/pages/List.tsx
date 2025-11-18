@@ -28,7 +28,7 @@ interface Animal {
 }
 
 const getStatusIcon = (temp: number | undefined) => {
-  if (temp === undefined ) return GrayTemp;
+  if (temp === undefined) return GrayTemp;
   if (temp === 0) return GrayTemp;
   if (temp === null) return GrayTemp;
   if (temp <= 35) return RedTemp;
@@ -39,14 +39,14 @@ const getStatusIcon = (temp: number | undefined) => {
 };
 
 const getStatusColor = (temp: number | undefined) => {
-  if (temp === undefined ) return 'var(--gray-temp)';
-  if (temp === 0) return 'var(--gray-temp)';
-  if (temp === null) return 'var(--gray-temp)';
-  if (temp <= 35) return 'var(--red-temp)';
-  if (temp <= 36 && temp >= 35.1) return 'var(--orange-temp)';
-  if (temp >= 40 && temp <= 41) return 'var(--orange-temp)';
-  if (temp >= 41) return 'var(--red-temp)';
-  return 'var(--green-temp)';
+  if (temp === undefined) return "var(--gray-temp)";
+  if (temp === 0) return "var(--gray-temp)";
+  if (temp === null) return "var(--gray-temp)";
+  if (temp <= 35) return "var(--red-temp)";
+  if (temp <= 36 && temp >= 35.1) return "var(--orange-temp)";
+  if (temp >= 40 && temp <= 41) return "var(--orange-temp)";
+  if (temp >= 41) return "var(--red-temp)";
+  return "var(--green-temp)";
 };
 
 const getSpeciesName = (especie: string) => {
@@ -60,7 +60,6 @@ const getSpeciesName = (especie: string) => {
     case "ANTA":
       return "Anta";
     default:
-      // Transforma algo como "MACACO_PREGO" → "Macaco Prego"
       return especie
         .toLowerCase()
         .replace(/_/g, " ")
@@ -75,79 +74,111 @@ export default function AnimalList() {
   const [notifications, setNotifications] = useState<NotificationItem[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
 
-  useEffect(() => {
-    const fetchAnimals = async () => {
-      // Busca todos os animais
-      const { data: animalData, error: animalError } = await supabase
-        .from("animal")
-        .select("*");
+  // -------------------------------------------------------
+  // ✅ Função utilizada pelo realtime + carregamento inicial
+  // -------------------------------------------------------
+  const fetchAnimals = async () => {
+    const { data: animalData, error: animalError } = await supabase
+      .from("animal")
+      .select("*");
 
-      if (animalError) {
-        console.error("Erro ao buscar animais:", animalError);
-        return;
-      }
+    if (animalError) {
+      console.error("Erro ao buscar animais:", animalError);
+      return;
+    }
 
-      // Busca os monitoramentos mais recentes
-      const { data: monitoramentoData, error: monitoramentoError } = await supabase
+    const { data: monitoramentoData, error: monitoramentoError } =
+      await supabase
         .from("monitoramento")
         .select("id_animal, valor_temperatura, data_monitoramento")
         .order("data_monitoramento", { ascending: false });
 
-      if (monitoramentoError) {
-        console.error("Erro ao buscar monitoramentos:", monitoramentoError);
-        return;
-      }
+    if (monitoramentoError) {
+      console.error("Erro ao buscar monitoramentos:", monitoramentoError);
+      return;
+    }
 
-      // Combina animal + último monitoramento
-      const mergedData = animalData.map((animal) => {
-        const monitoramento = monitoramentoData.find(
-          (m) => m.id_animal === animal.id
+    const mergedData = animalData.map((animal) => {
+      const monitoramento = monitoramentoData.find(
+        (m) => m.id_animal === animal.id
+      );
+      return { ...animal, monitoramento };
+    });
+
+    setAnimals(mergedData);
+
+    // 🔔 Notificações automáticas
+    const generatedNotifications: NotificationItem[] = mergedData
+      .filter((a) => {
+        const t = a.monitoramento?.valor_temperatura;
+        return (
+          t !== undefined &&
+          t !== null &&
+          t !== 0 &&
+          (t <= 35 || (t > 35 && t < 36) || t >= 40)
         );
-        return { ...animal, monitoramento };
+      })
+      .map((a, index) => {
+        const temp = a.monitoramento?.valor_temperatura || 0;
+        const level = temp <= 35 || temp > 41 ? "URGENTE" : "ATENÇÃO";
+
+        return {
+          id: index + 1,
+          level,
+          message:
+            level === "URGENTE"
+              ? `${a.nome} está com alerta extremo de saúde!`
+              : `${a.nome} apresenta variação de temperatura.`,
+          image: a.avatar || "/avatars/default.png",
+          collar: a.id.toString().padStart(3, "0"),
+        };
       });
 
-      setAnimals(mergedData);
+    setNotifications(generatedNotifications);
+  };
 
+  // -------------------------------------------------------
+  // 🌐 Efeito para carregar dados + ativar realtime
+  // -------------------------------------------------------
+  useEffect(() => {
+    fetchAnimals(); // carregamento inicial
 
+    // 🔥 REALTIME: atualiza sempre que animal for alterado
+    const animalChannel = supabase
+      .channel("animal-realtime")
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "animal" },
+        (payload) => {
+          console.log("🐾 Atualização em ANIMAL:", payload);
+          fetchAnimals();
+        }
+      )
+      .subscribe();
 
-// 🔔 Gera notificações automáticas
-      const generatedNotifications: NotificationItem[] = mergedData
-        .filter((a) => {
-          const t = a.monitoramento?.valor_temperatura;
-          return (
-            t !== undefined &&
-            t !== null &&
-            t !== 0 &&
-            (t <= 35 || (t > 35 && t < 36) || t >= 40)
-          );
-        })
-        .map((a, index) => {
-          const temp = a.monitoramento?.valor_temperatura || 0;
-          const level = temp <= 35 || temp > 41 ? "URGENTE" : "ATENÇÃO";
+    // 🔥 REALTIME: atualiza sempre que novo monitoramento chegar
+    const monitorChannel = supabase
+      .channel("monitor-realtime")
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "monitoramento" },
+        (payload) => {
+          console.log("🌡 Atualização em MONITORAMENTO:", payload);
+          fetchAnimals();
+        }
+      )
+      .subscribe();
 
-          return {
-            id: index + 1,
-            level,
-            message:
-              level === "URGENTE"
-                ? `${a.nome} está com alerta extremo de saúde!`
-                : `${a.nome} apresenta variação de temperatura.`,
-            image: a.avatar || "/avatars/default.png",
-            collar: a.id.toString().padStart(3, "0"),
-          };
-        });
-
-      setNotifications(generatedNotifications);
+    return () => {
+      supabase.removeChannel(animalChannel);
+      supabase.removeChannel(monitorChannel);
     };
-
-    fetchAnimals();
   }, []);
 
   const acessarMonitoramento = (animalId: number) => {
     navigate(`/Monitoramento?id=${animalId}`);
   };
 
-    // 🟡 Ao clicar em uma notificação, abrir a tela do respectivo animal
   const handleNotificationClick = (notification: NotificationItem) => {
     const animalId = Number(notification.collar);
     if (animalId) {
@@ -165,15 +196,17 @@ export default function AnimalList() {
       <div id="background-list">
         <div id="top-header">
           <h1 className="header">Animais</h1>
-          
+
           <div
             className="notification"
             onClick={() => setShowNotifications(true)}
           >
             <Bell className="bell-icon" />
-            {/* 🔔 Contador dinâmico */}
+
             {notifications.length > 0 && (
-              <span className="notification-count">{notifications.length}</span>
+              <span className="notification-count">
+                {notifications.length}
+              </span>
             )}
           </div>
         </div>
@@ -212,27 +245,45 @@ export default function AnimalList() {
                       alt={animal.nome}
                     />
                   </div>
+
                   <div className="animal-info">
                     <div className="animal-name">
                       {animal.nome}
                       {animal.starred && (
-                        <img src={StarIcon} alt="Estrela" className="star-icon" />
+                        <img
+                          src={StarIcon}
+                          alt="Estrela"
+                          className="star-icon"
+                        />
                       )}
                     </div>
+
                     <div className="animal-type">
                       {speciesName}
                       <span className="gender">
                         {animal.sexo === "FEMEA" ? (
-                          <img src={FemaleIcon} alt="Fêmea" className="gender-icon" />
+                          <img
+                            src={FemaleIcon}
+                            alt="Fêmea"
+                            className="gender-icon"
+                          />
                         ) : animal.sexo === "MACHO" ? (
-                          <img src={MaleIcon} alt="Macho" className="gender-icon" />
+                          <img
+                            src={MaleIcon}
+                            alt="Macho"
+                            className="gender-icon"
+                          />
                         ) : null}
                       </span>
                     </div>
                   </div>
+
                   <div className="temp-container">
                     <img src={TempIcon} alt="Temperature" className="temp-icon" />
-                    <span className="animal-temp" style={{ color: getStatusColor(temp) }}>
+                    <span
+                      className="animal-temp"
+                      style={{ color: getStatusColor(temp) }}
+                    >
                       {temp ? `${temp.toFixed(1)}°c` : "--°c"}
                     </span>
                   </div>
@@ -245,12 +296,11 @@ export default function AnimalList() {
 
       <FooterBar />
 
-      {/* 🔔 Modal de notificações com ação de clique */}
       <NotificationPopup
         isOpen={showNotifications}
         onClose={() => setShowNotifications(false)}
         notifications={notifications}
-        onNotificationClick={handleNotificationClick} // 👈 Adicionado
+        onNotificationClick={handleNotificationClick}
       />
     </div>
   );
