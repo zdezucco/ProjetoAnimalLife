@@ -44,6 +44,8 @@ const AnimalHeader: React.FC<AnimalHeaderProps> = ({ animal }) => {
   return (
     <HeaderContainer>
 
+      <Spacer />
+
       <AnimalInfo>
         <AnimalName>{animal.nome}</AnimalName>
         <Species>{getSpeciesName(animal.especie)}</Species>
@@ -70,13 +72,19 @@ const HeaderContainer = styled.div`
   padding: 15px;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: space-between;  /* ← Distribui os 3 lados */
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
+  width: 100%;
+`;
+
+const Spacer = styled.div`
+  width: 40px; /* ocupa o espaço equivalente ao GenderSection para centrar */
 `;
 
 const AnimalInfo = styled.div`
   text-align: center;
+  flex: 1; /* ← Isso garante que o centro realmente centralize */
 `;
 
 const AnimalName = styled.h2`
@@ -91,19 +99,21 @@ const Species = styled.p`
 
 const GenderSection = styled.div`
   display: flex;
-  align-items: center;
   flex-direction: column;
-  width: 25.2px;
-  height: 25.2px;
+  align-items: center;
+  min-width: 40px;  /* largura mínima para não quebrar o layout */
 `;
 
 const GenderIcon = styled.div`
-  width: 3rem;
-  height: 1.5rem;
-  margin-bottom: 4px;
+  width: 24px;
+  height: 24px;
+  
+  img {
+    width: 100%;
+    height: 100%;
+  }
 `;
 
 const GenderText = styled.span`
   font-size: 12px;
-  padding-right: 25px;
 `;
