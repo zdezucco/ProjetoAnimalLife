@@ -127,7 +127,6 @@ const Header = () => {
               <span className="notification-count">{notifications.length}</span>
             )}
           </div>
-          <img src={FavIcon} alt="Ícone de Favorito" className="icon-star" />
         </div>
       </div>
 
