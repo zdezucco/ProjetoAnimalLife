@@ -80,59 +80,46 @@
 }
 
 .button-row {
-  /* Usa Flexbox para alinhar o conteúdo. 
-    'flex-end' é um padrão comum para botões de formulário (Salvar/Editar).
-  */
   display: flex;
-  justify-content: flex-end; /* Alinha o(s) botão(ões) à direita */
-  
-  /* Espaçamento para separar do formulário acima e dos checkboxes abaixo */
-  margin-top: 20px; 
-  margin-bottom: 20px;
-  width: 100%;
+  justify-content: flex-end;
+  margin-top: 10px; 
+  margin-bottom: 10px;
+  width: 98%;
 }
 
 .button-row button {
-  /* Cores do seu index.css */
-  background-color: var(--primary-color); /* Verde principal (#227504) */
-  color: #FFFFFF; /* Texto branco para melhor contraste */
+  background-color: var(--primary-color);
+  color: #FFFFFF; 
   
-  /* Fonte do seu index.css */
   font-family: var(--ff-sans);
-  font-weight: var(--fw-bold, 700); /* Usa a variável de peso "bold" */
+  font-weight: var(--fw-bold, 700); 
   font-size: 16px;
-  text-transform: uppercase; /* Deixa o texto em maiúsculo, como "EDITAR" */
+  text-transform: uppercase; 
   letter-spacing: 0.5px;
   
-  /* Aparência e layout */
   border: none;
-  border-radius: 8px; /* Cantos arredondados, combinando com os inputs */
-  padding: 12px 24px; /* Bom espaçamento interno (vertical, horizontal) */
-  
-  /* Interação e Animação */
+  border-radius: 8px; 
+  padding: 7px 15px; 
+
   cursor: pointer;
   transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 .button-row button:hover {
-  /* Usa a cor secundária no hover */
-  background-color: var(--secondary-color); /* Verde mais claro (#57AB23) */
+  background-color: var(--secondary-color);
   
-  /* Efeito sutil de "levantar" o botão */
   transform: translateY(-2px); 
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 
 .button-row button:focus,
 .button-row button:focus-visible {
-  /* Acessibilidade: anel de foco claro */
   outline: 3px solid var(--secondary-color);
   outline-offset: 2px;
 }
 
 .button-row button:active {
-  /* Efeito ao clicar */
-  transform: translateY(0); /* Remove o "levantar" */
+  transform: translateY(0); 
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
