@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import refresh from "../assets/refresh.svg";
 import female from "../assets/female-icon-white.svg";
 import male from "../assets/male-icon-white.svg";
 
@@ -44,9 +43,6 @@ const isFemale = (sexo: string) => {
 const AnimalHeader: React.FC<AnimalHeaderProps> = ({ animal }) => {
   return (
     <HeaderContainer>
-      <RefreshButton onClick={() => window.location.reload()}>
-        <RefreshIcon> <img src={refresh} alt="Atualizar" /> </RefreshIcon>
-      </RefreshButton>
 
       <AnimalInfo>
         <AnimalName>{animal.nome}</AnimalName>
@@ -77,20 +73,6 @@ const HeaderContainer = styled.div`
   justify-content: space-between;
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
-`;
-
-const RefreshButton = styled.button`
-  width: 3rem;
-  height: 3rem;
-  background: #C2E5AD;
-  border: none;
-  cursor: pointer;
-  border-radius:  25%;
-`;
-
-const RefreshIcon = styled.div`
-  width: 51px;
-  height: 19px;
 `;
 
 const AnimalInfo = styled.div`
