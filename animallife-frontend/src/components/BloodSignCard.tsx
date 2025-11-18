@@ -7,6 +7,8 @@ import orangeTerm from "../assets/orange-term-monit.svg";
 interface Monitoramento {
   id: string;
   valor_temperatura: number;
+  valor_frequencia_cardiaca: number;
+  valor_saturacao_oxigenio: number;
   data_monitoramento: string;
   id_animal: string;
   observacoes?: string;
@@ -31,42 +33,42 @@ const BloodSignCard: React.FC<BloodSignCardProps> = ({ monitoramentos }) => {
   }
 
   const ultimo = monitoramentos[monitoramentos.length - 1];
-  const temp = ultimo.valor_temperatura;
+  const oxigen = ultimo.valor_saturacao_oxigenio;
   const media =
-    monitoramentos.reduce((acc, m) => acc + m.valor_temperatura, 0) /
+    monitoramentos.reduce((acc, m) => acc + m.valor_saturacao_oxigenio, 0) /
     monitoramentos.length;
 
   // Função que define o status, cor e ícone com base na temperatura
-  const getBloodStatus = (temp: number) => {
-    if (temp === undefined || temp === null || temp === 0)
+  const getBloodStatus = (oxigen: number) => {
+    if (oxigen === undefined || oxigen === null || oxigen === 0)
       return {
         color: "var(--second-text-color)",
         textcolor: "var(--gray-temp)",
         status: "INVÁLIDO",
         icon: grayTerm,
       };
-    if (temp <= 35)
+    if (oxigen <= 35)
       return {
         color: "var(--warning-secundary)",
         textcolor: "var(--red-temp)",
         status: "URGENTE",
         icon: redTerm,
       };
-    if (temp >= 35.1 && temp <= 36)
+    if (oxigen >= 35.1 && oxigen <= 36)
       return {
         color: "var(--attention-secundary)",
         textcolor: "var(--orange-temp)",
         status: "ATENÇÃO",
         icon: orangeTerm,
       };
-    if (temp >= 40 && temp <= 41)
+    if (oxigen >= 40 && oxigen <= 41)
       return {
         color: "var(--attention-secundary)",
         textcolor: "var(--orange-temp)",
         status: "ATENÇÃO",
         icon: orangeTerm,
       };
-    if (temp > 41)
+    if (oxigen > 41)
       return {
         color: "var(--warning-secundary)",
         textcolor: "var(--red-temp)",
@@ -81,7 +83,7 @@ const BloodSignCard: React.FC<BloodSignCardProps> = ({ monitoramentos }) => {
     };
   };
 
-  const { color, textcolor, status, icon } = getBloodStatus(temp);
+  const { color, textcolor, status, icon } = getBloodStatus(oxigen);
 
   return (
     <CardContainer style={{ backgroundColor: color }}>
@@ -90,7 +92,7 @@ const BloodSignCard: React.FC<BloodSignCardProps> = ({ monitoramentos }) => {
         <LeftSection>
           <img src={icon} alt="Ícone Saturação de Oxigênio" width={34} height={34} />
           <TemperateMedium>
-            <Temperature style={{ color: textcolor }}>{temp.toFixed(1)}%</Temperature>
+            <Temperature style={{ color: textcolor }}>{oxigen.toFixed(1)}%</Temperature>
             <Average style={{ color: textcolor }}>Média: {media.toFixed(1)}%</Average>
           </TemperateMedium>
         </LeftSection>

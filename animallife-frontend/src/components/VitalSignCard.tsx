@@ -7,6 +7,8 @@ import orangeHeart from "../assets/orange-heart.svg"
 interface Monitoramento {
   id: string;
   valor_temperatura: number;
+  valor_frequencia_cardiaca: number;
+  valor_saturacao_oxigenio: number;
   data_monitoramento: string;
   id_animal: string;
   observacoes?: string;
@@ -31,42 +33,42 @@ const VitalSignCard: React.FC<VitalSignCardProps> = ({ monitoramentos }) => {
   }
 
   const ultimo = monitoramentos[monitoramentos.length - 1];
-  const temp = ultimo.valor_temperatura;
+  const bpm = ultimo.valor_frequencia_cardiaca;
   const media =
-    monitoramentos.reduce((acc, m) => acc + m.valor_temperatura, 0) /
+    monitoramentos.reduce((acc, m) => acc + m.valor_frequencia_cardiaca, 0) /
     monitoramentos.length;
 
   // Função que define o status, cor e ícone com base na temperatura
-  const getVitalStatus = (temp: number) => {
-    if (temp === undefined || temp === null || temp === 0)
+  const getVitalStatus = (bpm: number) => {
+    if (bpm === undefined || bpm === null || bpm === 0)
       return {
         color: "var(--second-text-color)",
         textcolor: "var(--gray-temp)",
         status: "INVÁLIDO",
         icon: grayHeart,
       };
-    if (temp <= 35)
+    if (bpm <= 35)
       return {
         color: "var(--warning-secundary)",
         textcolor: "var(--red-temp)",
         status: "URGENTE",
         icon: redHeart,
       };
-    if (temp >= 35.1 && temp <= 36)
+    if (bpm >= 35.1 && bpm <= 36)
       return {
         color: "var(--attention-secundary)",
         textcolor: "var(--orange-temp)",
         status: "ATENÇÃO",
         icon: orangeHeart,
       };
-    if (temp >= 40 && temp <= 41)
+    if (bpm >= 40 && bpm <= 41)
       return {
         color: "var(--attention-secundary)",
         textcolor: "var(--orange-temp)",
         status: "ATENÇÃO",
         icon: orangeHeart,
       };
-    if (temp > 41)
+    if (bpm > 41)
       return {
         color: "var(--warning-secundary)",
         textcolor: "var(--red-temp)",
@@ -81,7 +83,7 @@ const VitalSignCard: React.FC<VitalSignCardProps> = ({ monitoramentos }) => {
     };
   };
 
-  const { color, textcolor, status, icon } = getVitalStatus(temp);
+  const { color, textcolor, status, icon } = getVitalStatus(bpm);
 
   return (
     <CardContainer style={{ backgroundColor: color }}>
@@ -90,7 +92,7 @@ const VitalSignCard: React.FC<VitalSignCardProps> = ({ monitoramentos }) => {
         <LeftSection>
           <img src={icon} alt="Ícone Frequência Cardíaca" width={34} height={34} />
           <TemperateMedium>
-            <Temperature style={{ color: textcolor }}>{temp.toFixed(1)}bpm</Temperature>
+            <Temperature style={{ color: textcolor }}>{bpm.toFixed(1)}bpm</Temperature>
             <Average style={{ color: textcolor }}>Média: {media.toFixed(1)}bpm</Average>
           </TemperateMedium>
         </LeftSection>
