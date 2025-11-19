@@ -84,7 +84,7 @@ const getOxygenIcon = (o2: number | undefined) => {
 const tempLevel = (t?: number) => {
   if (t === undefined || t === null) return "INVÁLIDO";
   if (t <= 35.9) return "URGENTE";
-  if (t >= 36.0 && t <= 37.4) return "ATENÇÃO";
+  if (t >= 36. && t <= 37.4) return "ATENÇÃO";
   if (t >= 37.5 && t <= 39.5) return "SAUDÁVEL";
   if (t >= 39.6 && t <= 40.0) return "ATENÇÃO";
   if (t >= 40.1) return "URGENTE";
@@ -162,87 +162,56 @@ export default function AnimalList() {
 
     setAnimals(merged);
 
-    // 🔔 GERA NOTIFICAÇÕES AUTOMÁTICAS (com title + message)
+    // 🔔 GERA NOTIFICAÇÕES SEM AGRUPAR (MOSTRA TODAS)
     const generated: NotificationItem[] = [];
 
     merged.forEach((a) => {
       const m = a.monitoramento;
       if (!m) return;
 
-      // temperatura
+      // TEMPERATURA
       const tl = tempLevel(m.valor_temperatura);
       if (tl === "URGENTE" || tl === "ATENÇÃO") {
         generated.push({
           id: `temp-${a.id}-${m.data_monitoramento ?? ""}`,
           title: `${a.nome} — Temperatura`,
-          level: tl as "URGENTE" | "ATENÇÃO",
-          message:
-            tl === "URGENTE"
-              ? `${a.nome} apresenta temperatura em nível URGENTE (${m.valor_temperatura}°C).`
-              : `${a.nome} apresenta variação de temperatura (${m.valor_temperatura}°C).`,
+          level: tl,
+          message: `${a.nome} apresenta temperatura em nível ${tl} (${m.valor_temperatura}°C).`,
           image: a.avatar || "/avatars/default.png",
           collar: a.id.toString(),
         });
       }
 
-      // frequencia cardiaca
+      // FREQUÊNCIA CARDÍACA
       const hl = heartLevel(m.valor_frequencia_cardiaca);
       if (hl === "URGENTE" || hl === "ATENÇÃO") {
         generated.push({
           id: `fc-${a.id}-${m.data_monitoramento ?? ""}`,
           title: `${a.nome} — Frequência Cardíaca`,
-          level: hl as "URGENTE" | "ATENÇÃO",
-          message:
-            hl === "URGENTE"
-              ? `${a.nome} com frequência cardíaca em nível URGENTE (${m.valor_frequencia_cardiaca} bpm).`
-              : `${a.nome} apresenta frequência cardíaca fora do intervalo (${m.valor_frequencia_cardiaca} bpm).`,
+          level: hl,
+          message: `${a.nome} apresenta frequência cardíaca em nível ${hl} (${m.valor_frequencia_cardiaca} BPM).`,
           image: a.avatar || "/avatars/default.png",
           collar: a.id.toString(),
         });
       }
 
-      // oxigenacao
+      // OXIGENAÇÃO
       const ol = oxygenLevel(m.valor_saturacao_oxigenio);
       if (ol === "URGENTE" || ol === "ATENÇÃO") {
         generated.push({
           id: `o2-${a.id}-${m.data_monitoramento ?? ""}`,
           title: `${a.nome} — Oxigenação`,
-          level: ol as "URGENTE" | "ATENÇÃO",
-          message:
-            ol === "URGENTE"
-              ? `${a.nome} com oxigenação em nível URGENTE (${m.valor_saturacao_oxigenio}%).`
-              : `${a.nome} com oxigenação em atenção (${m.valor_saturacao_oxigenio}%).`,
+          level: ol,
+          message: `${a.nome} apresenta oxigenação em nível ${ol} (${m.valor_saturacao_oxigenio}%).`,
           image: a.avatar || "/avatars/default.png",
           collar: a.id.toString(),
         });
       }
     });
 
-    const priority = { URGENTE: 3, ATENÇÃO: 2 };
+    // 👉 Agora usamos TODAS as notificações geradas
+    setNotifications(generated);
 
-    const unique = Object.values(
-      generated.reduce((acc, n) => {
-        const animalId = n.collar;
-
-        // Se é a primeira notificação do animal → salva
-        if (!acc[animalId]) {
-          acc[animalId] = n;
-        } else {
-          // Já existe outra → compara qual tem maior prioridade
-          const current = acc[animalId];
-          const incoming = n;
-
-          if (priority[incoming.level] > priority[current.level]) {
-            acc[animalId] = incoming;
-          }
-        }
-
-        return acc;
-      }, {} as Record<string, NotificationItem>)
-    );
-
-
-    setNotifications(unique);
 
 
     // Delay mínimo 1s
