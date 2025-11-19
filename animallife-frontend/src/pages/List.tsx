@@ -162,18 +162,24 @@ export default function AnimalList() {
 
     setAnimals(merged);
 
-    // 🔔 GERA NOTIFICAÇÕES SEM AGRUPAR (MOSTRA TODAS)
+   // 🔔 GERA NOTIFICAÇÕES AGRUPADAS IGUAL AO HEADER
     const generated: NotificationItem[] = [];
 
     merged.forEach((a) => {
       const m = a.monitoramento;
       if (!m) return;
 
-      // TEMPERATURA
+      // obter níveis
       const tl = tempLevel(m.valor_temperatura);
+      const hl = heartLevel(m.valor_frequencia_cardiaca);
+      const ol = oxygenLevel(m.valor_saturacao_oxigenio);
+
+      // cria array temporário com todas notificações do animal
+      const tempList: NotificationItem[] = [];
+
       if (tl === "URGENTE" || tl === "ATENÇÃO") {
-        generated.push({
-          id: `temp-${a.id}-${m.data_monitoramento ?? ""}`,
+        tempList.push({
+          id: `temp-${a.id}`,
           title: `${a.nome} — Temperatura`,
           level: tl,
           message: `${a.nome} apresenta temperatura em nível ${tl} (${m.valor_temperatura}°C).`,
@@ -182,11 +188,9 @@ export default function AnimalList() {
         });
       }
 
-      // FREQUÊNCIA CARDÍACA
-      const hl = heartLevel(m.valor_frequencia_cardiaca);
       if (hl === "URGENTE" || hl === "ATENÇÃO") {
-        generated.push({
-          id: `fc-${a.id}-${m.data_monitoramento ?? ""}`,
+        tempList.push({
+          id: `fc-${a.id}`,
           title: `${a.nome} — Frequência Cardíaca`,
           level: hl,
           message: `${a.nome} apresenta frequência cardíaca em nível ${hl} (${m.valor_frequencia_cardiaca} BPM).`,
@@ -195,11 +199,9 @@ export default function AnimalList() {
         });
       }
 
-      // OXIGENAÇÃO
-      const ol = oxygenLevel(m.valor_saturacao_oxigenio);
       if (ol === "URGENTE" || ol === "ATENÇÃO") {
-        generated.push({
-          id: `o2-${a.id}-${m.data_monitoramento ?? ""}`,
+        tempList.push({
+          id: `o2-${a.id}`,
           title: `${a.nome} — Oxigenação`,
           level: ol,
           message: `${a.nome} apresenta oxigenação em nível ${ol} (${m.valor_saturacao_oxigenio}%).`,
@@ -207,10 +209,22 @@ export default function AnimalList() {
           collar: a.id.toString(),
         });
       }
+
+      // PRIORIDADE IGUAL AO HEADER
+      const priority = { URGENTE: 3, ATENÇÃO: 2 };
+
+      // seleciona a mais importante
+      if (tempList.length > 0) {
+        const chosen = tempList.reduce((prev, curr) =>
+          priority[curr.level] > priority[prev.level] ? curr : prev
+        );
+        generated.push(chosen);
+      }
     });
 
-    // 👉 Agora usamos TODAS as notificações geradas
+    // salva notificações agrupadas
     setNotifications(generated);
+
 
 
 
