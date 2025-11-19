@@ -37,28 +37,7 @@ const NotificationPopup: React.FC<NotificationPopupProps> = ({
     }
   };
 
-  // ======================================================
-  // 🟦 UNIFICADOR DE NOTIFICAÇÕES POR ANIMAL
-  // ======================================================
-  const uniqueNotificationsMap = notifications.reduce((acc, n) => {
-    const animalId = Number(n.collar); // <-- agrupa corretamente por animal
-    const existing = acc[animalId];
-
-    if (!existing) {
-      acc[animalId] = n;
-    } else {
-      // URGENTE tem prioridade sobre ATENÇÃO
-      const priority = { URGENTE: 3, ATENÇÃO: 2 };
-
-      if (priority[n.level] > priority[existing.level]) {
-        acc[animalId] = n;
-      }
-    }
-
-    return acc;
-  }, {} as Record<number, NotificationItem>);
-
-  const finalNotifications = Object.values(uniqueNotificationsMap);
+const finalNotifications = notifications;
 
 
   // ======================================================

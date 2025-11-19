@@ -210,15 +210,9 @@ export default function AnimalList() {
         });
       }
 
-      // PRIORIDADE IGUAL AO HEADER
-      const priority = { URGENTE: 3, ATENÇÃO: 2 };
-
-      // seleciona a mais importante
-      if (tempList.length > 0) {
-        const chosen = tempList.reduce((prev, curr) =>
-          priority[curr.level] > priority[prev.level] ? curr : prev
-        );
-        generated.push(chosen);
+    // Junta todas as notificações de alerta/urgência do animal
+    if (tempList.length > 0) {
+        generated.push(...tempList);
       }
     });
 
