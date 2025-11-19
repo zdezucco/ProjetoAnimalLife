@@ -1,8 +1,8 @@
 import styled from "styled-components";
-import grayTerm from "../assets/gray-term-monit.svg";
-import greenTerm from "../assets/green-term-monit.svg";
-import redTerm from "../assets/red-term-monit.svg";
-import orangeTerm from "../assets/orange-term-monit.svg";
+import grayBlood from "../assets/blood-gray.svg";
+import greenBlood from "../assets/blood-green.svg";
+import redBlood from "../assets/blood-red.svg";
+import orangeBlood from "../assets/blood-orange.svg";
 
 interface Monitoramento {
   id: string;
@@ -45,27 +45,27 @@ const BloodSignCard: React.FC<BloodSignCardProps> = ({ monitoramentos }) => {
         color: "var(--second-text-color)",
         textcolor: "var(--gray-temp)",
         status: "INVÁLIDO",
-        icon: grayTerm,
+        icon: grayBlood,
       };
     if (oxigen <= 89)
       return {
         color: "var(--warning-secundary)",
         textcolor: "var(--red-temp)",
         status: "URGENTE",
-        icon: redTerm,
+        icon: redBlood,
       };
     if (oxigen >= 90 && oxigen <= 94)
       return {
         color: "var(--attention-secundary)",
         textcolor: "var(--orange-temp)",
         status: "ATENÇÃO",
-        icon: orangeTerm,
+        icon: orangeBlood,
       };
     return {
       color: "var(--healty-color)",
       textcolor: "var(--green-temp)",  
       status: "SAUDÁVEL",
-      icon: greenTerm,
+      icon: greenBlood,
     };
   };
 
