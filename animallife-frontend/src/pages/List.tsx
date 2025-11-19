@@ -217,15 +217,13 @@ export default function AnimalList() {
     // 2. SE NÃO HOUVER CONDIÇÕES DE ALERTA/URGÊNCIA, NÃO GERA NOTIFICAÇÃO
     if (detailedConditions.length === 0 || !highestPriorityLevel) return;
 
-    // 3. CONSTRÓI A MENSAGEM FINAL USANDO A LISTA DETALHADA
-    let messageText = `${a.nome} apresenta: `;
+    // Inicia a mensagem de forma mais direta, pois a lista virá a seguir
+    let messageText = `${a.nome} apresenta as seguintes alterações: \n\n`;
 
-    // Une os itens com vírgulas e "e" antes do último
-    const list = detailedConditions.length > 1 
-        ? detailedConditions.slice(0, -1).join(", ") + " e " + detailedConditions.slice(-1)
-        : detailedConditions[0];
-        
-    messageText += list + ".";
+    // Constrói a lista Markdown (ex: "\n- Item 1\n- Item 2")
+    const listItems = detailedConditions.map(item => `- ${item}`).join('\n');
+          
+    messageText += listItems;
 
     // 4. CRIA A NOTIFICAÇÃO CONSOLIDADA
     generated.push({

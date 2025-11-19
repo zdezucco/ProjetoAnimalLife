@@ -37,8 +37,25 @@ const NotificationPopup: React.FC<NotificationPopupProps> = ({
     }
   };
 
-const finalNotifications = notifications;
+  const finalNotifications = notifications;
 
+  // NotificationPopup.tsx (ou em utils.ts)
+  const renderMarkdown = (text: string) => {
+    // 1. Converte listas de Markdown para HTML (apenas o necessário)
+    let html = text.replace(/-\s(.+)/g, '<li>$1</li>');
+    html = `<ul>${html}</ul>`; // Envolve tudo em <ul>
+
+    // 2. Converte quebras de linha duplas (\n\n) em parágrafos ou BRs
+    html = html.replace(/\n/g, '<br/>');
+
+    // 3. Converte negrito **texto** em <strong>texto</strong>
+    html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+    
+    // Remove <ul> e </ul> de onde não deveria estar
+    html = html.replace(/<br\/><ul>/g, '<ul>').replace(/<\/ul><br\/>/g, '</ul>');
+    
+    return html;
+  };
 
   // ======================================================
 
@@ -82,7 +99,10 @@ const finalNotifications = notifications;
                     {n.level}
                   </strong>
 
-                  <p className="notification-message">{n.message}</p>
+                  <div
+                    className="notification-message"
+                    dangerouslySetInnerHTML={{ __html: renderMarkdown(n.message) }}
+                  />
 
                   <span className="notification-collar">
                     ID: {n.collar}
