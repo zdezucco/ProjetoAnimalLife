@@ -208,24 +208,29 @@ const Header = ({ selectedId }: HeaderProps) => {
         }
       });
 
-      // 🔵 Unificar (manter somente a mais urgente)
+      const priority = { URGENTE: 3, ATENÇÃO: 2 };
+
       const unique = Object.values(
         generated.reduce((acc, n) => {
           const animalId = n.collar;
 
+          // Se é a primeira notificação do animal → salva
           if (!acc[animalId]) {
             acc[animalId] = n;
           } else {
+            // Já existe outra → compara qual tem maior prioridade
             const current = acc[animalId];
-            const priority = { URGENTE: 2, ATENÇÃO: 1 };
+            const incoming = n;
 
-            if (priority[n.level] > priority[current.level]) {
-              acc[animalId] = n;
+            if (priority[incoming.level] > priority[current.level]) {
+              acc[animalId] = incoming;
             }
           }
+
           return acc;
         }, {} as Record<string, NotificationItem>)
       );
+
 
       setNotifications(unique);
 
