@@ -105,7 +105,7 @@ const monitoramentosOrdenados = [...monitoramentos]
   return (
     <>
       <PageContainer>
-        <Header />
+        <Header selectedId={animal.id}/>
         <AnimalHeader animal={animal} />
         <Content>
           <TempSignCard monitoramentos={monitoramentosOrdenados} />

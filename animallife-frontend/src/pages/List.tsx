@@ -49,8 +49,8 @@ interface Animal {
 // ======================
 const getTempIcon = (t: number | undefined) => {
   if (t === undefined || t === null) return grayTerm;
-  if (t <= 36.0) return redTerm;
-  if (t >= 36.1 && t <= 37.4) return orangeTerm;
+  if (t <= 35.9) return redTerm;
+  if (t >= 36.0 && t <= 37.4) return orangeTerm;
   if (t >= 39.6 && t <= 40.0) return orangeTerm;
   if (t >= 40.1) return redTerm;
   return greenTerm;
