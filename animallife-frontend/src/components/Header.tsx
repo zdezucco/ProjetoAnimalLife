@@ -160,23 +160,29 @@ const Header = ({ selectedId }: HeaderProps) => {
           };
         });
 
-      // 🔵 UNIFICAR NOTIFICAÇÃO POR ANIMAL
-      const mergedUnique = Object.values(
+      // 🔵 Unificar notificações por animal (igual ao List.tsx)
+      const unique = Object.values(
         generated.reduce((acc, n) => {
-          const idNum = Number(n.id);
-          acc[idNum] = {
-            id: idNum,
-            title: n.title,
-            message: n.message,
-            image: n.image,
-            collar: n.collar,
-            level: n.level,
-          };
+          const animalId = n.collar;
+
+          // Mantém apenas a mais urgente
+          if (!acc[animalId]) {
+            acc[animalId] = n;
+          } else {
+            const current = acc[animalId];
+
+            const priority = { URGENTE: 2, ATENÇÃO: 1 };
+
+            if (priority[n.level] > priority[current.level]) {
+              acc[animalId] = n;
+            }
+          }
+
           return acc;
-        }, {} as Record<number, NotificationItem>)
+        }, {} as Record<string, NotificationItem>)
       );
 
-      setNotifications(mergedUnique);
+      setNotifications(unique);
     };
 
     fetchAnimals();

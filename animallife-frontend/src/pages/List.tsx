@@ -61,10 +61,10 @@ const getTempIcon = (t: number | undefined) => {
 // ======================
 const getHeartIcon = (fc: number | undefined) => {
   if (fc === undefined || fc === null) return grayHeart;
-  if (fc <= 50) return redHeart;
-  if (fc >= 51 && fc <= 59) return orangeHeart;
-  if (fc >= 101 && fc <= 119) return orangeHeart;
-  if (fc >= 120) return redHeart;
+  if (fc <= 49) return redHeart;
+  if (fc >= 50 && fc <= 59) return orangeHeart;
+  if (fc >= 101 && fc <= 120) return orangeHeart;
+  if (fc >= 121) return redHeart;
   return greenHeart;
 };
 
@@ -218,7 +218,30 @@ export default function AnimalList() {
       }
     });
 
-    setNotifications(generated);
+        // 🔵 Unificar notificações por animal (1 por animal)
+    const unique = Object.values(
+      generated.reduce((acc, n) => {
+        const animalId = n.collar;
+
+        // Se já existe notificação do mesmo animal, fica somente a mais URGENTE
+        if (!acc[animalId]) {
+          acc[animalId] = n;
+        } else {
+          const current = acc[animalId];
+
+          const priority = { URGENTE: 2, ATENÇÃO: 1 };
+
+          if (priority[n.level] > priority[current.level]) {
+            acc[animalId] = n;
+          }
+        }
+
+        return acc;
+      }, {} as Record<string, NotificationItem>)
+    );
+
+    setNotifications(unique);
+
 
     // Delay mínimo 1s
     const elapsed = Date.now() - start;

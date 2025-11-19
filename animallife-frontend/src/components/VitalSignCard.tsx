@@ -47,7 +47,7 @@ const VitalSignCard: React.FC<VitalSignCardProps> = ({ monitoramentos }) => {
         status: "INVÁLIDO",
         icon: grayHeart,
       };
-    if (bpm <= 50)
+    if (bpm <= 49)
       return {
         color: "var(--warning-secundary)",
         textcolor: "var(--red-temp)",
@@ -61,14 +61,14 @@ const VitalSignCard: React.FC<VitalSignCardProps> = ({ monitoramentos }) => {
         status: "ATENÇÃO",
         icon: orangeHeart,
       };
-    if (bpm >= 101 && bpm <= 119)
+    if (bpm >= 101 && bpm <= 120)
       return {
         color: "var(--attention-secundary)",
         textcolor: "var(--orange-temp)",
         status: "ATENÇÃO",
         icon: orangeHeart,
       };
-    if (bpm >= 120)
+    if (bpm >= 121)
       return {
         color: "var(--warning-secundary)",
         textcolor: "var(--red-temp)",
@@ -93,7 +93,7 @@ const VitalSignCard: React.FC<VitalSignCardProps> = ({ monitoramentos }) => {
           <img src={icon} alt="Ícone Frequência Cardíaca" width={34} height={34} />
           <TemperateMedium>
             <Temperature style={{ color: textcolor }}>{bpm.toFixed(1)}bpm</Temperature>
-            <Average style={{ color: textcolor }}>Média: {media.toFixed(1)}bpm</Average>
+            <Average style={{ color: textcolor }}>Média: {media.toFixed(0)}bpm</Average>
           </TemperateMedium>
         </LeftSection>
         <Status style={{ color: textcolor }}>{status}</Status>

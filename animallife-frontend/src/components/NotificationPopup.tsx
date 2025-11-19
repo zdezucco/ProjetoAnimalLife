@@ -3,7 +3,7 @@ import "../styles/notification.css";
 
 export type NotificationItem = {
   id: number | string;
-  title: string; // <-- Novo campo
+  title: string;
   level: "URGENTE" | "ATENÇÃO";
   message: string;
   image: string;
@@ -23,6 +23,7 @@ const NotificationPopup: React.FC<NotificationPopupProps> = ({
   notifications,
   onNotificationClick,
 }) => {
+
   if (!isOpen) return null;
 
   const getLevelColor = (level: string) => {
@@ -35,6 +36,30 @@ const NotificationPopup: React.FC<NotificationPopupProps> = ({
         return "var(--gray-temp)";
     }
   };
+
+  // ======================================================
+  // 🟦 UNIFICADOR DE NOTIFICAÇÕES (REMOVE DUPLICADAS)
+  // ======================================================
+  const uniqueNotificationsMap = notifications.reduce((acc, n) => {
+    const idNum = Number(n.id);
+    const existing = acc[idNum];
+
+    if (existing) {
+      // Se já existe, URGENTE sempre vence ATENÇÃO
+      if (n.level === "URGENTE" && existing.level !== "URGENTE") {
+        acc[idNum] = n;
+      }
+    } else {
+      // Primeiro registro do animal
+      acc[idNum] = n;
+    }
+
+    return acc;
+  }, {} as Record<number, NotificationItem>);
+
+  const finalNotifications = Object.values(uniqueNotificationsMap);
+
+  // ======================================================
 
   return (
     <div className="notification-popup-overlay" onClick={onClose}>
@@ -49,11 +74,11 @@ const NotificationPopup: React.FC<NotificationPopupProps> = ({
           </button>
         </div>
 
-        {notifications.length === 0 ? (
+        {finalNotifications.length === 0 ? (
           <p className="no-notifications">Nenhuma notificação no momento.</p>
         ) : (
           <ul className="notification-list">
-            {notifications.map((n) => (
+            {finalNotifications.map((n) => (
               <li
                 key={n.id}
                 className="notification-item"
@@ -67,10 +92,8 @@ const NotificationPopup: React.FC<NotificationPopupProps> = ({
 
                 <div className="notification-info">
 
-                  {/* TÍTULO */}
                   <h4 className="notification-title">{n.title}</h4>
 
-                  {/* NÍVEL */}
                   <strong
                     className="notification-level"
                     style={{ color: getLevelColor(n.level) }}
@@ -78,10 +101,8 @@ const NotificationPopup: React.FC<NotificationPopupProps> = ({
                     {n.level}
                   </strong>
 
-                  {/* MENSAGEM */}
                   <p className="notification-message">{n.message}</p>
 
-                  {/* ID */}
                   <span className="notification-collar">
                     ID: {n.collar}
                   </span>
