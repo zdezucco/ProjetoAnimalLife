@@ -151,9 +151,6 @@
   align-items: center;
 }
 
-.star-icon {
-  margin-left: 0.25rem;
-}
 
 .animal-type {
   font-size: 0.75rem;
@@ -178,6 +175,19 @@
   height: 2.5rem;
   margin-right: 0.625rem;
 }
+
+.vital-icons {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin-right: 10px;
+}
+
+.vital-icon {
+  width: 22px;
+  height: 22px;
+}
+
 
 .animal-temp {
   font-size: 1.125rem;
