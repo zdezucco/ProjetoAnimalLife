@@ -131,34 +131,34 @@ const Header = ({ selectedId }: HeaderProps) => {
 
       setSelectedAnimal(initial);
 
-      // 🔴 GERAR NOTIFICAÇÕES
       const generated: NotificationItem[] = merged
-        .filter((a) => {
-          const t = a.monitoramento?.valor_temperatura;
-          return (
-            t !== undefined &&
-            t !== null &&
-            t !== 0 &&
-            (t <= 35 || (t > 35 && t < 36) || t >= 40)
-          );
-        })
-        .map((a) => {
-          const temp = a.monitoramento?.valor_temperatura || 0;
-          const level: "URGENTE" | "ATENÇÃO" =
-            temp <= 35 || temp > 41 ? "URGENTE" : "ATENÇÃO";
+      .filter((a) => {
+        const t = a.monitoramento?.valor_temperatura;
 
-          return {
-            id: a.id,
-            title: a.nome,
-            level,
-            message:
-              level === "URGENTE"
-                ? `${a.nome} está com alerta extremo de saúde!`
-                : `${a.nome} apresenta variação de temperatura.`,
-            image: a.avatar || "/avatars/default.png",
-            collar: a.id.toString(),
-          };
-        });
+        if (t === undefined || t === null || t === 0) return false;
+
+        // Notificações válidas
+        return t <= 35 || t >= 41 || (t > 35 && t < 41);
+      })
+      .map((a) => {
+        const temp = a.monitoramento?.valor_temperatura || 0;
+
+        const level: "URGENTE" | "ATENÇÃO" =
+          temp <= 35 || temp >= 41 ? "URGENTE" : "ATENÇÃO";
+
+        return {
+          id: a.id,
+          title: a.nome,
+          level,
+          message:
+            level === "URGENTE"
+              ? `${a.nome} está com alerta extremo de saúde!`
+              : `${a.nome} apresenta variação de temperatura.`,
+          image: a.avatar || "/avatars/default.png",
+          collar: a.id.toString(),
+        };
+      });
+
 
       // 🔵 Unificar notificações por animal (igual ao List.tsx)
       const unique = Object.values(
