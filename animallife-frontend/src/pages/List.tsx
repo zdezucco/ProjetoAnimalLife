@@ -164,6 +164,8 @@ export default function AnimalList() {
 
   // 🔔 GERA NOTIFICAÇÕES CONSOLIDADAS E DETALHADAS POR ANIMAL
   const generated: NotificationItem[] = [];
+  // Mantenha o objeto priority para referência, se quiser (remova se não for usar, conforme o aviso anterior)
+  const priority = { URGENTE: 3, ATENÇÃO: 2, SAUDÁVEL: 1, INVÁLIDO: 0 }; 
 
   merged.forEach((a) => {
     const m = a.monitoramento;
@@ -174,86 +176,62 @@ export default function AnimalList() {
     const heartStatus = heartLevel(m.valor_frequencia_cardiaca);
     const oxygenStatus = oxygenLevel(m.valor_saturacao_oxigenio);
 
-    // Estruturas para agrupar as condições por nível
-    const urgenteConditions: string[] = [];
-    const atencaoConditions: string[] = [];
+    // Lista para armazenar as strings de alerta/urgência DETALHADAS
+    const detailedConditions: string[] = [];
     
     // Variável para rastrear o maior nível de prioridade encontrado
-    let highestPriorityLevel: "URGENTE" | "ATENÇÃO" = "ATENÇÃO";
+    let highestPriorityLevel: "URGENTE" | "ATENÇÃO" | null = null;
+    let maxPriorityValue = 0; // Usado para determinar o nível mais alto
+
+    // =======================================================
+    // FUNÇÃO AUXILIAR PARA ADICIONAR CONDIÇÃO E ATUALIZAR PRIORIDADE
+    // =======================================================
+    const addCondition = (name: string, level: "URGENTE" | "ATENÇÃO", value: string, unit: string) => {
+      // Adiciona a string detalhada: "Temperatura (XX.X°C) - URGENTE"
+      detailedConditions.push(`${name} (${value}${unit}) — **${level}**`);
+      
+      // Atualiza o nível de prioridade
+      const currentPriorityValue = priority[level];
+      if (currentPriorityValue > maxPriorityValue) {
+        maxPriorityValue = currentPriorityValue;
+        highestPriorityLevel = level;
+      }
+    };
+    // =======================================================
 
     // Verifica Temperatura
     if (tempStatus === "URGENTE" || tempStatus === "ATENÇÃO") {
-      // String detalhada: "Temperatura (XX.X°C)"
-      const detail = `Temperatura (${m.valor_temperatura}°C)`;
-      
-      if (tempStatus === "URGENTE") {
-        urgenteConditions.push(detail);
-        highestPriorityLevel = "URGENTE"; // Atualiza para o mais alto
-      } else {
-        atencaoConditions.push(detail);
-      }
+      addCondition("Temperatura", tempStatus, m.valor_temperatura?.toString() ?? 'N/A', '°C');
     }
 
     // Verifica Frequência Cardíaca
     if (heartStatus === "URGENTE" || heartStatus === "ATENÇÃO") {
-      // String detalhada: "Frequência Cardíaca (XX BPM)"
-      const detail = `Frequência Cardíaca (${m.valor_frequencia_cardiaca} BPM)`;
-      
-      if (heartStatus === "URGENTE") {
-        urgenteConditions.push(detail);
-        highestPriorityLevel = "URGENTE"; // Atualiza para o mais alto
-      } else {
-        atencaoConditions.push(detail);
-      }
+      addCondition("Frequência Cardíaca", heartStatus, m.valor_frequencia_cardiaca?.toString() ?? 'N/A', ' BPM');
     }
 
     // Verifica Oxigenação
     if (oxygenStatus === "URGENTE" || oxygenStatus === "ATENÇÃO") {
-      // String detalhada: "Oxigenação (XX%)"
-      const detail = `Oxigenação (${m.valor_saturacao_oxigenio}%)`;
-      
-      if (oxygenStatus === "URGENTE") {
-        urgenteConditions.push(detail);
-        highestPriorityLevel = "URGENTE"; // Atualiza para o mais alto
-      } else {
-        atencaoConditions.push(detail);
-      }
+      addCondition("Oxigenação", oxygenStatus, m.valor_saturacao_oxigenio?.toString() ?? 'N/A', '%');
     }
 
     // 2. SE NÃO HOUVER CONDIÇÕES DE ALERTA/URGÊNCIA, NÃO GERA NOTIFICAÇÃO
-    if (urgenteConditions.length === 0 && atencaoConditions.length === 0) return;
+    if (detailedConditions.length === 0 || !highestPriorityLevel) return;
 
-    // 3. CONSTRÓI A MENSAGEM FINAL DETALHADA
-    let messageText = `${a.nome} apresenta problemas: `;
+    // 3. CONSTRÓI A MENSAGEM FINAL USANDO A LISTA DETALHADA
+    let messageText = `${a.nome} apresenta: `;
 
-    // Adiciona os itens URGENTES
-    if (urgenteConditions.length > 0) {
-      const list = urgenteConditions.length > 1 
-        ? urgenteConditions.slice(0, -1).join(", ") + " e " + urgenteConditions.slice(-1)
-        : urgenteConditions[0];
+    // Une os itens com vírgulas e "e" antes do último
+    const list = detailedConditions.length > 1 
+        ? detailedConditions.slice(0, -1).join(", ") + " e " + detailedConditions.slice(-1)
+        : detailedConditions[0];
         
-      messageText += `${list} **URGENTE**.`;
-    }
-
-    // Adiciona os itens em ATENÇÃO (se houver e separados por ponto final)
-    if (atencaoConditions.length > 0) {
-      if (urgenteConditions.length > 0) {
-        messageText += " "; // Adiciona espaço após o primeiro ponto.
-      }
-      
-      const list = atencaoConditions.length > 1 
-        ? atencaoConditions.slice(0, -1).join(", ") + " e " + atencaoConditions.slice(-1)
-        : atencaoConditions[0];
-        
-      messageText += `${list} em **ATENÇÃO**.`;
-    }
-
+    messageText += list + ".";
 
     // 4. CRIA A NOTIFICAÇÃO CONSOLIDADA
     generated.push({
       id: `consolidated-${a.id}`,
       title: `${a.nome} — ALERTA VITAL`, 
-      level: highestPriorityLevel, // Será "URGENTE" ou "ATENÇÃO"
+      level: highestPriorityLevel, // O nível geral da notificação (URGENTE ou ATENÇÃO)
       message: messageText,
       image: a.avatar || "/avatars/default.png",
       collar: a.id.toString(),
