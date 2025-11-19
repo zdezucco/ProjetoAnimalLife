@@ -20,7 +20,7 @@ interface Animal {
   registro: string;
   avatar?: string;
   monitoramento?: {
-    valor_temperatura?: number; // Tornando opcional para evitar erros, se não houver monitoramento
+    valor_temperatura?: number;
     valor_frequencia_cardiaca?: number;
     valor_saturacao_oxigenio?: number;
     data_monitoramento?: string;
@@ -40,6 +40,9 @@ const Header = ({ selectedId }: HeaderProps) => {
   const Retornar = () => navigate("/List");
   const toggleNotifications = () => setShowNotifications((prev) => !prev);
 
+  // ======================
+  //  FUNÇÕES DE NÍVEL DE ALERTA
+  // ======================
   const tempLevel = (t?: number) => {
     if (t === undefined || t === null) return null;
     if (t <= 35.9) return "URGENTE";
@@ -51,7 +54,7 @@ const Header = ({ selectedId }: HeaderProps) => {
   };
 
   const heartLevel = (fc?: number) => {
-    if (!fc) return null;
+    if (fc === undefined || fc === null) return null;
     if (fc <= 50) return "URGENTE";
     if (fc >= 51 && fc <= 59) return "ATENÇÃO";
     if (fc >= 60 && fc <= 100) return null;
@@ -61,11 +64,12 @@ const Header = ({ selectedId }: HeaderProps) => {
   };
 
   const oxygenLevel = (o2?: number) => {
-    if (!o2) return null;
+    if (o2 === undefined || o2 === null) return null;
     if (o2 <= 90) return "URGENTE";
     if (o2 >= 91 && o2 <= 94) return "ATENÇÃO";
     return null;
   };
+
 
   // 🟦 COMPACTAR IMAGEM
   const resizeImage = (file: File, maxWidth = 500, maxHeight = 500): Promise<File> => {
@@ -135,7 +139,7 @@ const Header = ({ selectedId }: HeaderProps) => {
     setAnimals((prev) => prev.map((a) => (a.id === selectedAnimal.id ? { ...a, avatar: publicUrl } : a)));
   };
 
-  // 🟥 BUSCA + UNIFICAÇÃO DE NOTIFICAÇÕES
+  // 🟥 BUSCA + GERAÇÃO DE NOTIFICAÇÕES CONSOLIDADAS
   useEffect(() => {
     const fetchAnimals = async () => {
       const { data: animalData } = await supabase.from("animal").select("*");
@@ -163,7 +167,7 @@ const Header = ({ selectedId }: HeaderProps) => {
 
       setSelectedAnimal(initial);
 
-      // 🔵 GERAR NOTIFICAÇÕES CONSOLIDADAS (APLICANDO A LÓGICA DE LIST.TSX)
+      // 🔵 GERAR NOTIFICAÇÕES CONSOLIDADAS
       const generated: NotificationItem[] = [];
       const priority = { URGENTE: 3, ATENÇÃO: 2, SAUDÁVEL: 1, INVÁLIDO: 0 }; 
 
@@ -186,7 +190,8 @@ const Header = ({ selectedId }: HeaderProps) => {
         // FUNÇÃO AUXILIAR PARA ADICIONAR CONDIÇÃO E ATUALIZAR PRIORIDADE
         // =======================================================
         const addCondition = (name: string, level: "URGENTE" | "ATENÇÃO", value: number | undefined, unit: string) => {
-          if (!value) return; // Garante que o valor existe
+          // CORRIGIDO: Usa verificação estrita para permitir o valor 0 (zero)
+          if (value === undefined || value === null) return; 
           
           // String detalhada: "Temperatura (XX.X°C) — **URGENTE**"
           detailedConditions.push(`${name} (${value}${unit}) — **${level}**`);
@@ -222,7 +227,6 @@ const Header = ({ selectedId }: HeaderProps) => {
         let messageText = `${a.nome} apresenta as seguintes alterações: \n\n`;
 
         // Constrói a lista Markdown (ex: "\n- Item 1\n- Item 2")
-        // O NotificationPopup.tsx deve ser ajustado para renderizar Markdown/HTML.
         const listItems = detailedConditions.map(item => `- ${item}`).join('\n');
           
         messageText += listItems;
@@ -238,18 +242,8 @@ const Header = ({ selectedId }: HeaderProps) => {
         });
       });
 
-      // NOVO: Usa as notificações geradas diretamente, pois já estão consolidadas
+      // Usa as notificações geradas diretamente, pois já estão consolidadas
       setNotifications(generated); 
-
-      /* CÓDIGO ANTIGO REMOVIDO:
-      const priority = { URGENTE: 3, ATENÇÃO: 2 };
-      const unique = Object.values(
-        generated.reduce((acc, n) => {
-          // ... lógica de agrupamento e prioridade antiga ...
-        }, {} as Record<string, NotificationItem>)
-      );
-      setNotifications(unique);
-      */
     };
 
     fetchAnimals();
