@@ -152,7 +152,13 @@ export default function AnimalList() {
 
   // Carregamento inicial + listeners realtime
   useEffect(() => {
-    fetchAnimals();
+    setLoading(true);
+    
+    const delay = setTimeout(() => {
+      fetchAnimals();
+    }, 300); // pequeno delay visual
+
+    return () => clearTimeout(delay);
 
     const animalChannel = supabase
       .channel("animal-realtime")
