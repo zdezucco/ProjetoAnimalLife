@@ -45,28 +45,28 @@ const TempSignCard: React.FC<TempSignCardProps> = ({ monitoramentos }) => {
         status: "INVÁLIDO",
         icon: grayTerm,
       };
-    if (temp <= 35)
+    if (temp <= 36.0)
       return {
         color: "var(--warning-secundary)",
         textcolor: "var(--red-temp)",
         status: "URGENTE",
         icon: redTerm,
       };
-    if (temp >= 35.1 && temp <= 36)
+    if (temp >= 36.0 && temp <= 37.4)
       return {
         color: "var(--attention-secundary)",
         textcolor: "var(--orange-temp)",
         status: "ATENÇÃO",
         icon: orangeTerm,
       };
-    if (temp >= 40 && temp <= 41)
+    if (temp >= 39.6 && temp <= 40.0)
       return {
         color: "var(--attention-secundary)",
         textcolor: "var(--orange-temp)",
         status: "ATENÇÃO",
         icon: orangeTerm,
       };
-    if (temp > 41)
+    if (temp >= 40.1)
       return {
         color: "var(--warning-secundary)",
         textcolor: "var(--red-temp)",

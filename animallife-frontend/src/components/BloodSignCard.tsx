@@ -47,33 +47,19 @@ const BloodSignCard: React.FC<BloodSignCardProps> = ({ monitoramentos }) => {
         status: "INVÁLIDO",
         icon: grayTerm,
       };
-    if (oxigen <= 35)
+    if (oxigen <= 89)
       return {
         color: "var(--warning-secundary)",
         textcolor: "var(--red-temp)",
         status: "URGENTE",
         icon: redTerm,
       };
-    if (oxigen >= 35.1 && oxigen <= 36)
+    if (oxigen >= 90 && oxigen <= 94)
       return {
         color: "var(--attention-secundary)",
         textcolor: "var(--orange-temp)",
         status: "ATENÇÃO",
         icon: orangeTerm,
-      };
-    if (oxigen >= 40 && oxigen <= 41)
-      return {
-        color: "var(--attention-secundary)",
-        textcolor: "var(--orange-temp)",
-        status: "ATENÇÃO",
-        icon: orangeTerm,
-      };
-    if (oxigen > 41)
-      return {
-        color: "var(--warning-secundary)",
-        textcolor: "var(--red-temp)",
-        status: "URGENTE",
-        icon: redTerm,
       };
     return {
       color: "var(--healty-color)",

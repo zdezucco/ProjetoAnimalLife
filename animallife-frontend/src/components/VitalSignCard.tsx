@@ -47,28 +47,28 @@ const VitalSignCard: React.FC<VitalSignCardProps> = ({ monitoramentos }) => {
         status: "INVÁLIDO",
         icon: grayHeart,
       };
-    if (bpm <= 35)
+    if (bpm <= 50)
       return {
         color: "var(--warning-secundary)",
         textcolor: "var(--red-temp)",
         status: "URGENTE",
         icon: redHeart,
       };
-    if (bpm >= 35.1 && bpm <= 36)
+    if (bpm >= 50 && bpm <= 59)
       return {
         color: "var(--attention-secundary)",
         textcolor: "var(--orange-temp)",
         status: "ATENÇÃO",
         icon: orangeHeart,
       };
-    if (bpm >= 40 && bpm <= 41)
+    if (bpm >= 101 && bpm <= 119)
       return {
         color: "var(--attention-secundary)",
         textcolor: "var(--orange-temp)",
         status: "ATENÇÃO",
         icon: orangeHeart,
       };
-    if (bpm > 41)
+    if (bpm >= 120)
       return {
         color: "var(--warning-secundary)",
         textcolor: "var(--red-temp)",
