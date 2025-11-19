@@ -36,6 +36,34 @@ const Header = ({ selectedId }: HeaderProps) => {
   const Retornar = () => navigate("/List");
   const toggleNotifications = () => setShowNotifications((prev) => !prev);
 
+  const tempLevel = (t?: number) => {
+  if (t === undefined || t === null) return null;
+  if (t <= 35.9) return "URGENTE";
+  if (t >= 36.0 && t <= 37.4) return "ATENÇÃO";
+  if (t >= 37.5 && t <= 39.5) return null;
+  if (t >= 39.6 && t <= 40.0) return "ATENÇÃO";
+  if (t >= 40.1) return "URGENTE";
+  return null;
+  };
+
+  const heartLevel = (fc?: number) => {
+    if (!fc) return null;
+    if (fc <= 50) return "URGENTE";
+    if (fc >= 51 && fc <= 59) return "ATENÇÃO";
+    if (fc >= 60 && fc <= 100) return null;
+    if (fc >= 101 && fc <= 119) return "ATENÇÃO";
+    if (fc >= 120) return "URGENTE";
+    return null;
+  };
+
+  const oxygenLevel = (o2?: number) => {
+    if (!o2) return null;
+    if (o2 <= 90) return "URGENTE";
+    if (o2 >= 91 && o2 <= 94) return "ATENÇÃO";
+    return null;
+  };
+
+
   // 🟦 COMPACTAR IMAGEM
   const resizeImage = (file: File, maxWidth = 500, maxHeight = 500): Promise<File> => {
     return new Promise((resolve) => {
@@ -118,7 +146,8 @@ const Header = ({ selectedId }: HeaderProps) => {
 
       const merged = animalsArray.map((a) => ({
         ...a,
-        monitoramento: monArray.find((m) => m.id_animal === a.id) || null,
+        monitoramento: monArray.find((m) => Number(m.id_animal) === Number(a.id)) || null
+
       }));
 
       setAnimals(merged);
@@ -138,76 +167,55 @@ const Header = ({ selectedId }: HeaderProps) => {
         const m = a.monitoramento;
         if (!m) return;
 
-        // ===== TEMPERATURA =====
-        const t = m.valor_temperatura;
-        if (t !== undefined && t !== null) {
-          let level: "URGENTE" | "ATENÇÃO" | null = null;
-
-          if (t <= 35.9 || t >= 40.1) level = "URGENTE";
-          else if (t >= 36 && t <= 37.4) level = "ATENÇÃO";
-          else if (t >= 39.6 && t <= 40.0) level = "ATENÇÃO";
-
-          if (level) {
-            generated.push({
-              id: `temp-${a.id}`,
-              title: `${a.nome} — Temperatura`,
-              level,
-              message:
-                level === "URGENTE"
-                  ? `${a.nome} está com temperatura crítica (${t}°C).`
-                  : `${a.nome} apresenta variação de temperatura (${t}°C).`,
-              image: a.avatar || "/avatars/default.png",
-              collar: a.id.toString(),
-            });
-          }
+        // temperatura
+        const tl = tempLevel(m.valor_temperatura);
+        if (tl) {
+          generated.push({
+            id: `temp-${a.id}`,
+            title: `${a.nome} — Temperatura`,
+            level: tl,
+            message:
+              tl === "URGENTE"
+                ? `${a.nome} apresenta temperatura em nível URGENTE (${m.valor_temperatura}°C).`
+                : `${a.nome} apresenta variação de temperatura (${m.valor_temperatura}°C).`,
+            image: a.avatar || "/avatars/default.png",
+            collar: a.id.toString(),
+          });
         }
 
-        // ===== OXIGENAÇÃO =====
-        const o = m.valor_saturacao_oxigenio;
-        if (o !== undefined && o !== null) {
-          let level: "URGENTE" | "ATENÇÃO" | null = null;
-
-          if (o <= 90) level = "URGENTE";
-          else if (o >= 91 && o <= 94) level = "ATENÇÃO";
-
-          if (level) {
-            generated.push({
-              id: `o2-${a.id}`,
-              title: `${a.nome} — Oxigenação`,
-              level,
-              message:
-                level === "URGENTE"
-                  ? `${a.nome} está com oxigenação crítica (${o}%).`
-                  : `${a.nome} apresenta oxigenação fora do ideal (${o}%).`,
-              image: a.avatar || "/avatars/default.png",
-              collar: a.id.toString(),
-            });
-          }
+        // frequência
+        const hl = heartLevel(m.valor_frequencia_cardiaca);
+        if (hl) {
+          generated.push({
+            id: `fc-${a.id}`,
+            title: `${a.nome} — Frequência Cardíaca`,
+            level: hl,
+            message:
+              hl === "URGENTE"
+                ? `${a.nome} com frequência cardíaca em nível URGENTE (${m.valor_frequencia_cardiaca} bpm).`
+                : `${a.nome} apresenta frequência cardíaca fora do intervalo (${m.valor_frequencia_cardiaca} bpm).`,
+            image: a.avatar || "/avatars/default.png",
+            collar: a.id.toString(),
+          });
         }
 
-        // ===== BATIMENTOS =====
-        const fc = m.valor_frequencia_cardiaca;
-        if (fc !== undefined && fc !== null) {
-          let level: "URGENTE" | "ATENÇÃO" | null = null;
-
-          if (fc <= 50 || fc >= 120) level = "URGENTE";
-          else if ((fc >= 51 && fc <= 59) || (fc >= 101 && fc <= 119)) level = "ATENÇÃO";
-
-          if (level) {
-            generated.push({
-              id: `fc-${a.id}`,
-              title: `${a.nome} — Frequência Cardíaca`,
-              level,
-              message:
-                level === "URGENTE"
-                  ? `${a.nome} está com batimentos cardíacos críticos (${fc} bpm).`
-                  : `${a.nome} apresenta batimentos cardíacos irregulares (${fc} bpm).`,
-              image: a.avatar || "/avatars/default.png",
-              collar: a.id.toString(),
-            });
-          }
+        // oxigenação
+        const ol = oxygenLevel(m.valor_saturacao_oxigenio);
+        if (ol) {
+          generated.push({
+            id: `o2-${a.id}`,
+            title: `${a.nome} — Oxigenação`,
+            level: ol,
+            message:
+              ol === "URGENTE"
+                ? `${a.nome} com oxigenação em nível URGENTE (${m.valor_saturacao_oxigenio}%).`
+                : `${a.nome} com oxigenação em atenção (${m.valor_saturacao_oxigenio}%).`,
+            image: a.avatar || "/avatars/default.png",
+            collar: a.id.toString(),
+          });
         }
       });
+
 
       const priority = { URGENTE: 3, ATENÇÃO: 2 };
 
