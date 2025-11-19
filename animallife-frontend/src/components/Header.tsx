@@ -131,58 +131,104 @@ const Header = ({ selectedId }: HeaderProps) => {
 
       setSelectedAnimal(initial);
 
-      const generated: NotificationItem[] = merged
-      .filter((a) => {
-        const t = a.monitoramento?.valor_temperatura;
+      // 🔵 GERAR NOTIFICAÇÕES (AGORA COM 3 MÉTRICAS)
+      const generated: NotificationItem[] = [];
 
-        if (t === undefined || t === null || t === 0) return false;
+      merged.forEach((a) => {
+        const m = a.monitoramento;
+        if (!m) return;
 
-        // Notificações válidas
-        return t <= 35 || t >= 41 || (t > 35 && t < 41);
-      })
-      .map((a) => {
-        const temp = a.monitoramento?.valor_temperatura || 0;
+        // ===== TEMPERATURA =====
+        const t = m.valor_temperatura;
+        if (t !== undefined && t !== null) {
+          let level: "URGENTE" | "ATENÇÃO" | null = null;
 
-        const level: "URGENTE" | "ATENÇÃO" =
-          temp <= 35 || temp >= 41 ? "URGENTE" : "ATENÇÃO";
+          if (t <= 35 || t >= 41) level = "URGENTE";
+          else if (t > 35 && t < 41) level = "ATENÇÃO";
 
-        return {
-          id: a.id,
-          title: a.nome,
-          level,
-          message:
-            level === "URGENTE"
-              ? `${a.nome} está com alerta extremo de saúde!`
-              : `${a.nome} apresenta variação de temperatura.`,
-          image: a.avatar || "/avatars/default.png",
-          collar: a.id.toString(),
-        };
+          if (level) {
+            generated.push({
+              id: `temp-${a.id}`,
+              title: `${a.nome} — Temperatura`,
+              level,
+              message:
+                level === "URGENTE"
+                  ? `${a.nome} está com temperatura crítica (${t}°C).`
+                  : `${a.nome} apresenta variação de temperatura (${t}°C).`,
+              image: a.avatar || "/avatars/default.png",
+              collar: a.id.toString(),
+            });
+          }
+        }
+
+        // ===== OXIGENAÇÃO =====
+        const o = m.valor_saturacao_oxigenio;
+        if (o !== undefined && o !== null) {
+          let level: "URGENTE" | "ATENÇÃO" | null = null;
+
+          if (o <= 90) level = "URGENTE";
+          else if (o >= 91 && o <= 94) level = "ATENÇÃO";
+
+          if (level) {
+            generated.push({
+              id: `o2-${a.id}`,
+              title: `${a.nome} — Oxigenação`,
+              level,
+              message:
+                level === "URGENTE"
+                  ? `${a.nome} está com oxigenação crítica (${o}%).`
+                  : `${a.nome} apresenta oxigenação fora do ideal (${o}%).`,
+              image: a.avatar || "/avatars/default.png",
+              collar: a.id.toString(),
+            });
+          }
+        }
+
+        // ===== BATIMENTOS =====
+        const fc = m.valor_frequencia_cardiaca;
+        if (fc !== undefined && fc !== null) {
+          let level: "URGENTE" | "ATENÇÃO" | null = null;
+
+          if (fc <= 50 || fc >= 120) level = "URGENTE";
+          else if ((fc >= 51 && fc <= 59) || (fc >= 101 && fc <= 119)) level = "ATENÇÃO";
+
+          if (level) {
+            generated.push({
+              id: `fc-${a.id}`,
+              title: `${a.nome} — Frequência Cardíaca`,
+              level,
+              message:
+                level === "URGENTE"
+                  ? `${a.nome} está com batimentos cardíacos críticos (${fc} bpm).`
+                  : `${a.nome} apresenta batimentos cardíacos irregulares (${fc} bpm).`,
+              image: a.avatar || "/avatars/default.png",
+              collar: a.id.toString(),
+            });
+          }
+        }
       });
 
-
-      // 🔵 Unificar notificações por animal (igual ao List.tsx)
+      // 🔵 Unificar (manter somente a mais urgente)
       const unique = Object.values(
         generated.reduce((acc, n) => {
           const animalId = n.collar;
 
-          // Mantém apenas a mais urgente
           if (!acc[animalId]) {
             acc[animalId] = n;
           } else {
             const current = acc[animalId];
-
             const priority = { URGENTE: 2, ATENÇÃO: 1 };
 
             if (priority[n.level] > priority[current.level]) {
               acc[animalId] = n;
             }
           }
-
           return acc;
         }, {} as Record<string, NotificationItem>)
       );
 
       setNotifications(unique);
+
     };
 
     fetchAnimals();

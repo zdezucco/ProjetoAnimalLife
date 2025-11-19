@@ -181,7 +181,7 @@ export default function AnimalList() {
               ? `${a.nome} apresenta temperatura em nível URGENTE (${m.valor_temperatura}°C).`
               : `${a.nome} apresenta variação de temperatura (${m.valor_temperatura}°C).`,
           image: a.avatar || "/avatars/default.png",
-          collar: String(a.id).padStart(3, "0"),
+          collar: a.id.toString(),
         });
       }
 
@@ -197,7 +197,7 @@ export default function AnimalList() {
               ? `${a.nome} com frequência cardíaca em nível URGENTE (${m.valor_frequencia_cardiaca} bpm).`
               : `${a.nome} apresenta frequência cardíaca fora do intervalo (${m.valor_frequencia_cardiaca} bpm).`,
           image: a.avatar || "/avatars/default.png",
-          collar: String(a.id).padStart(3, "0"),
+          collar: a.id.toString(),
         });
       }
 
@@ -213,7 +213,7 @@ export default function AnimalList() {
               ? `${a.nome} com oxigenação em nível URGENTE (${m.valor_saturacao_oxigenio}%).`
               : `${a.nome} com oxigenação em atenção (${m.valor_saturacao_oxigenio}%).`,
           image: a.avatar || "/avatars/default.png",
-          collar: String(a.id).padStart(3, "0"),
+          collar: a.id.toString(),
         });
       }
     });
