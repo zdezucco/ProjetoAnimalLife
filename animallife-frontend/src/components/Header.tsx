@@ -143,8 +143,9 @@ const Header = ({ selectedId }: HeaderProps) => {
         if (t !== undefined && t !== null) {
           let level: "URGENTE" | "ATENÇÃO" | null = null;
 
-          if (t <= 35 || t >= 41) level = "URGENTE";
-          else if (t > 35 && t < 41) level = "ATENÇÃO";
+          if (t <= 35.9 || t >= 40.1) level = "URGENTE";
+          else if (t >= 36 && t <= 37.4) level = "ATENÇÃO";
+          else if (t >= 39.6 && t <= 40.0) level = "ATENÇÃO";
 
           if (level) {
             generated.push({
@@ -241,7 +242,7 @@ const Header = ({ selectedId }: HeaderProps) => {
 
   // 🔵 CLIQUE NA NOTIFICAÇÃO
   const handleNotificationClick = (notification: NotificationItem) => {
-    navigate(`/Monitoramento?id=${notification.id}`);
+    navigate(`/Monitoramento?id=${notification.collar}`);
     setShowNotifications(false);
   };
 

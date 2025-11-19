@@ -83,8 +83,8 @@ const getOxygenIcon = (o2: number | undefined) => {
 // ======================
 const tempLevel = (t?: number) => {
   if (t === undefined || t === null) return "INVÁLIDO";
-  if (t <= 36.0) return "URGENTE";
-  if (t >= 36.1 && t <= 37.4) return "ATENÇÃO";
+  if (t <= 35.9) return "URGENTE";
+  if (t >= 36.0 && t <= 37.4) return "ATENÇÃO";
   if (t >= 37.5 && t <= 39.5) return "SAUDÁVEL";
   if (t >= 39.6 && t <= 40.0) return "ATENÇÃO";
   if (t >= 40.1) return "URGENTE";
