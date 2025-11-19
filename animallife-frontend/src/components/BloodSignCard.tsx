@@ -79,7 +79,7 @@ const BloodSignCard: React.FC<BloodSignCardProps> = ({ monitoramentos }) => {
           <img src={icon} alt="Ícone Saturação de Oxigênio" width={34} height={34} />
           <TemperateMedium>
             <Temperature style={{ color: textcolor }}>{oxigen.toFixed(1)}%</Temperature>
-            <Average style={{ color: textcolor }}>Média: {media.toFixed(1)}%</Average>
+            <Average style={{ color: textcolor }}>Média: {media.toFixed(0)}%</Average>
           </TemperateMedium>
         </LeftSection>
         <Status style={{ color: textcolor }}>{status}</Status>

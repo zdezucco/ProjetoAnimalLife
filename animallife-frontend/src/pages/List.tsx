@@ -37,17 +37,18 @@ interface Animal {
   starred?: boolean;
   avatar?: string;
   monitoramento?: {
-    valor_temperatura: number;
-    valor_frequencia_cardiaca: number;
-    valor_saturacao_oxigenio: number;
+    valor_temperatura?: number;
+    valor_frequencia_cardiaca?: number;
+    valor_saturacao_oxigenio?: number;
+    data_monitoramento?: string;
   };
 }
 
 // ======================
-//  TEMPERATURA
+//  TEMPERATURA (icones usados na listagem — mantive helpers caso queira usar)
 // ======================
 const getTempIcon = (t: number | undefined) => {
-  if (!t) return grayTerm;
+  if (t === undefined || t === null) return grayTerm;
   if (t <= 36.0) return redTerm;
   if (t >= 36.1 && t <= 37.4) return orangeTerm;
   if (t >= 39.6 && t <= 40.0) return orangeTerm;
@@ -59,7 +60,7 @@ const getTempIcon = (t: number | undefined) => {
 //  FREQUÊNCIA CARDÍACA
 // ======================
 const getHeartIcon = (fc: number | undefined) => {
-  if (!fc) return grayHeart;
+  if (fc === undefined || fc === null) return grayHeart;
   if (fc <= 50) return redHeart;
   if (fc >= 51 && fc <= 59) return orangeHeart;
   if (fc >= 101 && fc <= 119) return orangeHeart;
@@ -71,10 +72,41 @@ const getHeartIcon = (fc: number | undefined) => {
 //  OXIGENAÇÃO
 // ======================
 const getOxygenIcon = (o2: number | undefined) => {
-  if (!o2) return grayBlood;
+  if (o2 === undefined || o2 === null) return grayBlood;
   if (o2 <= 90) return redBlood;
   if (o2 >= 91 && o2 <= 94) return orangeBlood;
   return greenBlood;
+};
+
+// ======================
+//  Funções que retornam nível/label (URGENTE | ATENÇÃO | SAUDÁVEL)
+// ======================
+const tempLevel = (t?: number) => {
+  if (t === undefined || t === null) return "INVÁLIDO";
+  if (t <= 36.0) return "URGENTE";
+  if (t >= 36.1 && t <= 37.4) return "ATENÇÃO";
+  if (t >= 37.5 && t <= 39.5) return "SAUDÁVEL";
+  if (t >= 39.6 && t <= 40.0) return "ATENÇÃO";
+  if (t >= 40.1) return "URGENTE";
+  return "SAUDÁVEL";
+};
+
+const heartLevel = (fc?: number) => {
+  if (fc === undefined || fc === null) return "INVÁLIDO";
+  if (fc <= 50) return "URGENTE";
+  if (fc >= 51 && fc <= 59) return "ATENÇÃO";
+  if (fc >= 60 && fc <= 100) return "SAUDÁVEL";
+  if (fc >= 101 && fc <= 119) return "ATENÇÃO";
+  if (fc >= 120) return "URGENTE";
+  return "SAUDÁVEL";
+};
+
+const oxygenLevel = (o2?: number) => {
+  if (o2 === undefined || o2 === null) return "INVÁLIDO";
+  if (o2 <= 90) return "URGENTE";
+  if (o2 >= 91 && o2 <= 94) return "ATENÇÃO";
+  if (o2 >= 95 && o2 <= 100) return "SAUDÁVEL";
+  return "SAUDÁVEL";
 };
 
 const getSpeciesName = (especie: string) => {
@@ -121,20 +153,74 @@ export default function AnimalList() {
     const animalsRows = animalDataRaw ?? [];
     const monitorRows = monitorDataRaw ?? [];
 
-    // 💡 TRATAMENTO FINAL DE ID + MERGE SEGURO
-    const merged = animalsRows.map((a: any) => {
+    // 💡 TRATAMENTO FINAL DE ID + MERGE SEGURO (usa Number para evitar problemas de tipo)
+    const merged: Animal[] = animalsRows.map((a: any) => {
       const idA = Number(a.id);
-
-      const monitoramento = monitorRows.find(
-        (m: any) => Number(m.id_animal) === idA
-      );
-
+      const monitoramento = monitorRows.find((m: any) => Number(m.id_animal) === idA);
       return { ...a, monitoramento };
     });
 
     setAnimals(merged);
 
-    // Delay mínimo de 1s
+    // 🔔 GERA NOTIFICAÇÕES AUTOMÁTICAS (com title + message)
+    const generated: NotificationItem[] = [];
+
+    merged.forEach((a) => {
+      const m = a.monitoramento;
+      if (!m) return;
+
+      // temperatura
+      const tl = tempLevel(m.valor_temperatura);
+      if (tl === "URGENTE" || tl === "ATENÇÃO") {
+        generated.push({
+          id: `temp-${a.id}-${m.data_monitoramento ?? ""}`,
+          title: `${a.nome} — Temperatura`,
+          level: tl as "URGENTE" | "ATENÇÃO",
+          message:
+            tl === "URGENTE"
+              ? `${a.nome} apresenta temperatura em nível URGENTE (${m.valor_temperatura}°C).`
+              : `${a.nome} apresenta variação de temperatura (${m.valor_temperatura}°C).`,
+          image: a.avatar || "/avatars/default.png",
+          collar: String(a.id).padStart(3, "0"),
+        });
+      }
+
+      // frequencia cardiaca
+      const hl = heartLevel(m.valor_frequencia_cardiaca);
+      if (hl === "URGENTE" || hl === "ATENÇÃO") {
+        generated.push({
+          id: `fc-${a.id}-${m.data_monitoramento ?? ""}`,
+          title: `${a.nome} — Frequência Cardíaca`,
+          level: hl as "URGENTE" | "ATENÇÃO",
+          message:
+            hl === "URGENTE"
+              ? `${a.nome} com frequência cardíaca em nível URGENTE (${m.valor_frequencia_cardiaca} bpm).`
+              : `${a.nome} apresenta frequência cardíaca fora do intervalo (${m.valor_frequencia_cardiaca} bpm).`,
+          image: a.avatar || "/avatars/default.png",
+          collar: String(a.id).padStart(3, "0"),
+        });
+      }
+
+      // oxigenacao
+      const ol = oxygenLevel(m.valor_saturacao_oxigenio);
+      if (ol === "URGENTE" || ol === "ATENÇÃO") {
+        generated.push({
+          id: `o2-${a.id}-${m.data_monitoramento ?? ""}`,
+          title: `${a.nome} — Oxigenação`,
+          level: ol as "URGENTE" | "ATENÇÃO",
+          message:
+            ol === "URGENTE"
+              ? `${a.nome} com oxigenação em nível URGENTE (${m.valor_saturacao_oxigenio}%).`
+              : `${a.nome} com oxigenação em atenção (${m.valor_saturacao_oxigenio}%).`,
+          image: a.avatar || "/avatars/default.png",
+          collar: String(a.id).padStart(3, "0"),
+        });
+      }
+    });
+
+    setNotifications(generated);
+
+    // Delay mínimo 1s
     const elapsed = Date.now() - start;
     const wait = 1000 - elapsed;
     setTimeout(() => setLoading(false), wait > 0 ? wait : 0);
@@ -166,6 +252,15 @@ export default function AnimalList() {
 
   const acessarMonitoramento = (id: number) => {
     navigate(`/Monitoramento?id=${id}`);
+  };
+
+  const handleNotificationClick = (n: NotificationItem) => {
+    // Se clicar numa notificação, abre o monitoramento do animal
+    const id = Number(n.collar);
+    if (id) {
+      setShowNotifications(false);
+      navigate(`/Monitoramento?id=${id}`);
+    }
   };
 
   const filteredAnimals = animals.filter((a) =>
@@ -260,6 +355,7 @@ export default function AnimalList() {
         isOpen={showNotifications}
         onClose={() => setShowNotifications(false)}
         notifications={notifications}
+        onNotificationClick={handleNotificationClick}
       />
     </div>
   );

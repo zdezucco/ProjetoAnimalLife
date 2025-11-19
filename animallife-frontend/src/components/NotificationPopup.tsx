@@ -2,7 +2,8 @@ import React from "react";
 import "../styles/notification.css";
 
 export type NotificationItem = {
-  id: number;
+  id: number | string;
+  title: string; // <-- Novo campo
   level: "URGENTE" | "ATENÇÃO";
   message: string;
   image: string;
@@ -56,9 +57,7 @@ const NotificationPopup: React.FC<NotificationPopupProps> = ({
               <li
                 key={n.id}
                 className="notification-item"
-                onClick={() =>
-                  onNotificationClick && onNotificationClick(n)
-                }
+                onClick={() => onNotificationClick && onNotificationClick(n)}
               >
                 <img
                   src={n.image}
@@ -67,6 +66,11 @@ const NotificationPopup: React.FC<NotificationPopupProps> = ({
                 />
 
                 <div className="notification-info">
+
+                  {/* TÍTULO */}
+                  <h4 className="notification-title">{n.title}</h4>
+
+                  {/* NÍVEL */}
                   <strong
                     className="notification-level"
                     style={{ color: getLevelColor(n.level) }}
@@ -74,11 +78,14 @@ const NotificationPopup: React.FC<NotificationPopupProps> = ({
                     {n.level}
                   </strong>
 
+                  {/* MENSAGEM */}
                   <p className="notification-message">{n.message}</p>
 
+                  {/* ID */}
                   <span className="notification-collar">
                     ID: {n.collar}
                   </span>
+
                 </div>
               </li>
             ))}
