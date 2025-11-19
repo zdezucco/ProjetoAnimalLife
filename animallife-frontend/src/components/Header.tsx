@@ -27,13 +27,14 @@ const Header = () => {
   const [selectedAnimal, setSelectedAnimal] = useState<Animal | null>(null);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
-
-  const [showPreview, setShowPreview] = useState(false); // 🟦 PREVIEW DA IMAGEM
+  const [showPreview, setShowPreview] = useState(false);
 
   const Retornar = () => navigate("/List");
   const toggleNotifications = () => setShowNotifications((prev) => !prev);
 
-  // 🟦 Função para reduzir imagem antes do upload
+  // =============================
+  //  REDUZ IMAGEM ANTES DO UPLOAD
+  // =============================
   const resizeImage = (file: File, maxWidth = 500, maxHeight = 500): Promise<File> => {
     return new Promise((resolve) => {
       const img = new Image();
@@ -86,13 +87,13 @@ const Header = () => {
     });
   };
 
-  // 🟧 UPLOAD + compressão + atualização
+  // =============================
+  // UPLOAD + COMPRESSÃO DE IMAGEM
+  // =============================
   const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     if (!event.target.files || !selectedAnimal) return;
 
     const originalFile = event.target.files[0];
-
-    // 🔵 Comprime a imagem antes do upload
     const compressedFile = await resizeImage(originalFile);
 
     const fileExt = compressedFile.name.split(".").pop();
@@ -108,102 +109,83 @@ const Header = () => {
       return;
     }
 
-    // URL pública
     const { data: urlData } = supabase.storage.from("avatars").getPublicUrl(filePath);
     const publicUrl = urlData.publicUrl;
 
-    // Atualiza no banco
     await supabase.from("animal").update({ avatar: publicUrl }).eq("id", selectedAnimal.id);
 
-    // Atualiza em tela
     setSelectedAnimal((prev) => (prev ? { ...prev, avatar: publicUrl } : prev));
     setAnimals((prev) =>
       prev.map((a) => (a.id === selectedAnimal.id ? { ...a, avatar: publicUrl } : a))
     );
   };
 
+  // ========================================
+  //         BUSCA ANIMAIS + NOTIFICAÇÕES
+  // ========================================
   useEffect(() => {
-  const fetchAnimals = async () => {
-    try {
-      const { data: animalData, error: animalError } = await supabase
-        .from("animal")
-        .select("*");
+    const fetchAnimals = async () => {
+      try {
+        const { data: animalData } = await supabase.from("animal").select("*");
+        const { data: monData } = await supabase
+          .from("monitoramento")
+          .select("id_animal, valor_temperatura, data_monitoramento")
+          .order("data_monitoramento", { ascending: false });
 
-      if (animalError) {
-        console.error("Erro ao buscar animais:", animalError);
-        return;
+        const animalsArray = Array.isArray(animalData) ? animalData : [];
+        const monArray = Array.isArray(monData) ? monData : [];
+
+        const merged = animalsArray.map((a) => ({
+          ...a,
+          monitoramento: monArray.find((m) => m.id_animal === a.id) || null,
+        }));
+
+        setAnimals(merged);
+
+        const params = new URLSearchParams(window.location.search);
+        const urlId = Number(params.get("id"));
+
+        if (urlId) {
+          const found = merged.find((x) => x.id === urlId);
+          setSelectedAnimal(found || merged[0] || null);
+        } else {
+          setSelectedAnimal(merged[0] || null);
+        }
+
+        // =============================
+        // GERA NOTIFICAÇÕES AUTOMÁTICAS
+        // =============================
+        const generated: NotificationItem[] = merged
+          .filter((a) => {
+            const t = a.monitoramento?.valor_temperatura;
+            return t !== undefined && t !== null && t !== 0 && (t <= 35 || t >= 40);
+          })
+          .map((a) => {
+            const temp = a.monitoramento?.valor_temperatura || 0;
+            const level = temp <= 35 || temp > 41 ? "URGENTE" : "ATENÇÃO";
+
+            return {
+              id: a.id.toString(),
+              title: `${a.nome} — Temperatura`, // ← **CAMPO ADICIONADO**
+              level,
+              message:
+                level === "URGENTE"
+                  ? `${a.nome} está com alerta extremo de saúde!`
+                  : `${a.nome} apresenta variação de temperatura.`,
+              image: a.avatar || "/avatars/default.png",
+              collar: a.id.toString(),
+            };
+          });
+
+        setNotifications(generated);
+      } catch (err) {
+        console.error("Erro inesperado ao buscar dados:", err);
       }
+    };
 
-      const { data: monData, error: monError } = await supabase
-        .from("monitoramento")
-        .select("id_animal, valor_temperatura, data_monitoramento")
-        .order("data_monitoramento", { ascending: false });
+    fetchAnimals();
+  }, []);
 
-      if (monError) {
-        console.error("Erro ao buscar monitoramentos:", monError);
-        return;
-      }
-
-      // usa array vazio como fallback caso alguma das respostas seja null/undefined
-      const animalsArray = Array.isArray(animalData) ? animalData : [];
-      const monArray = Array.isArray(monData) ? monData : [];
-
-      const merged = animalsArray.map((a) => ({
-        ...a,
-        monitoramento: monArray.find((m) => m.id_animal === a.id) || null,
-      }));
-
-      setAnimals(merged);
-
-      // seleciona animal pela url (se houver) — mesmo fallback seguro
-      const params = new URLSearchParams(window.location.search);
-      const urlId = Number(params.get("id"));
-      if (urlId) {
-        const found = merged.find((x) => x.id === urlId);
-        if (found) setSelectedAnimal(found);
-        else if (merged.length > 0) setSelectedAnimal(merged[0]);
-      } else if (merged.length > 0) {
-        setSelectedAnimal(merged[0]);
-      }
-
-      // gera notificações com base no monitoramento (se existir)
-      const generated: NotificationItem[] = merged
-        .filter((a) => {
-          const t = a.monitoramento?.valor_temperatura;
-          return (
-            t !== undefined &&
-            t !== null &&
-            t !== 0 &&
-            (t <= 35 || (t > 35 && t < 36) || t >= 40)
-          );
-        })
-        .map((a) => {
-          const temp = a.monitoramento?.valor_temperatura || 0;
-          const level = temp <= 35 || temp > 41 ? "URGENTE" : "ATENÇÃO";
-
-          return {
-            id: a.id,
-            level,
-            message:
-              level === "URGENTE"
-                ? `${a.nome} está com alerta extremo de saúde!`
-                : `${a.nome} apresenta variação de temperatura.`,
-            image: a.avatar || "/avatars/default.png",
-            collar: a.id.toString(),
-          };
-        });
-
-      setNotifications(generated);
-    } catch (err) {
-      console.error("Erro inesperado ao buscar dados:", err);
-    }
-  };
-
-  fetchAnimals();
-}, []);
-
-
-  // 🟦 Ao clicar em notificação → abre monitoramento
   const handleNotificationClick = (notification: NotificationItem) => {
     const id = Number(notification.collar);
     setSelectedAnimal(animals.find((a) => a.id === id) || null);
@@ -237,7 +219,6 @@ const Header = () => {
             className="animal-photo"
           />
 
-          {/* Ícone editar */}
           <img
             src={Editicon}
             alt="Editar"
@@ -248,7 +229,6 @@ const Header = () => {
             }}
           />
 
-          {/* Input oculto */}
           <input
             type="file"
             accept="image/*"
@@ -259,7 +239,6 @@ const Header = () => {
         </div>
       </div>
 
-      {/* 🟦 MODAL DE PRÉ-VISUALIZAÇÃO */}
       {showPreview && (
         <div className="preview-overlay" onClick={() => setShowPreview(false)}>
           <img
