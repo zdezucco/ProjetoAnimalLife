@@ -111,11 +111,38 @@
   opacity: 0.9;
 }
 
-.notification-text h3,
-.notification-text p {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+.notification-info {
+    /* Altera o padrão do container de info para permitir quebra de linha */
+    white-space: normal;
+}
+
+.notification-info p, 
+.notification-info div { /* Aplica ao div onde o conteúdo está */
+    /* Sobrescreve as regras de truncamento para permitir a lista */
+    overflow: visible;
+    text-overflow: clip;
+    white-space: normal;
+}
+
+.notification-message ul {
+  /* Remove margens verticais excessivas do container UL */
+  margin-top: 5px;
+  margin-bottom: 5px; 
+  
+  /* Ajusta o recuo da lista para o ponto (bolinha) */
+  padding-left: 20px; 
+  
+  /* Garante que o texto da lista quebre corretamente */
+  word-break: break-word; 
+  white-space: normal; /* Permite múltiplas linhas */
+}
+
+.notification-message li {
+  /* Reduz o espaçamento entre cada item da lista (linhas) */
+  margin-bottom: 2px; 
+  
+  /* Ajusta a altura da linha para que o texto não fique tão esticado */
+  line-height: 1.3; 
 }
 
 
