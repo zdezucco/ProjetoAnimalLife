@@ -8,7 +8,7 @@ import NotificationPopup, { NotificationItem } from "../components/NotificationP
 import { supabase } from "../supabaseClient";
 
 interface HeaderProps {
-  selectedId?: number;   // 🟦 permite forçar ID vindo do Monitoramento
+  selectedId?: number; // Para forçar ID vindo do Monitoramento
 }
 
 interface Animal {
@@ -27,7 +27,7 @@ const Header = ({ selectedId }: HeaderProps) => {
   const navigate = useNavigate();
   const [showNotifications, setShowNotifications] = useState(false);
   const [notifications, setNotifications] = useState<NotificationItem[]>([]);
-  const [animals, setAnimals] = useState<Animal[]>([]);
+  const [_animals, setAnimals] = useState<Animal[]>([]);
   const [selectedAnimal, setSelectedAnimal] = useState<Animal | null>(null);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -36,7 +36,7 @@ const Header = ({ selectedId }: HeaderProps) => {
   const Retornar = () => navigate("/List");
   const toggleNotifications = () => setShowNotifications((prev) => !prev);
 
-  // 🟦 Comprime imagem antes do upload
+  // 🟦 COMPACTAR IMAGEM
   const resizeImage = (file: File, maxWidth = 500, maxHeight = 500): Promise<File> => {
     return new Promise((resolve) => {
       const img = new Image();
@@ -63,6 +63,7 @@ const Header = ({ selectedId }: HeaderProps) => {
 
         canvas.width = width;
         canvas.height = height;
+
         const ctx = canvas.getContext("2d");
         ctx?.drawImage(img, 0, 0, width, height);
 
@@ -80,6 +81,7 @@ const Header = ({ selectedId }: HeaderProps) => {
     });
   };
 
+  // 🟧 UPLOAD DE IMAGEM DO ANIMAL
   const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     if (!event.target.files || !selectedAnimal) return;
 
@@ -102,7 +104,7 @@ const Header = ({ selectedId }: HeaderProps) => {
     setAnimals((prev) => prev.map((a) => (a.id === selectedAnimal.id ? { ...a, avatar: publicUrl } : a)));
   };
 
-  // 🟧 BUSCA + NOTIFICAÇÕES
+  // 🟥 BUSCA + UNIFICAÇÃO DE NOTIFICAÇÕES
   useEffect(() => {
     const fetchAnimals = async () => {
       const { data: animalData } = await supabase.from("animal").select("*");
@@ -121,64 +123,58 @@ const Header = ({ selectedId }: HeaderProps) => {
 
       setAnimals(merged);
 
-      // 🟦 SELEÇÃO DE ANIMAL (URL OU selectedId)
+      // 🔵 SELECIONAR ANIMAL
       const params = new URLSearchParams(window.location.search);
       const urlId = Number(params.get("id"));
       const forcedId = selectedId ?? urlId;
+      const initial = merged.find((a) => a.id === forcedId) || merged[0] || null;
 
-      if (forcedId) {
-        const found = merged.find((a) => a.id === forcedId);
-        setSelectedAnimal(found || merged[0] || null);
-      } else {
-        setSelectedAnimal(merged[0] || null);
-      }
+      setSelectedAnimal(initial);
 
-      // 🟥 GERAR NOTIFICAÇÕES POR ANIMAL
+      // 🔴 GERAR NOTIFICAÇÕES
       const generated: NotificationItem[] = merged
-      .filter((a) => {
-        const t = a.monitoramento?.valor_temperatura;
-        return (
-          t !== undefined &&
-          t !== null &&
-          t !== 0 &&
-          (t <= 35 || (t > 35 && t < 36) || t >= 40)
-        );
-      })
-      .map((a) => {
-        const temp = a.monitoramento?.valor_temperatura || 0;
-        const level: "URGENTE" | "ATENÇÃO" =
-          temp <= 35 || temp > 41 ? "URGENTE" : "ATENÇÃO";
+        .filter((a) => {
+          const t = a.monitoramento?.valor_temperatura;
+          return (
+            t !== undefined &&
+            t !== null &&
+            t !== 0 &&
+            (t <= 35 || (t > 35 && t < 36) || t >= 40)
+          );
+        })
+        .map((a) => {
+          const temp = a.monitoramento?.valor_temperatura || 0;
+          const level: "URGENTE" | "ATENÇÃO" =
+            temp <= 35 || temp > 41 ? "URGENTE" : "ATENÇÃO";
 
-        return {
-          id: a.id,
-          title: a.nome,
-          level,
-          message:
-            level === "URGENTE"
-              ? `${a.nome} está com alerta extremo de saúde!`
-              : `${a.nome} apresenta variação de temperatura.`,
-          image: a.avatar || "/avatars/default.png",
-          collar: a.id.toString(),
-        };
-      });
+          return {
+            id: a.id,
+            title: a.nome,
+            level,
+            message:
+              level === "URGENTE"
+                ? `${a.nome} está com alerta extremo de saúde!`
+                : `${a.nome} apresenta variação de temperatura.`,
+            image: a.avatar || "/avatars/default.png",
+            collar: a.id.toString(),
+          };
+        });
 
-      // 🟦 UNIFICAR NOTIFICAÇÕES POR ANIMAL
-    const mergedUnique = Object.values(
-      generated.reduce((acc, n) => {
-    const idNum = Number(n.id);
-
-    acc[idNum] = {
-      id: idNum,
-      title: n.title,
-      message: n.message,
-      image: n.image,
-      collar: n.collar,
-      level: n.level as "URGENTE" | "ATENÇÃO", // <- força literal válido
-    };
-
-    return acc;
-  }, {} as Record<number, NotificationItem>)
-);
+      // 🔵 UNIFICAR NOTIFICAÇÃO POR ANIMAL
+      const mergedUnique = Object.values(
+        generated.reduce((acc, n) => {
+          const idNum = Number(n.id);
+          acc[idNum] = {
+            id: idNum,
+            title: n.title,
+            message: n.message,
+            image: n.image,
+            collar: n.collar,
+            level: n.level,
+          };
+          return acc;
+        }, {} as Record<number, NotificationItem>)
+      );
 
       setNotifications(mergedUnique);
     };
@@ -186,6 +182,7 @@ const Header = ({ selectedId }: HeaderProps) => {
     fetchAnimals();
   }, [selectedId]);
 
+  // 🔵 CLIQUE NA NOTIFICAÇÃO
   const handleNotificationClick = (notification: NotificationItem) => {
     navigate(`/Monitoramento?id=${notification.id}`);
     setShowNotifications(false);
@@ -201,14 +198,21 @@ const Header = ({ selectedId }: HeaderProps) => {
         <div className="header-right">
           <div className="notification" onClick={toggleNotifications}>
             <Bell className="bell-icon" />
-            {notifications.length > 0 && <span className="notification-count">{notifications.length}</span>}
+            {notifications.length > 0 && (
+              <span className="notification-count">{notifications.length}</span>
+            )}
           </div>
         </div>
       </div>
 
+      {/* FOTO DO ANIMAL */}
       <div className="animal-photo-section">
         <div className="photo-wrapper" onClick={() => setShowPreview(true)}>
-          <img src={selectedAnimal?.avatar || "/avatars/default.png"} alt="Animal" className="animal-photo" />
+          <img
+            src={selectedAnimal?.avatar || "/avatars/default.png"}
+            alt="Animal"
+            className="animal-photo"
+          />
 
           <img
             src={Editicon}
@@ -220,16 +224,29 @@ const Header = ({ selectedId }: HeaderProps) => {
             }}
           />
 
-          <input type="file" accept="image/*" ref={fileInputRef} onChange={handleImageUpload} style={{ display: "none" }} />
+          <input
+            type="file"
+            accept="image/*"
+            ref={fileInputRef}
+            onChange={handleImageUpload}
+            style={{ display: "none" }}
+          />
         </div>
       </div>
 
+      {/* PREVIEW */}
       {showPreview && (
         <div className="preview-overlay" onClick={() => setShowPreview(false)}>
-          <img src={selectedAnimal?.avatar} alt="Preview" className="preview-image" onClick={(e) => e.stopPropagation()} />
+          <img
+            src={selectedAnimal?.avatar}
+            alt="Preview"
+            className="preview-image"
+            onClick={(e) => e.stopPropagation()}
+          />
         </div>
       )}
 
+      {/* POPUP DE NOTIFICAÇÕES */}
       <NotificationPopup
         isOpen={showNotifications}
         onClose={() => setShowNotifications(false)}
