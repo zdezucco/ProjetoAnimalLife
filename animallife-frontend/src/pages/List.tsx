@@ -13,6 +13,7 @@ import { useNavigate } from "react-router";
 import FooterBar from "../components/FooterBar";
 import NotificationPopup, { NotificationItem } from "../components/NotificationPopup";
 import { supabase } from "../supabaseClient";
+import LoadingScreen from "../pages/Loadingscreen";
 
 interface Animal {
   id: number;
@@ -28,9 +29,7 @@ interface Animal {
 }
 
 const getStatusIcon = (temp: number | undefined) => {
-  if (temp === undefined) return GrayTemp;
-  if (temp === 0) return GrayTemp;
-  if (temp === null) return GrayTemp;
+  if (temp === undefined || temp === 0 || temp === null) return GrayTemp;
   if (temp <= 35) return RedTemp;
   if (temp <= 36 && temp >= 35.1) return OrangeTemp;
   if (temp >= 40 && temp <= 41) return OrangeTemp;
@@ -39,9 +38,7 @@ const getStatusIcon = (temp: number | undefined) => {
 };
 
 const getStatusColor = (temp: number | undefined) => {
-  if (temp === undefined) return "var(--gray-temp)";
-  if (temp === 0) return "var(--gray-temp)";
-  if (temp === null) return "var(--gray-temp)";
+  if (temp === undefined || temp === 0 || temp === null) return "var(--gray-temp)";
   if (temp <= 35) return "var(--red-temp)";
   if (temp <= 36 && temp >= 35.1) return "var(--orange-temp)";
   if (temp >= 40 && temp <= 41) return "var(--orange-temp)";
@@ -73,17 +70,22 @@ export default function AnimalList() {
   const [animals, setAnimals] = useState<Animal[]>([]);
   const [notifications, setNotifications] = useState<NotificationItem[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
+  const [loading, setLoading] = useState(true);
 
   // -------------------------------------------------------
-  // ✅ Função utilizada pelo realtime + carregamento inicial
+  // Função de buscar dados + delay mínimo de 1 segundo
   // -------------------------------------------------------
   const fetchAnimals = async () => {
+    setLoading(true);
+    const startTime = Date.now();
+
     const { data: animalData, error: animalError } = await supabase
       .from("animal")
       .select("*");
 
     if (animalError) {
       console.error("Erro ao buscar animais:", animalError);
+      setLoading(false);
       return;
     }
 
@@ -95,6 +97,7 @@ export default function AnimalList() {
 
     if (monitoramentoError) {
       console.error("Erro ao buscar monitoramentos:", monitoramentoError);
+      setLoading(false);
       return;
     }
 
@@ -135,37 +138,37 @@ export default function AnimalList() {
       });
 
     setNotifications(generatedNotifications);
+
+    // ⏳ Mantém tela de loading por pelo menos 1 segundo
+    const elapsed = Date.now() - startTime;
+    const remainingTime = 1000 - elapsed;
+
+    if (remainingTime > 0) {
+      setTimeout(() => setLoading(false), remainingTime);
+    } else {
+      setLoading(false);
+    }
   };
 
-  // -------------------------------------------------------
-  // 🌐 Efeito para carregar dados + ativar realtime
-  // -------------------------------------------------------
+  // Carregamento inicial + listeners realtime
   useEffect(() => {
-    fetchAnimals(); // carregamento inicial
+    fetchAnimals();
 
-    // 🔥 REALTIME: atualiza sempre que animal for alterado
     const animalChannel = supabase
       .channel("animal-realtime")
       .on(
         "postgres_changes",
         { event: "*", schema: "public", table: "animal" },
-        (payload) => {
-          console.log("🐾 Atualização em ANIMAL:", payload);
-          fetchAnimals();
-        }
+        () => fetchAnimals()
       )
       .subscribe();
 
-    // 🔥 REALTIME: atualiza sempre que novo monitoramento chegar
     const monitorChannel = supabase
       .channel("monitor-realtime")
       .on(
         "postgres_changes",
         { event: "*", schema: "public", table: "monitoramento" },
-        (payload) => {
-          console.log("🌡 Atualização em MONITORAMENTO:", payload);
-          fetchAnimals();
-        }
+        () => fetchAnimals()
       )
       .subscribe();
 
@@ -174,6 +177,9 @@ export default function AnimalList() {
       supabase.removeChannel(monitorChannel);
     };
   }, []);
+
+  // 🔥 Loading Screen
+  if (loading) return <LoadingScreen />;
 
   const acessarMonitoramento = (animalId: number) => {
     navigate(`/Monitoramento?id=${animalId}`);
@@ -262,17 +268,9 @@ export default function AnimalList() {
                       {speciesName}
                       <span className="gender">
                         {animal.sexo === "FEMEA" ? (
-                          <img
-                            src={FemaleIcon}
-                            alt="Fêmea"
-                            className="gender-icon"
-                          />
+                          <img src={FemaleIcon} alt="Fêmea" className="gender-icon" />
                         ) : animal.sexo === "MACHO" ? (
-                          <img
-                            src={MaleIcon}
-                            alt="Macho"
-                            className="gender-icon"
-                          />
+                          <img src={MaleIcon} alt="Macho" className="gender-icon" />
                         ) : null}
                       </span>
                     </div>
