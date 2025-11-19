@@ -126,11 +126,11 @@
 
 .notification-message ul {
   /* Remove margens verticais excessivas do container UL */
-  margin-top: 5px;
-  margin-bottom: 5px; 
+  margin-top: 0px;
+  margin-bottom: 0px; 
   
   /* Ajusta o recuo da lista para o ponto (bolinha) */
-  padding-left: 20px; 
+  padding-left: 15px; 
   
   /* Garante que o texto da lista quebre corretamente */
   word-break: break-word; 
@@ -139,7 +139,7 @@
 
 .notification-message li {
   /* Reduz o espaçamento entre cada item da lista (linhas) */
-  margin-bottom: 2px; 
+  margin-bottom: 0px; 
   
   /* Ajusta a altura da linha para que o texto não fique tão esticado */
   line-height: 1.3; 
