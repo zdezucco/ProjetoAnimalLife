@@ -11,6 +11,7 @@ interface HeaderProps {
   selectedId?: number; // Para forçar ID vindo do Monitoramento
 }
 
+// Interface Animal ajustada para incluir os valores de monitoramento
 interface Animal {
   id: number;
   nome: string;
@@ -19,7 +20,10 @@ interface Animal {
   registro: string;
   avatar?: string;
   monitoramento?: {
-    valor_temperatura: number;
+    valor_temperatura?: number; // Tornando opcional para evitar erros, se não houver monitoramento
+    valor_frequencia_cardiaca?: number;
+    valor_saturacao_oxigenio?: number;
+    data_monitoramento?: string;
   };
 }
 
@@ -37,13 +41,13 @@ const Header = ({ selectedId }: HeaderProps) => {
   const toggleNotifications = () => setShowNotifications((prev) => !prev);
 
   const tempLevel = (t?: number) => {
-  if (t === undefined || t === null) return null;
-  if (t <= 35.9) return "URGENTE";
-  if (t >= 36.0 && t <= 37.4) return "ATENÇÃO";
-  if (t >= 37.5 && t <= 39.5) return null;
-  if (t >= 39.6 && t <= 40.0) return "ATENÇÃO";
-  if (t >= 40.1) return "URGENTE";
-  return null;
+    if (t === undefined || t === null) return null;
+    if (t <= 35.9) return "URGENTE";
+    if (t >= 36.0 && t <= 37.4) return "ATENÇÃO";
+    if (t >= 37.5 && t <= 39.5) return null;
+    if (t >= 39.6 && t <= 40.0) return "ATENÇÃO";
+    if (t >= 40.1) return "URGENTE";
+    return null;
   };
 
   const heartLevel = (fc?: number) => {
@@ -62,7 +66,6 @@ const Header = ({ selectedId }: HeaderProps) => {
     if (o2 >= 91 && o2 <= 94) return "ATENÇÃO";
     return null;
   };
-
 
   // 🟦 COMPACTAR IMAGEM
   const resizeImage = (file: File, maxWidth = 500, maxHeight = 500): Promise<File> => {
@@ -144,10 +147,10 @@ const Header = ({ selectedId }: HeaderProps) => {
       const animalsArray = animalData || [];
       const monArray = monData || [];
 
-      const merged = animalsArray.map((a) => ({
+      const merged: Animal[] = animalsArray.map((a: any) => ({
         ...a,
-        monitoramento: monArray.find((m) => Number(m.id_animal) === Number(a.id)) || null
-
+        // Encontra o monitoramento mais recente
+        monitoramento: monArray.find((m: any) => Number(m.id_animal) === Number(a.id))
       }));
 
       setAnimals(merged);
@@ -160,89 +163,93 @@ const Header = ({ selectedId }: HeaderProps) => {
 
       setSelectedAnimal(initial);
 
-      // 🔵 GERAR NOTIFICAÇÕES (AGORA COM 3 MÉTRICAS)
+      // 🔵 GERAR NOTIFICAÇÕES CONSOLIDADAS (APLICANDO A LÓGICA DE LIST.TSX)
       const generated: NotificationItem[] = [];
+      const priority = { URGENTE: 3, ATENÇÃO: 2, SAUDÁVEL: 1, INVÁLIDO: 0 }; 
 
       merged.forEach((a) => {
         const m = a.monitoramento;
         if (!m) return;
 
-        // temperatura
-        const tl = tempLevel(m.valor_temperatura);
-        if (tl) {
-          generated.push({
-            id: `temp-${a.id}`,
-            title: `${a.nome} — Temperatura`,
-            level: tl,
-            message:
-              tl === "URGENTE"
-                ? `${a.nome} apresenta temperatura em nível URGENTE (${m.valor_temperatura}°C).`
-                : `${a.nome} apresenta variação de temperatura (${m.valor_temperatura}°C).`,
-            image: a.avatar || "/avatars/default.png",
-            collar: a.id.toString(),
-          });
+        // 1. OBTEM NÍVEIS E VALORES DOS SINAIS VITAIS
+        const tempStatus = tempLevel(m.valor_temperatura);
+        const heartStatus = heartLevel(m.valor_frequencia_cardiaca);
+        const oxygenStatus = oxygenLevel(m.valor_saturacao_oxigenio);
+
+        // Lista para armazenar as strings de alerta/urgência DETALHADAS
+        const detailedConditions: string[] = [];
+        
+        let highestPriorityLevel: "URGENTE" | "ATENÇÃO" | null = null;
+        let maxPriorityValue = 0; 
+
+        // =======================================================
+        // FUNÇÃO AUXILIAR PARA ADICIONAR CONDIÇÃO E ATUALIZAR PRIORIDADE
+        // =======================================================
+        const addCondition = (name: string, level: "URGENTE" | "ATENÇÃO", value: number | undefined, unit: string) => {
+          if (!value) return; // Garante que o valor existe
+          
+          // String detalhada: "Temperatura (XX.X°C) — **URGENTE**"
+          detailedConditions.push(`${name} (${value}${unit}) — **${level}**`);
+          
+          // Atualiza o nível de prioridade
+          const currentPriorityValue = priority[level];
+          if (currentPriorityValue > maxPriorityValue) {
+            maxPriorityValue = currentPriorityValue;
+            highestPriorityLevel = level;
+          }
+        };
+        // =======================================================
+
+        // Verifica Temperatura
+        if (tempStatus === "URGENTE" || tempStatus === "ATENÇÃO") {
+          addCondition("Temperatura", tempStatus, m.valor_temperatura, '°C');
         }
 
-        // frequência
-        const hl = heartLevel(m.valor_frequencia_cardiaca);
-        if (hl) {
-          generated.push({
-            id: `fc-${a.id}`,
-            title: `${a.nome} — Frequência Cardíaca`,
-            level: hl,
-            message:
-              hl === "URGENTE"
-                ? `${a.nome} com frequência cardíaca em nível URGENTE (${m.valor_frequencia_cardiaca} bpm).`
-                : `${a.nome} apresenta frequência cardíaca fora do intervalo (${m.valor_frequencia_cardiaca} bpm).`,
-            image: a.avatar || "/avatars/default.png",
-            collar: a.id.toString(),
-          });
+        // Verifica Frequência Cardíaca
+        if (heartStatus === "URGENTE" || heartStatus === "ATENÇÃO") {
+          addCondition("Frequência Cardíaca", heartStatus, m.valor_frequencia_cardiaca, ' BPM');
         }
 
-        // oxigenação
-        const ol = oxygenLevel(m.valor_saturacao_oxigenio);
-        if (ol) {
-          generated.push({
-            id: `o2-${a.id}`,
-            title: `${a.nome} — Oxigenação`,
-            level: ol,
-            message:
-              ol === "URGENTE"
-                ? `${a.nome} com oxigenação em nível URGENTE (${m.valor_saturacao_oxigenio}%).`
-                : `${a.nome} com oxigenação em atenção (${m.valor_saturacao_oxigenio}%).`,
-            image: a.avatar || "/avatars/default.png",
-            collar: a.id.toString(),
-          });
+        // Verifica Oxigenação
+        if (oxygenStatus === "URGENTE" || oxygenStatus === "ATENÇÃO") {
+          addCondition("Oxigenação", oxygenStatus, m.valor_saturacao_oxigenio, '%');
         }
+
+        // 2. SE NÃO HOUVER CONDIÇÕES DE ALERTA/URGÊNCIA, NÃO GERA NOTIFICAÇÃO
+        if (detailedConditions.length === 0 || !highestPriorityLevel) return;
+
+        // 3. CONSTRÓI A MENSAGEM FINAL USANDO A LISTA DETALHADA EM MARKDOWN
+        let messageText = `${a.nome} apresenta as seguintes alterações: \n\n`;
+
+        // Constrói a lista Markdown (ex: "\n- Item 1\n- Item 2")
+        // O NotificationPopup.tsx deve ser ajustado para renderizar Markdown/HTML.
+        const listItems = detailedConditions.map(item => `- ${item}`).join('\n');
+          
+        messageText += listItems;
+        
+        // 4. CRIA A NOTIFICAÇÃO CONSOLIDADA
+        generated.push({
+          id: `consolidated-${a.id}`,
+          title: `${a.nome} — ALERTA VITAL`, 
+          level: highestPriorityLevel, // O nível geral da notificação
+          message: messageText,
+          image: a.avatar || "/avatars/default.png",
+          collar: a.id.toString(),
+        });
       });
 
+      // NOVO: Usa as notificações geradas diretamente, pois já estão consolidadas
+      setNotifications(generated); 
 
+      /* CÓDIGO ANTIGO REMOVIDO:
       const priority = { URGENTE: 3, ATENÇÃO: 2 };
-
       const unique = Object.values(
         generated.reduce((acc, n) => {
-          const animalId = n.collar;
-
-          // Se é a primeira notificação do animal → salva
-          if (!acc[animalId]) {
-            acc[animalId] = n;
-          } else {
-            // Já existe outra → compara qual tem maior prioridade
-            const current = acc[animalId];
-            const incoming = n;
-
-            if (priority[incoming.level] > priority[current.level]) {
-              acc[animalId] = incoming;
-            }
-          }
-
-          return acc;
+          // ... lógica de agrupamento e prioridade antiga ...
         }, {} as Record<string, NotificationItem>)
       );
-
-
       setNotifications(unique);
-
+      */
     };
 
     fetchAnimals();
