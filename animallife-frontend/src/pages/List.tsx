@@ -162,62 +162,74 @@ export default function AnimalList() {
 
     setAnimals(merged);
 
-   // 🔔 GERA NOTIFICAÇÕES AGRUPADAS IGUAL AO HEADER
-    const generated: NotificationItem[] = [];
+   // 🔔 GERA NOTIFICAÇÕES AGRUPADAS POR ANIMAL
+  const generated: NotificationItem[] = [];
+  const priority = { URGENTE: 3, ATENÇÃO: 2, SAUDÁVEL: 1, INVÁLIDO: 0 };
 
-    merged.forEach((a) => {
-      const m = a.monitoramento;
-      if (!m) return;
+  merged.forEach((a) => {
+    const m = a.monitoramento;
+    if (!m) return;
 
-      // obter níveis
-      const tl = tempLevel(m.valor_temperatura);
-      const hl = heartLevel(m.valor_frequencia_cardiaca);
-      const ol = oxygenLevel(m.valor_saturacao_oxigenio);
+    // 1. OBTEM NÍVEIS E AGRUPA AS CONDIÇÕES DE ALERTA
+    const tempStatus = tempLevel(m.valor_temperatura);
+    const heartStatus = heartLevel(m.valor_frequencia_cardiaca);
+    const oxygenStatus = oxygenLevel(m.valor_saturacao_oxigenio);
 
-      // cria array temporário com todas notificações do animal
-      const tempList: NotificationItem[] = [];
+    // Lista para armazenar as strings de alerta/urgência
+    const alertConditions: { name: string; level: "URGENTE" | "ATENÇÃO" }[] = [];
 
-      if (tl === "URGENTE" || tl === "ATENÇÃO") {
-        tempList.push({
-          id: `temp-${a.id}`,
-          title: `${a.nome} — Temperatura`,
-          level: tl,
-          message: `${a.nome} apresenta temperatura em nível ${tl} (${m.valor_temperatura}°C).`,
-          image: a.avatar || "/avatars/default.png",
-          collar: a.id.toString(),
-        });
-      }
+    // Verifica Temperatura
+    if (tempStatus === "URGENTE" || tempStatus === "ATENÇÃO") {
+      alertConditions.push({ name: "Temperatura", level: tempStatus });
+    }
 
-      if (hl === "URGENTE" || hl === "ATENÇÃO") {
-        tempList.push({
-          id: `fc-${a.id}`,
-          title: `${a.nome} — Frequência Cardíaca`,
-          level: hl,
-          message: `${a.nome} apresenta frequência cardíaca em nível ${hl} (${m.valor_frequencia_cardiaca} BPM).`,
-          image: a.avatar || "/avatars/default.png",
-          collar: a.id.toString(),
-        });
-      }
+    // Verifica Frequência Cardíaca
+    if (heartStatus === "URGENTE" || heartStatus === "ATENÇÃO") {
+      alertConditions.push({ name: "Frequência Cardíaca", level: heartStatus });
+    }
 
-      if (ol === "URGENTE" || ol === "ATENÇÃO") {
-        tempList.push({
-          id: `o2-${a.id}`,
-          title: `${a.nome} — Oxigenação`,
-          level: ol,
-          message: `${a.nome} apresenta oxigenação em nível ${ol} (${m.valor_saturacao_oxigenio}%).`,
-          image: a.avatar || "/avatars/default.png",
-          collar: a.id.toString(),
-        });
-      }
+    // Verifica Oxigenação
+    if (oxygenStatus === "URGENTE" || oxygenStatus === "ATENÇÃO") {
+      alertConditions.push({ name: "Oxigenação", level: oxygenStatus });
+    }
 
-    // Junta todas as notificações de alerta/urgência do animal
-    if (tempList.length > 0) {
-        generated.push(...tempList);
-      }
+    // SE NÃO HOUVER CONDIÇÕES DE ALERTA, PARA
+    if (alertConditions.length === 0) return;
+
+    // 2. CONSOLIDA A MENSAGEM E O NÍVEL DE PRIORIDADE
+
+    // Determina o Nível Máximo (URGENTE > ATENÇÃO)
+    const highestPriorityLevel = alertConditions.reduce((maxLevel, condition) =>
+      priority[condition.level] > priority[maxLevel] ? condition.level : maxLevel,
+      "ATENÇÃO" as "URGENTE" | "ATENÇÃO"
+    );
+    
+    // Constrói a mensagem consolidada
+    const names = alertConditions.map(c => c.name);
+    let messageText = "";
+
+    if (names.length === 1) {
+      messageText = `${names[0]} em nível ${highestPriorityLevel}.`;
+    } else if (names.length === 2) {
+      messageText = `${names[0]} e ${names[1]} em nível ${highestPriorityLevel}.`;
+    } else { // 3 ou mais
+      const last = names.pop();
+      messageText = `${names.join(", ")} e ${last} em nível ${highestPriorityLevel}.`;
+    }
+
+    // 3. CRIA A NOTIFICAÇÃO CONSOLIDADA
+    generated.push({
+      id: `consolidated-${a.id}`, // ID único por animal
+      title: `${a.nome} — VITAL ALERTA`, // Título genérico para o animal
+      level: highestPriorityLevel,
+      message: `${a.nome} apresenta: ${messageText}`,
+      image: a.avatar || "/avatars/default.png",
+      collar: a.id.toString(),
     });
+  });
 
-    // salva notificações agrupadas
-    setNotifications(generated);
+  // salva notificações agrupadas (Agora será no máximo 1 por animal)
+  setNotifications(generated);
 
 
 
