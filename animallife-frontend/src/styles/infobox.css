@@ -35,37 +35,121 @@
 }
 
 .checkboxes-section {
+  /* Linhas divisórias horizontais */
+  border-top: 1px solid #ddd; 
+  border-bottom: 1px solid #ddd;
+  padding: 15px 0; 
   margin-top: 20px;
+    
   display: flex;
   justify-content: space-between;
   gap: 30px;
+  
+  /* Permite o posicionamento da linha vertical */
+  position: relative; 
 }
 
+/* Linha divisória vertical (Protótipo) */
+.checkboxes-section::after {
+    content: '';
+    position: absolute;
+    top: 0; /* Começa no topo do padding */
+    bottom: 0; /* Vai até o final do padding */
+    left: 50%;
+    transform: translateX(-50%);
+    width: 1px;
+    background-color: #ddd;
+}
+@media (max-width: 480px) {
+    .checkboxes-section {
+        flex-direction: column; /* Empilha em telas pequenas */
+    }
+    .checkboxes-section::after {
+        content: none; /* Remove a linha vertical em telas pequenas */
+    }
+    .checkbox-group:first-child {
+        /* Adiciona uma linha horizontal entre os grupos Dieta e Sexo quando empilhados */
+        border-bottom: 1px solid #eee;
+        padding-bottom: 15px;
+        margin-bottom: 15px;
+    }
+}
+
+
 .checkbox-group {
-  /* Ocupa espaço igual em cada coluna */
   flex: 1; 
-  min-width: 150px; /* Evita que a coluna fique muito estreita */
-  margin-bottom: 0; /* Remove margem vertical desnecessária */
+  min-width: 150px;
+  margin-bottom: 0; 
 }
 
 .group-label {
   display: block;
   margin-bottom: 8px;
   font-weight: bold;
-  color: #666;
+  color: #333;
 }
 
 .checkbox-group .options {
   display: flex;
   flex-direction: column;
-  gap: 12px; /* Espaço entre as opções verticalmente */
+  gap: 12px;
 }
 
 .checkbox-group label {
   font-size: 1em;
   display: flex;
   align-items: center;
+  cursor: pointer;
   gap: 8px;
+}
+
+/* 1. OCULTA O CHECKBOX NATIVO */
+.checkbox-group input[type="checkbox"] {
+  position: absolute;
+  opacity: 0; 
+  width: 0;
+  height: 0;
+}
+
+/* 2. CRIA O ELEMENTO VISUAL DO CHECKBOX */
+.checkbox-group label::before {
+  content: '';
+  display: inline-block;
+  width: 1.3em; /* Tamanho da caixa (aprox 21px) */
+  height: 1.3em; 
+  border-radius: 4px; 
+  border: 2px solid #ccc; /* Borda cinza/claro */
+  background-color: #fff;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+  
+  /* Posicionamento e ajuste de texto */
+  margin-right: 0.5em; 
+  position: relative;
+  left: 0; /* Remove o ajuste de -8px do código anterior */
+}
+
+/* 3. ESTILO QUANDO CHECADO (Fundo verde e marca) */
+.checkbox-group input[type="checkbox"]:checked + ::before {
+  border-color: #1abc9c; /* Borda verde forte */
+  background-color: #1abc9c; /* Fundo verde */
+}
+
+/* 4. O ÍCONE (Marca de Visto) */
+.checkbox-group input[type="checkbox"]:checked + ::before {
+    /* Usando SVG embutido para a marca de visto */
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M20 6L9 17L4 12' stroke='%23FFFFFF' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-size: 80%;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+/* Estilo para os ícones de gênero (Macho/Fêmea) */
+.gender-icon {
+    width: 18px;
+    height: 18px;
+    margin-left: auto; /* Empurra o ícone para a direita */
+    opacity: 0.8;
 }
 
 .register-box {
