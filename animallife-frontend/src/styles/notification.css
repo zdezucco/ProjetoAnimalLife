@@ -43,9 +43,15 @@
 .close-btn {
   background: none;
   border: none;
-  font-size: 24px; /* Aumenta um pouco */
   cursor: pointer;
-  color: #6c757d;
+  padding: 0; /* Remove padding padrão, se houver */
+  line-height: 0; /* Remove altura da linha */
+}
+
+.close-icon-img {
+    width: 24px; /* Tamanho desejado do ícone */
+    height: 24px;
+    display: block;
 }
 
 .notification-list {

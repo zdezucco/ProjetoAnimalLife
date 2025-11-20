@@ -63,7 +63,7 @@ const NotificationPopup: React.FC<NotificationPopupProps> = ({
           {/* Altera <h3> para <h2> para corresponder ao CSS do header */}
           <h2>Notificações</h2>
           <button className="close-btn" onClick={onClose}>
-            {CloseBtn}
+            <img src={CloseBtn} alt="Fechar" className="close-icon-img" />
           </button>
         </div>
 
@@ -85,7 +85,6 @@ const NotificationPopup: React.FC<NotificationPopupProps> = ({
                     >
                         {n.level}!
                     </strong>
-                    <button className="close-item-btn">{CloseBtn}</button> {/* Adiciona um botão de fechar (opcional) */}
                 </div>
                 
                 <div className="notification-content-body">
