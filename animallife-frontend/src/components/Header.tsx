@@ -262,7 +262,7 @@ const Header = ({ selectedId }: HeaderProps) => {
 
       {/* FOTO DO ANIMAL */}
       <div className="animal-photo-section">
-        <div className="photo-wrapper" onClick={() => {openPreview}>
+        <div className="photo-wrapper" onClick={() => {openPreview}}>
           <img
             src={selectedAnimal?.avatar || "/avatars/default.png"}
             alt="Animal"
