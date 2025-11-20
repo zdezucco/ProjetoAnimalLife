@@ -167,7 +167,7 @@ const Header = ({ selectedId }: HeaderProps) => {
 
       setSelectedAnimal(initial);
 
-      // 🔵 GERAR NOTIFICAÇÕES CONSOLIDADAS
+      // 🔵 GERAR NOTIFICAÇÕES CONSOLIDADAS (GENÉRICAS)
       const generated: NotificationItem[] = [];
       const priority = { URGENTE: 3, ATENÇÃO: 2, SAUDÁVEL: 1, INVÁLIDO: 0 }; 
 
@@ -175,68 +175,28 @@ const Header = ({ selectedId }: HeaderProps) => {
         const m = a.monitoramento;
         if (!m) return;
 
-        // 1. OBTEM NÍVEIS E VALORES DOS SINAIS VITAIS
         const tempStatus = tempLevel(m.valor_temperatura);
         const heartStatus = heartLevel(m.valor_frequencia_cardiaca);
         const oxygenStatus = oxygenLevel(m.valor_saturacao_oxigenio);
 
-        // Lista para armazenar as strings de alerta/urgência DETALHADAS
-        const detailedConditions: string[] = [];
+        // Determina o nível de prioridade mais alto
+        const levels = [tempStatus, heartStatus, oxygenStatus]
+          .filter((l): l is "URGENTE" | "ATENÇÃO" => l === "URGENTE" || l === "ATENÇÃO");
+
+        if (levels.length === 0) return; // Sem alertas
+
+        const highestLevel = levels.reduce((max, current) => 
+          priority[current] > priority[max] ? current : max,
+          "ATENÇÃO" as "ATENÇÃO" | "URGENTE"
+        );
         
-        let highestPriorityLevel: "URGENTE" | "ATENÇÃO" | null = null;
-        let maxPriorityValue = 0; 
-
-        // =======================================================
-        // FUNÇÃO AUXILIAR PARA ADICIONAR CONDIÇÃO E ATUALIZAR PRIORIDADE
-        // =======================================================
-        const addCondition = (name: string, level: "URGENTE" | "ATENÇÃO", value: number | undefined, unit: string) => {
-          // CORRIGIDO: Usa verificação estrita para permitir o valor 0 (zero)
-          if (value === undefined || value === null) return; 
-          
-          // String detalhada: "Temperatura (XX.X°C) — **URGENTE**"
-          detailedConditions.push(`${name} (${value}${unit}) — **${level}**`);
-          
-          // Atualiza o nível de prioridade
-          const currentPriorityValue = priority[level];
-          if (currentPriorityValue > maxPriorityValue) {
-            maxPriorityValue = currentPriorityValue;
-            highestPriorityLevel = level;
-          }
-        };
-        // =======================================================
-
-        // Verifica Temperatura
-        if (tempStatus === "URGENTE" || tempStatus === "ATENÇÃO") {
-          addCondition("Temperatura", tempStatus, m.valor_temperatura, '°C');
-        }
-
-        // Verifica Frequência Cardíaca
-        if (heartStatus === "URGENTE" || heartStatus === "ATENÇÃO") {
-          addCondition("Frequência Cardíaca", heartStatus, m.valor_frequencia_cardiaca, ' BPM');
-        }
-
-        // Verifica Oxigenação
-        if (oxygenStatus === "URGENTE" || oxygenStatus === "ATENÇÃO") {
-          addCondition("Oxigenação", oxygenStatus, m.valor_saturacao_oxigenio, '%');
-        }
-
-        // 2. SE NÃO HOUVER CONDIÇÕES DE ALERTA/URGÊNCIA, NÃO GERA NOTIFICAÇÃO
-        if (detailedConditions.length === 0 || !highestPriorityLevel) return;
-
-        // 3. CONSTRÓI A MENSAGEM FINAL USANDO A LISTA DETALHADA EM MARKDOWN
-        let messageText = `${a.nome} apresenta as seguintes alterações: \n\n`;
-
-        // Constrói a lista Markdown (ex: "\n- Item 1\n- Item 2")
-        const listItems = detailedConditions.map(item => `- ${item}`).join('\n');
-          
-        messageText += listItems;
-        
-        // 4. CRIA A NOTIFICAÇÃO CONSOLIDADA
+        // CRIA A NOTIFICAÇÃO GENÉRICA
         generated.push({
           id: `consolidated-${a.id}`,
           title: `${a.nome} — ALERTA VITAL`, 
-          level: highestPriorityLevel, // O nível geral da notificação
-          message: messageText,
+          level: highestLevel,
+          // MENSAGEM GENÉRICA:
+          message: `${a.nome} está em nível de **${highestLevel}**. Verifique o monitoramento.`,
           image: a.avatar || "/avatars/default.png",
           collar: a.id.toString(),
         });
@@ -251,6 +211,10 @@ const Header = ({ selectedId }: HeaderProps) => {
 
   // 🔵 CLIQUE NA NOTIFICAÇÃO
   const handleNotificationClick = (notification: NotificationItem) => {
+    // Adiciona o delay de 2s ANTES de navegar
+    // Nota: O Header não tem estado 'loading' próprio para a tela inteira,
+    // mas a navegação do List.tsx para o Monitoramento.tsx lida com isso.
+    // Aqui, apenas garantimos a navegação.
     navigate(`/Monitoramento?id=${notification.collar}`);
     setShowNotifications(false);
   };

@@ -17,6 +17,7 @@ const Monitoramento = () => {
   const [searchParams] = useSearchParams();
   const [animal, setAnimal] = useState<any>(null);
   const [monitoramentos, setMonitoramentos] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true); // Adicionado estado de loading local
   const animalId = searchParams.get("id");
 
 const monitoramentosOrdenados = [...monitoramentos]
@@ -24,8 +25,6 @@ const monitoramentosOrdenados = [...monitoramentos]
     new Date(a.data_monitoramento).getTime() -
     new Date(b.data_monitoramento).getTime()
   );
-
-
 
   // ===== FUNÇÃO DE CARREGAR DADOS =====
   const fetchData = async () => {
@@ -47,15 +46,25 @@ const monitoramentosOrdenados = [...monitoramentos]
     setMonitoramentos(monitoramentoData || []);
   };
 
-  // ===== CARREGAMENTO INICIAL =====
+  // ===== CARREGAMENTO INICIAL COM DELAY DE 2s =====
   useEffect(() => {
-    fetchData();
+    const start = Date.now();
+    fetchData().then(() => {
+        const elapsed = Date.now() - start;
+        const wait = 2000 - elapsed; // Delay de 2 segundos
+        
+        setTimeout(() => {
+            setLoading(false);
+        }, wait > 0 ? wait : 0);
+    });
   }, [animalId]);
 
 
-  // ======= SUPABASE REALTIME LISTENERS =======
+  // ======= SUPABASE REALTIME LISTENERS (Sem Loading) =======
   useEffect(() => {
     if (!animalId) return;
+
+    // A função fetchData agora só atualiza o estado, não toca no loading
 
     // Atualizações na tabela *animal*
     const animalChannel = supabase
@@ -100,7 +109,8 @@ const monitoramentosOrdenados = [...monitoramentos]
     };
   }, [animalId]);
 
-  if (!animal) return <LoadingScreen />;
+  // Condição de renderização do Loading Screen
+  if (loading || !animal) return <LoadingScreen />;
 
   return (
     <>

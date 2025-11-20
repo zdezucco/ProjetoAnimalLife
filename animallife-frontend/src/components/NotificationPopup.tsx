@@ -39,21 +39,14 @@ const NotificationPopup: React.FC<NotificationPopupProps> = ({
 
   const finalNotifications = notifications;
 
-  // NotificationPopup.tsx (ou em utils.ts)
-  const renderMarkdown = (text: string) => {
-    // 1. Converte listas de Markdown para HTML (apenas o necessário)
-    let html = text.replace(/-\s(.+)/g, '<li>$1</li>');
-    html = `<ul>${html}</ul>`; // Envolve tudo em <ul>
-
-    // 2. Converte quebras de linha duplas (\n\n) em parágrafos ou BRs
+  // FUNÇÃO SIMPLIFICADA para renderizar apenas negrito (sem listas)
+  const renderSimpleMarkdown = (text: string) => {
+    // 1. Converte negrito **texto** em <strong>texto</strong>
+    let html = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+    
+    // 2. Converte quebras de linha duplas (\n) em <br> para respeitar a formatação de parágrafo
     html = html.replace(/\n/g, '<br/>');
 
-    // 3. Converte negrito **texto** em <strong>texto</strong>
-    html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-    
-    // Remove <ul> e </ul> de onde não deveria estar
-    html = html.replace(/<br\/><ul>/g, '<ul>').replace(/<\/ul><br\/>/g, '</ul>');
-    
     return html;
   };
 
@@ -101,7 +94,8 @@ const NotificationPopup: React.FC<NotificationPopupProps> = ({
 
                   <div
                     className="notification-message"
-                    dangerouslySetInnerHTML={{ __html: renderMarkdown(n.message) }}
+                    // Agora usa a função simplificada para negrito
+                    dangerouslySetInnerHTML={{ __html: renderSimpleMarkdown(n.message) }}
                   />
 
                   <span className="notification-collar">
