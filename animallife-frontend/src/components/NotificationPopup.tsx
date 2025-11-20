@@ -32,7 +32,7 @@ const NotificationPopup: React.FC<NotificationPopupProps> = ({
       case "URGENTE":
         return "var(--red-temp, #FFBCBC)"; // Usando fallback
       case "ATENÇÃO":
-        return "var(--orange-temp, #FEDAB9)"; // Usando fallback
+        return "var(--orange-temp, #FFBCBC)"; // Usando fallback
       default:
         return "var(--gray-temp, #D9D9D9)";
     }
