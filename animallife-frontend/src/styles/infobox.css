@@ -1,19 +1,25 @@
+/* === TÍTULO CENTRALIZADO COM LINHA === */
 .info-box-container h4 {
   font-size: 1.2em;
-  margin-bottom: 15px;
   color: #333;
+  text-align: center;        /* Centraliza */
+  text-transform: uppercase; /* Letras maiúsculas */
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #ddd; /* Linha abaixo do título */
+  letter-spacing: 1px;
 }
 
 .info-form {
   display: flex;
   flex-direction: column;
-  gap: 12px; /* Espaço entre os grupos de formulário */
+  gap: 12px;
 }
 
 .form-group {
   display: flex;
   flex-direction: column;
-  flex: 1; /* Para ocupar espaço igual na linha */
+  flex: 1;
 }
 
 .form-group label {
@@ -22,104 +28,189 @@
   color: #666;
 }
 
-.form-group input {
+/* Aplica estilo apenas aos inputs de texto/número, ignorando o checkbox */
+.form-group input:not([type="checkbox"]) {
   padding: 12px;
   border-radius: 8px;
   border: 1px solid #ccc;
-  width: 100%; /* Ocupa toda a largura do seu contêiner pai */
+  width: 100%;
 }
 
 .form-row {
   display: flex;
-  gap: 15px; /* Espaço entre os inputs na mesma linha */
+  gap: 15px;
 }
 
+/* === SEÇÃO DE CHECKBOXES EM COLUNAS === */
 .checkboxes-section {
   margin-top: 20px;
-}
-.checkbox-group {
-  margin-bottom: 15px;
-}
-.group-label {
-  display: block;
-  margin-bottom: 8px;
-  font-weight: bold;
-  color: #666;
-}
-.checkbox-group .options {
+  padding: 20px 0;
+  
+  /* Linhas de separação da seção */
+  border-top: 1px solid #ddd;
+  border-bottom: 1px solid #ddd;
+
+  /* Layout Flex para duas colunas */
   display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
-}
-.checkbox-group label {
-  font-size: 1em;
-  display: flex;
-  align-items: center;
-  gap: 8px;
+  justify-content: space-between; /* Espalha as colunas */
+  position: relative;
 }
 
+/* Linha vertical no meio (Separador das colunas) */
+.checkboxes-section::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 20px;
+  bottom: 20px;
+  width: 1px;
+  background-color: #ddd;
+  transform: translateX(-50%);
+}
+
+/* Coluna individual (Dieta / Sexo) */
+.checkbox-group {
+  flex: 1;            /* Ocupa metade do espaço */
+  padding: 0 20px;    /* Espaçamento interno para não colar na linha do meio */
+  display: flex;
+  flex-direction: column;
+}
+
+.group-label {
+  display: block;
+  margin-bottom: 12px;
+  font-weight: bold;
+  color: #333;
+  font-size: 1em;
+}
+
+.checkbox-group .options {
+  display: flex;
+  flex-direction: column; /* Opções uma embaixo da outra */
+  gap: 12px;
+}
+
+/* Estilo do Item (Label) */
+.checkbox-group label {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  font-size: 0.95em;
+  color: #444;
+  user-select: none;
+}
+
+/* === CHECKBOX CUSTOMIZADO === */
+
+/* 1. Esconde o input nativo */
+.checkbox-group input[type="checkbox"] {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+/* 2. Cria a caixa customizada (span.custom-checkbox) */
+.custom-checkbox {
+  height: 20px;
+  width: 20px;
+  background-color: #fff;
+  border: 2px solid #ccc;
+  border-radius: 4px;
+  margin-right: 10px; /* Espaço entre a caixa e o texto */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease-in-out;
+  flex-shrink: 0; /* Impede que a caixa encolha */
+}
+
+/* 3. Estilo quando marcado (Checked) */
+.checkbox-group input:checked ~ .custom-checkbox {
+  background-color: #1d8016; /* Verde do seu print */
+  border-color: #1d8016;
+}
+
+/* 4. O Ícone de Check (Visto) */
+.custom-checkbox::after {
+  content: "";
+  display: none;
+  width: 5px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+  margin-bottom: 2px; /* Ajuste fino da posição do check */
+}
+
+/* Mostra o ícone quando marcado */
+.checkbox-group input:checked ~ .custom-checkbox::after {
+  display: block;
+}
+
+/* Ícones de Gênero */
+.gender-icon {
+  width: 16px;
+  height: 16px;
+  margin-left: 8px;
+  opacity: 0.7;
+}
+
+/* Responsividade: Empilha em telas pequenas */
+@media (max-width: 500px) {
+  .checkboxes-section {
+    flex-direction: column;
+    gap: 20px;
+  }
+  .checkboxes-section::after {
+    display: none; /* Remove linha vertical */
+  }
+  .checkbox-group {
+    padding: 0;
+  }
+}
+
+/* === RESTANTE DOS ESTILOS (MANTIDOS) === */
 .register-box {
   margin-top: 20px;
 }
-
 .register-box h3 {
   font-size: 1.2em;
   margin-bottom: 15px;
 }
-
 .register-box textarea {
   width: 100%;
-  min-height: 120px; /* Usa min-height para ser flexível */
+  min-height: 120px;
   padding: 12px;
-  resize: vertical; /* Permite redimensionar verticalmente */
+  resize: vertical;
   border-radius: 8px;
   border: 1px solid #ccc;
   font-size: 1em;
   line-height: 1.6;
-  background-color: #f7f9fa; /* Fundo levemente azulado/cinza */
+  background-color: #f7f9fa;
 }
-
 .button-row {
   display: flex;
   justify-content: flex-end;
-  margin-top: 10px; 
+  margin-top: 15px;
   margin-bottom: 10px;
-  width: 98%;
+  width: 100%;
 }
-
 .button-row button {
-  background-color: var(--primary-color);
-  color: #FFFFFF; 
-  
-  font-family: var(--ff-sans);
-  font-weight: var(--ff-sans, 700); 
-  font-size: 16px;
-  text-transform: uppercase; 
-  letter-spacing: 0.5px;
-  
+  background-color: var(--primary-color, #2e7d32); /* Fallback verde */
+  color: #FFFFFF;
+  font-weight: 700;
+  font-size: 14px;
+  text-transform: uppercase;
   border: none;
-  border-radius: 8px; 
-  padding: 7px 15px; 
-
+  border-radius: 6px;
+  padding: 10px 20px;
   cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  transition: 0.3s;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
 }
-
 .button-row button:hover {
-  background-color: var(--secondary-color);
-  
-  transform: translateY(-2px); 
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-}
-
-.button-row button:focus,
-.button-row button:focus-visible {
-  outline: 3px solid var(--secondary-color);
-  outline-offset: 2px;
-}
-
-.button-row button:active {
-  transform: translateY(0); 
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  filter: brightness(0.9);
+  transform: translateY(-1px);
 }

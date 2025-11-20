@@ -230,6 +230,7 @@ const InfoBox = ({ animalId }: InfoBoxProps) => {
                   disabled={!isEditing}
                   onChange={() => handleCheckboxChange("dieta", d)}
                 />
+                <span className="custom-checkbox"></span>
                 {d}
               </label>
             ))}
@@ -247,6 +248,7 @@ const InfoBox = ({ animalId }: InfoBoxProps) => {
                   disabled={!isEditing}
                   onChange={() => handleCheckboxChange("sexo", s)}
                 />
+                <span className="custom-checkbox"></span>
                 {s}
                 {s === "Macho" && <img src={MaleIcon} alt="Macho" className="gender-icon" />}
                 {s === "Fêmea" && <img src={FemaleIcon} alt="Fêmea" className="gender-icon" />}
