@@ -342,7 +342,9 @@ export default function AnimalList() {
                     </div>
 
                     <div className="animal-type">
-                      {getSpeciesName(animal.especie)}
+                      {getSpeciesName(animal.especie)}                
+                    </div>
+                    <div className="animal-gender">
                       <span className="gender">
                         {animal.sexo === "FEMEA" ? (
                           <img src={FemaleIcon} className="gender-icon" />
