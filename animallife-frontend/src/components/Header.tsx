@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import { Bell } from "lucide-react";
 import Editicon from "../assets/edit-icon.svg";
 import Return from "../assets/return.svg";
@@ -139,75 +139,97 @@ const Header = ({ selectedId }: HeaderProps) => {
     setAnimals((prev) => prev.map((a) => (a.id === selectedAnimal.id ? { ...a, avatar: publicUrl } : a)));
   };
 
-  // 🟥 BUSCA + GERAÇÃO DE NOTIFICAÇÕES CONSOLIDADAS
-  useEffect(() => {
-    const fetchAnimals = async () => {
-      const { data: animalData } = await supabase.from("animal").select("*");
-      const { data: monData } = await supabase
-        .from("monitoramento")
-        .select("*")
-        .order("data_monitoramento", { ascending: false });
+  // 🟥 FUNÇÃO DE BUSCA E GERAÇÃO DE NOTIFICAÇÕES (USADA POR INIT E REALTIME)
+  const fetchAnimals = useCallback(async () => {
+    const { data: animalData } = await supabase.from("animal").select("*");
+    const { data: monData } = await supabase
+      .from("monitoramento")
+      .select("*")
+      .order("data_monitoramento", { ascending: false });
 
-      const animalsArray = animalData || [];
-      const monArray = monData || [];
+    const animalsArray = animalData || [];
+    const monArray = monData || [];
 
-      const merged: Animal[] = animalsArray.map((a: any) => ({
-        ...a,
-        // Encontra o monitoramento mais recente
-        monitoramento: monArray.find((m: any) => Number(m.id_animal) === Number(a.id))
-      }));
+    const merged: Animal[] = animalsArray.map((a: any) => ({
+      ...a,
+      // Encontra o monitoramento mais recente
+      monitoramento: monArray.find((m: any) => Number(m.id_animal) === Number(a.id))
+    }));
 
-      setAnimals(merged);
+    setAnimals(merged);
 
-      // 🔵 SELECIONAR ANIMAL
-      const params = new URLSearchParams(window.location.search);
-      const urlId = Number(params.get("id"));
-      const forcedId = selectedId ?? urlId;
-      const initial = merged.find((a) => a.id === forcedId) || merged[0] || null;
+    // 🔵 SELECIONAR ANIMAL
+    const params = new URLSearchParams(window.location.search);
+    const urlId = Number(params.get("id"));
+    const forcedId = selectedId ?? urlId;
+    const initial = merged.find((a) => a.id === forcedId) || merged[0] || null;
 
-      setSelectedAnimal(initial);
+    setSelectedAnimal(initial);
 
-      // 🔵 GERAR NOTIFICAÇÕES CONSOLIDADAS (GENÉRICAS)
-      const generated: NotificationItem[] = [];
-      const priority = { URGENTE: 3, ATENÇÃO: 2, SAUDÁVEL: 1, INVÁLIDO: 0 }; 
+    // 🔵 GERAR NOTIFICAÇÕES CONSOLIDADAS (GENÉRICAS)
+    const generated: NotificationItem[] = [];
+    const priority = { URGENTE: 3, ATENÇÃO: 2, SAUDÁVEL: 1, INVÁLIDO: 0 }; 
 
-      merged.forEach((a) => {
-        const m = a.monitoramento;
-        if (!m) return;
+    merged.forEach((a) => {
+      const m = a.monitoramento;
+      if (!m) return;
 
-        const tempStatus = tempLevel(m.valor_temperatura);
-        const heartStatus = heartLevel(m.valor_frequencia_cardiaca);
-        const oxygenStatus = oxygenLevel(m.valor_saturacao_oxigenio);
+      const tempStatus = tempLevel(m.valor_temperatura);
+      const heartStatus = heartLevel(m.valor_frequencia_cardiaca);
+      const oxygenStatus = oxygenLevel(m.valor_saturacao_oxigenio);
 
-        // Determina o nível de prioridade mais alto
-        const levels = [tempStatus, heartStatus, oxygenStatus]
-          .filter((l): l is "URGENTE" | "ATENÇÃO" => l === "URGENTE" || l === "ATENÇÃO");
+      // Determina o nível de prioridade mais alto
+      const levels = [tempStatus, heartStatus, oxygenStatus]
+        .filter((l): l is "URGENTE" | "ATENÇÃO" => l === "URGENTE" || l === "ATENÇÃO");
 
-        if (levels.length === 0) return; // Sem alertas
+      if (levels.length === 0) return; // Sem alertas
 
-        const highestLevel = levels.reduce((max, current) => 
-          priority[current] > priority[max] ? current : max,
-          "ATENÇÃO" as "ATENÇÃO" | "URGENTE"
-        );
-        
-        // CRIA A NOTIFICAÇÃO GENÉRICA
-        generated.push({
-          id: `consolidated-${a.id}`,
-          title: `${a.nome} — ALERTA VITAL`, 
-          level: highestLevel,
-          // MENSAGEM GENÉRICA:
-          message: `${a.nome} está em nível de **${highestLevel}**. Verifique o monitoramento.`,
-          image: a.avatar || "/avatars/default.png",
-          collar: a.id.toString(),
-        });
+      const highestLevel = levels.reduce((max, current) => 
+        priority[current] > priority[max] ? current : max,
+        "ATENÇÃO" as "ATENÇÃO" | "URGENTE"
+      );
+      
+      // CRIA A NOTIFICAÇÃO GENÉRICA
+      generated.push({
+        id: `consolidated-${a.id}`,
+        title: `${a.nome} — ALERTA VITAL`, 
+        level: highestLevel,
+        // MENSAGEM GENÉRICA:
+        message: `${a.nome} está em nível de **${highestLevel}**. Verifique o monitoramento.`,
+        image: a.avatar || "/avatars/default.png",
+        collar: a.id.toString(),
       });
+    });
 
-      // Usa as notificações geradas diretamente, pois já estão consolidadas
-      setNotifications(generated); 
-    };
+    // Usa as notificações geradas diretamente, pois já estão consolidadas
+    setNotifications(generated); 
+  }, [selectedId]); // Depende de selectedId
 
+  // 1. EFEITO PARA BUSCA INICIAL (Chama a função fetchAnimals)
+  useEffect(() => {
     fetchAnimals();
-  }, [selectedId]);
+  }, [fetchAnimals]);
+
+  // 2. EFEITO PARA LISTENERS REALTIME (CORRIGIDO: Adiciona listeners)
+  useEffect(() => {
+    // Escutando mudanças na tabela 'animal'
+    const animalCh = supabase
+      .channel("animal_rt")
+      .on("postgres_changes", { event: "*", schema: "public", table: "animal" }, fetchAnimals)
+      .subscribe();
+
+    // Escutando mudanças na tabela 'monitoramento'
+    const monCh = supabase
+      .channel("monitor_rt")
+      .on("postgres_changes", { event: "*", schema: "public", table: "monitoramento" }, fetchAnimals)
+      .subscribe();
+
+    // Cleanup: Remove os listeners quando o componente for desmontado
+    return () => {
+      supabase.removeChannel(animalCh);
+      supabase.removeChannel(monCh);
+    };
+  }, [fetchAnimals]); // Depende da função memoizada
 
   // 🔵 CLIQUE NA NOTIFICAÇÃO
   const handleNotificationClick = (notification: NotificationItem) => {
