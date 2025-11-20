@@ -112,6 +112,14 @@
   box-shadow: rgba(0, 0, 0, 0.24) -2px 3px 12px;
   padding: 0px 5px 5px;
   margin-top: -5px;
+
+  scrollbar-width: none;
+}
+
+.animal-list::-webkit-scrollbar {
+    display: none;
+    width: 0; /* Garante que não ocupe espaço horizontal */
+    height: 0;
 }
 
 .animal-item {
