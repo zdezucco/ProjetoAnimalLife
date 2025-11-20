@@ -51,7 +51,11 @@ const NotificationPopup: React.FC<NotificationPopupProps> = ({
     return html;
   };
 
-  // ======================================================
+  // Função auxiliar para remover o til (~) de ATENÇÃO e garantir que o CSS funcione
+  const getCssLevel = (level: "URGENTE" | "ATENÇÃO") => {
+    // Converte para minúsculo e remove o til (ã -> a)
+    return level.toLowerCase().replace('ã', 'a');
+  }
 
   return (
     <div className="notification-popup-overlay" onClick={onClose}>
@@ -74,7 +78,7 @@ const NotificationPopup: React.FC<NotificationPopupProps> = ({
             {finalNotifications.map((n) => (
               <li
                 key={n.id}
-                className={`notification-item ${n.level.toLowerCase()}`} // Adiciona classe 'urgente' ou 'atencao'
+                className={`notification-item ${getCssLevel(n.level)}`}  // Adiciona classe 'urgente' ou 'atencao'
                 onClick={() => onNotificationClick && onNotificationClick(n)}
               >
                 {/* LINHA DE STATUS SUPERIOR (URGENTE! / ATENÇÃO!) */}
