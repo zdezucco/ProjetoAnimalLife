@@ -17,7 +17,7 @@ const Login: React.FC = () => {
       </div>
 
       <div className="acess-form">
-        <button className="acess-button" onClick={acessarList}>Aperte para acessar o sistema</button>
+        <button className="acess-button" onClick={acessarList}>Acessar sistema</button>
       </div>
     </div>
   );
