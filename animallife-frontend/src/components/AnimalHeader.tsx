@@ -117,4 +117,5 @@ const GenderIcon = styled.div`
 
 const GenderText = styled.span`
   font-size: 13px;
+  margin-top: 5px;
 `;

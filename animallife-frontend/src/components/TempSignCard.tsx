@@ -90,7 +90,7 @@ const TempSignCard: React.FC<TempSignCardProps> = ({ monitoramentos }) => {
         <LeftSection>
           <img src={icon} alt="Ícone Termômetro" width={34} height={34} />
           <TemperateMedium>
-            <Temperature style={{ color: textcolor }}>{temp.toFixed(1)}°c</Temperature>
+            <Temperature style={{ color: textcolor }}>{temp.toFixed(1)}°C</Temperature>
             <Average style={{ color: textcolor }}>Média: {media.toFixed(1)}°c</Average>
           </TemperateMedium>
         </LeftSection>
@@ -139,18 +139,19 @@ const LeftSection = styled.div`
 const TemperateMedium = styled.div`
   display: flex;
   align-items: center;
-  gap: 5px;
+  gap: 0px;
   flex-direction: column;
 `;
 
 const Temperature = styled.span`
-  font-size: 18px;
+  font-size: 22px;
   font-weight: bold;
   color: var(--secondary-color);
+  margin-left: -11px;
 `;
 
 const Average = styled.span`
-  font-size: 12px;
+  font-size: 14px;
   color: var(--secondary-color);
 `;
 

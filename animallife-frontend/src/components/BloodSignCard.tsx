@@ -127,18 +127,20 @@ const LeftSection = styled.div`
 const TemperateMedium = styled.div`
   display: flex;
   align-items: center;
-  gap: 5px;
+  gap: 0px;
   flex-direction: column;
+  margin-left: 10px;
 `;
 
 const Temperature = styled.span`
-  font-size: 18px;
+  font-size: 22px;
   font-weight: bold;
   color: var(--secondary-color);
+  margin-left: -11px;
 `;
 
 const Average = styled.span`
-  font-size: 12px;
+  font-size: 14px;
   color: var(--secondary-color);
 `;
 
