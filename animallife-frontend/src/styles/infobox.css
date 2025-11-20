@@ -35,12 +35,11 @@
 }
 
 .checkboxes-section {
-  /* Linhas divisórias horizontais */
   border-top: 1px solid #ddd; 
   border-bottom: 1px solid #ddd;
   padding: 15px 0; 
   margin-top: 20px;
-    
+  
   display: flex;
   justify-content: space-between;
   gap: 30px;
@@ -60,9 +59,10 @@
     width: 1px;
     background-color: #ddd;
 }
-@media (max-width: 480px) {
+@media (max-width: 600px) { /* Ajustado o breakpoint para garantir duas colunas em tablets/desktops */
     .checkboxes-section {
         flex-direction: column; /* Empilha em telas pequenas */
+        gap: 0; /* Remove gap horizontal ao empilhar */
     }
     .checkboxes-section::after {
         content: none; /* Remove a linha vertical em telas pequenas */
@@ -95,12 +95,13 @@
   gap: 12px;
 }
 
+/* Estilo do Rótulo - Contêiner do Checkbox e Texto */
 .checkbox-group label {
   font-size: 1em;
   display: flex;
   align-items: center;
   cursor: pointer;
-  gap: 8px;
+  gap: 10px; 
 }
 
 /* 1. OCULTA O CHECKBOX NATIVO */
@@ -118,15 +119,13 @@
   width: 1.3em; /* Tamanho da caixa (aprox 21px) */
   height: 1.3em; 
   border-radius: 4px; 
-  border: 2px solid #ccc; /* Borda cinza/claro */
+  border: 2px solid #ccc; /* Borda cinza padrão */
   background-color: #fff;
   transition: all 0.2s ease;
   flex-shrink: 0;
   
-  /* Posicionamento e ajuste de texto */
-  margin-right: 0.5em; 
-  position: relative;
-  left: 0; /* Remove o ajuste de -8px do código anterior */
+  /* Remove o gap padrão da label para que o ::before fique na posição 0 */
+  margin-right: -8px; 
 }
 
 /* 3. ESTILO QUANDO CHECADO (Fundo verde e marca) */
