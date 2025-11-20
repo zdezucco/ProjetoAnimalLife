@@ -140,7 +140,7 @@ const PageContainer = styled.div`
   border-radius: 25px;
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
   margin: auto;
-  padding: 5px;
+  padding: 10px;
 `;
 
 const Content = styled.div`
