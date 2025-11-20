@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { supabase } from "../supabaseClient"; // ajusta o caminho conforme tua estrutura
 import "../styles/infobox.css";
+import FemaleIcon from "../assets/female-icon.svg";
+import MaleIcon from "../assets/male-icon.svg";
 
 interface InfoBoxProps {
   animalId: number;
@@ -246,6 +248,8 @@ const InfoBox = ({ animalId }: InfoBoxProps) => {
                   onChange={() => handleCheckboxChange("sexo", s)}
                 />
                 {s}
+                {s === "Macho" && <img src={MaleIcon} alt="Macho" className="gender-icon" />}
+                {s === "Fêmea" && <img src={FemaleIcon} alt="Fêmea" className="gender-icon" />}
               </label>
             ))}
           </div>
