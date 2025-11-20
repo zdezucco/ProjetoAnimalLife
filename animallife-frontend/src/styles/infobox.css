@@ -36,21 +36,31 @@
 
 .checkboxes-section {
   margin-top: 20px;
+  display: flex;
+  justify-content: space-between;
+  gap: 30px;
 }
+
 .checkbox-group {
-  margin-bottom: 15px;
+  /* Ocupa espaço igual em cada coluna */
+  flex: 1; 
+  min-width: 150px; /* Evita que a coluna fique muito estreita */
+  margin-bottom: 0; /* Remove margem vertical desnecessária */
 }
+
 .group-label {
   display: block;
   margin-bottom: 8px;
   font-weight: bold;
   color: #666;
 }
+
 .checkbox-group .options {
   display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
+  flex-direction: column;
+  gap: 12px; /* Espaço entre as opções verticalmente */
 }
+
 .checkbox-group label {
   font-size: 1em;
   display: flex;

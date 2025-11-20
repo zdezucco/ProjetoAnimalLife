@@ -215,15 +215,6 @@ const InfoBox = ({ animalId }: InfoBoxProps) => {
           </div>
         </form>
 
-        <div className="button-row">
-          {!isEditing ? (
-            <button onClick={() => setIsEditing(true)}>Editar</button>
-          ) : (
-            <button onClick={handleSave}>Salvar alterações</button>
-          )}
-        </div>
-      </div>
-
       {/* 🔹 DIETA e SEXO */}
       <div className="checkboxes-section">
         <div className="checkbox-group">
@@ -258,6 +249,15 @@ const InfoBox = ({ animalId }: InfoBoxProps) => {
               </label>
             ))}
           </div>
+        </div>
+      </div>
+
+      <div className="button-row">
+          {!isEditing ? (
+            <button onClick={() => setIsEditing(true)}>Editar</button>
+          ) : (
+            <button onClick={handleSave}>Salvar alterações</button>
+          )}
         </div>
       </div>
 
