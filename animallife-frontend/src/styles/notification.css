@@ -80,12 +80,12 @@
 /* ESTILOS CONDICIONAIS DE COR */
 
 .notification-item.urgente {
-    background-color: #fcebeb; /* Fundo muito claro de vermelho */
+    background-color: #FFBCBC; /* Fundo muito claro de vermelho */
     border-color: #ff5252; /* Borda vermelha */
 }
 
 .notification-item.atencao {
-    background-color: #fff8e1; /* Fundo muito claro de laranja */
+    background-color: #FEDAB9; /* Fundo muito claro de laranja */
     border-color: #ff9800; /* Borda laranja */
 }
 

@@ -1,4 +1,5 @@
 import React from "react";
+import CloseBtn from "../assets/close-btn.svg";
 import "../styles/notification.css";
 
 export type NotificationItem = {
@@ -62,7 +63,7 @@ const NotificationPopup: React.FC<NotificationPopupProps> = ({
           {/* Altera <h3> para <h2> para corresponder ao CSS do header */}
           <h2>Notificações</h2>
           <button className="close-btn" onClick={onClose}>
-            ✕
+            {CloseBtn}
           </button>
         </div>
 
@@ -84,7 +85,7 @@ const NotificationPopup: React.FC<NotificationPopupProps> = ({
                     >
                         {n.level}!
                     </strong>
-                    <button className="close-item-btn">✕</button> {/* Adiciona um botão de fechar (opcional) */}
+                    <button className="close-item-btn">{CloseBtn}</button> {/* Adiciona um botão de fechar (opcional) */}
                 </div>
                 
                 <div className="notification-content-body">
