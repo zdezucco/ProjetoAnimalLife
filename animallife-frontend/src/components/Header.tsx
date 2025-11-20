@@ -55,8 +55,8 @@ const Header = ({ selectedId }: HeaderProps) => {
 
   const heartLevel = (fc?: number) => {
     if (fc === undefined || fc === null) return null;
-    if (fc <= 50) return "URGENTE";
-    if (fc >= 51 && fc <= 59) return "ATENÇÃO";
+    if (fc <= 49) return "URGENTE";
+    if (fc >= 50 && fc <= 59) return "ATENÇÃO";
     if (fc >= 60 && fc <= 100) return null;
     if (fc >= 101 && fc <= 119) return "ATENÇÃO";
     if (fc >= 120) return "URGENTE";
@@ -65,8 +65,8 @@ const Header = ({ selectedId }: HeaderProps) => {
 
   const oxygenLevel = (o2?: number) => {
     if (o2 === undefined || o2 === null) return null;
-    if (o2 <= 90) return "URGENTE";
-    if (o2 >= 91 && o2 <= 94) return "ATENÇÃO";
+    if (o2 <= 89) return "URGENTE";
+    if (o2 >= 90 && o2 <= 94) return "ATENÇÃO";
     return null;
   };
 
