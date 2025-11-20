@@ -131,13 +131,13 @@
   align-items: center;
   background: var(--second-text-color);
   border-radius: 0.5rem;
-  padding: 0.75rem;
+  padding: 10px;
   box-shadow: 0 0.125rem 0.25rem rgba(0,0,0,0.05);
 }
 
 .animal-avatar {
-  width: 3rem;
-  height: 3rem;
+  width: 4rem;
+  height: 4rem;
   border-radius: 50%;
   overflow: hidden;
   margin-right: 0.75rem;
@@ -155,21 +155,23 @@
 }
 
 .animal-name {
-  font-size: 1rem;
+  font-size: 20px;
   font-weight: var(--fw-bold);
   color: var(--text-color);
   display: flex;
   align-items: center;
-  margin-top: 8px;
+  margin-top: 0px;
 }
 
 
 .animal-type {
-  font-size: 0.75rem;
+  font-size: 14px;
   color: var(--primary-text-color);
   display: flex;
   align-items: flex-start;
   flex-direction: column;
+  margin-top: -4px;
+  margin-bottom: 10px;
 }
 
 .animal-gender{
