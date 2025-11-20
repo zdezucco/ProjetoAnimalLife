@@ -108,6 +108,14 @@
     /* Ajustes para remover o botão de fechar (se houver) */
 }
 
+.notification-item.urgente .notification-status-header {
+    background-color: #ff5252; /* Vermelho forte */
+}
+
+.notification-item.atencao .notification-status-header {
+    background-color: #ff9800; /* Laranja forte */
+}
+
 .notification-level-title {
     /* Este strong define a cor do texto do nível */
     padding: 0;
