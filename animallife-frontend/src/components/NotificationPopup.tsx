@@ -51,11 +51,12 @@ const NotificationPopup: React.FC<NotificationPopupProps> = ({
     return html;
   };
 
-  // Função auxiliar para remover o til (~) de ATENÇÃO e garantir que o CSS funcione
+// CORREÇÃO: Função auxiliar para remover ACENTOS de forma robusta
   const getCssLevel = (level: "URGENTE" | "ATENÇÃO") => {
-    // Converte para minúsculo e remove o til (ã -> a)
-    return level.toLowerCase().replace('ã', 'a');
-  }
+    // 1. Converte para minúsculas
+    const lower = level.toLowerCase();
+    return lower.normalize('NFD').replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, '');
+  };
 
   return (
     <div className="notification-popup-overlay" onClick={onClose}>
