@@ -160,7 +160,7 @@
 /* Responsividade: Empilha em telas pequenas */
 @media (max-width: 500px) {
   .checkboxes-section {
-    flex-direction: column;
+    flex-direction: row;
     gap: 20px;
   }
   .checkboxes-section::after {
