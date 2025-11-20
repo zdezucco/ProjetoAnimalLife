@@ -72,8 +72,8 @@ body {
 
 .notification-count {
   position: absolute;
-  top: 3%;
-  right: 40%;
+  top: -5%;
+  right: 55%;
   background: red;
   color: white;
   border-radius: 50%;
