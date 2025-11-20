@@ -89,6 +89,7 @@ body {
   text-align: center;
   position: relative;
   margin-top: 0.625rem;
+  margin-bottom: -10px;
 }
 
 .animal-photo {
@@ -120,8 +121,8 @@ body {
 }
 
 .edit-icon{
-  right: 6%;
-  top: 64%;
+  right: 7%;
+  top: 60%;
 }
 
 .animal-name-box {

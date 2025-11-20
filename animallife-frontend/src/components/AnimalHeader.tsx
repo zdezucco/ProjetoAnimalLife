@@ -89,12 +89,12 @@ const AnimalInfo = styled.div`
 
 const AnimalName = styled.h2`
   margin: 0;
-  font-size: 18px;
+  font-size: 20px;
 `;
 
 const Species = styled.p`
   margin: 0;
-  font-size: 12px;
+  font-size: 16px;
 `;
 
 const GenderSection = styled.div`
@@ -106,8 +106,8 @@ const GenderSection = styled.div`
 `;
 
 const GenderIcon = styled.div`
-  width: 24px;
-  height: 24px;
+  width: 28px;
+  height: 28px;
   
   img {
     width: 100%;
@@ -116,5 +116,5 @@ const GenderIcon = styled.div`
 `;
 
 const GenderText = styled.span`
-  font-size: 12px;
+  font-size: 13px;
 `;

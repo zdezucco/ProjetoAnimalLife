@@ -74,8 +74,8 @@
 .photo-wrapper {
   position: relative;
   display: inline-block; /* Importante para o posicionamento funcionar */
-  width: 150px; /* Mesmo width da .animal-photo */
-  height: 150px; /* Mesmo height da .animal-photo */  
+  width: 170px; /* Mesmo width da .animal-photo */
+  height: 170px; /* Mesmo height da .animal-photo */  
   overflow-y: hidden;
   overflow-x: hidden; /* Impede rolagem horizontal */
 }
