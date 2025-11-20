@@ -252,7 +252,7 @@ const InfoBox = ({ animalId }: InfoBoxProps) => {
           <div className="form-row">
             <div className="form-group">
               <label htmlFor="idade">Idade:</label>
-              <input id="idade" type="text" value={formData.idade || ""} readOnly > Anos</input>
+              <input id="idade" type="text" value={formData.idade ? `${formData.idade} Anos` : ""} readOnly />
             </div>
 
             <div className="form-group">
