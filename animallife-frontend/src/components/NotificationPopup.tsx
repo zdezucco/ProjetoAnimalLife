@@ -29,11 +29,11 @@ const NotificationPopup: React.FC<NotificationPopupProps> = ({
   const getLevelColor = (level: string) => {
     switch (level) {
       case "URGENTE":
-        return "var(--red-temp)";
+        return "var(--red-temp, #FFBCBC)"; // Usando fallback
       case "ATENÇÃO":
-        return "var(--orange-temp)";
+        return "var(--orange-temp, #FEDAB9)"; // Usando fallback
       default:
-        return "var(--gray-temp)";
+        return "var(--gray-temp, #D9D9D9)";
     }
   };
 
@@ -59,7 +59,8 @@ const NotificationPopup: React.FC<NotificationPopupProps> = ({
         onClick={(e) => e.stopPropagation()}
       >
         <div className="popup-header">
-          <h3>Notificações</h3>
+          {/* Altera <h3> para <h2> para corresponder ao CSS do header */}
+          <h2>Notificações</h2>
           <button className="close-btn" onClick={onClose}>
             ✕
           </button>
@@ -72,36 +73,40 @@ const NotificationPopup: React.FC<NotificationPopupProps> = ({
             {finalNotifications.map((n) => (
               <li
                 key={n.id}
-                className="notification-item"
+                className={`notification-item ${n.level.toLowerCase()}`} // Adiciona classe 'urgente' ou 'atencao'
                 onClick={() => onNotificationClick && onNotificationClick(n)}
               >
-                <img
-                  src={n.image}
-                  alt="Animal"
-                  className="notification-img"
-                />
+                {/* LINHA DE STATUS SUPERIOR (URGENTE! / ATENÇÃO!) */}
+                <div className="notification-status-header">
+                    <strong
+                        className="notification-level-title"
+                        style={{ color: getLevelColor(n.level) }}
+                    >
+                        {n.level}!
+                    </strong>
+                    <button className="close-item-btn">✕</button> {/* Adiciona um botão de fechar (opcional) */}
+                </div>
+                
+                <div className="notification-content-body">
+                    <img
+                        src={n.image}
+                        alt="Animal"
+                        className="notification-img"
+                    />
 
-                <div className="notification-info">
+                    <div className="notification-info">
+                        {/* A nova mensagem será a mensagem genérica que precisa de negrito */}
+                        <div
+                            className="notification-message"
+                            dangerouslySetInnerHTML={{ __html: renderSimpleMarkdown(n.message) }}
+                        />
+                    </div>
+                </div>
 
-                  <h4 className="notification-title">{n.title}</h4>
-
-                  <strong
-                    className="notification-level"
-                    style={{ color: getLevelColor(n.level) }}
-                  >
-                    {n.level}
-                  </strong>
-
-                  <div
-                    className="notification-message"
-                    // Agora usa a função simplificada para negrito
-                    dangerouslySetInnerHTML={{ __html: renderSimpleMarkdown(n.message) }}
-                  />
-
-                  <span className="notification-collar">
-                    ID: {n.collar}
-                  </span>
-
+                <div className="notification-footer">
+                    <span className="notification-collar">
+                        Coleira {n.collar}
+                    </span>
                 </div>
               </li>
             ))}
