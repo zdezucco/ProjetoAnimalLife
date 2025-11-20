@@ -22,7 +22,7 @@
   color: #666;
 }
 
-.form-group input:not([type="checkbox"]) { /* Aplica apenas a inputs de texto */
+.form-group input {
   padding: 12px;
   border-radius: 8px;
   border: 1px solid #ccc;
@@ -34,124 +34,30 @@
   gap: 15px; /* Espaço entre os inputs na mesma linha */
 }
 
-/* === SEÇÃO DE CHECKBOXES (DIETA E SEXO) === */
-
 .checkboxes-section {
-  /* Linhas divisórias horizontais */
-  border-top: 1px solid #ddd; 
-  border-bottom: 1px solid #ddd;
-  padding: 15px 0; 
   margin-top: 20px;
-  display: flex;
-  justify-content: space-between;
-  gap: 30px;
-  position: relative; 
 }
-
-/* Linha divisória vertical (Protótipo) */
-.checkboxes-section::after {
-    content: '';
-    position: absolute;
-    top: 0; 
-    bottom: 0; 
-    left: 50%;
-    transform: translateX(-50%);
-    width: 1px;
-    background-color: #ddd;
-}
-
-/* Garante quebra de linha em telas pequenas */
-@media (max-width: 600px) {
-    .checkboxes-section {
-        flex-direction: column; 
-        gap: 0; 
-    }
-    .checkboxes-section::after {
-        content: none; 
-    }
-    .checkbox-group:first-child {
-        border-bottom: 1px solid #eee;
-        padding-bottom: 15px;
-        margin-bottom: 15px;
-    }
-}
-
-
 .checkbox-group {
-  width: calc(50% - 15px);
-  min-width: 150px;
-  margin-bottom: 0; 
+  margin-bottom: 15px;
 }
-
 .group-label {
   display: block;
   margin-bottom: 8px;
   font-weight: bold;
-  color: #333;
+  color: #666;
 }
-
 .checkbox-group .options {
   display: flex;
-  flex-direction: column;
-  gap: 12px;
+  flex-wrap: wrap;
+  gap: 20px;
 }
-
-/* Estilo do Rótulo - Contêiner do Checkbox e Texto */
 .checkbox-group label {
   font-size: 1em;
   display: flex;
   align-items: center;
-  cursor: pointer;
-  gap: 10px; 
+  gap: 8px;
 }
 
-/* 1. OCULTA O CHECKBOX NATIVO */
-.checkbox-group input[type="checkbox"] {
-  /* CORREÇÃO: Usa 'position: relative' ou 'margin' para evitar quebra de layout */
-  /* Removemos o input de fluxo, mas garantimos que o label (pai) o contenha */
-  position: absolute;
-  opacity: 0; 
-  width: 0;
-  height: 0;
-}
-
-/* 2. CRIA O ELEMENTO VISUAL DO CHECKBOX */
-.checkbox-group label > input[type="checkbox"] + ::before {
-  content: '';
-  display: inline-block;
-  width: 1.3em; 
-  height: 1.3em; 
-  border-radius: 4px; 
-  border: 2px solid #ccc; /* Borda cinza padrão */
-  background-color: #fff;
-  transition: all 0.2s ease;
-  flex-shrink: 0;
-}
-
-/* 3. ESTILO QUANDO CHECADO (Fundo verde e marca) */
-.checkbox-group input[type="checkbox"]:checked + ::before {
-  border-color: #1abc9c; /* Borda verde forte */
-  background-color: #1abc9c; /* Fundo verde */
-}
-
-/* 4. O ÍCONE (Marca de Visto) */
-.checkbox-group input[type="checkbox"]:checked + ::before {
-    /* Usando SVG embutido para a marca de visto */
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M20 6L9 17L4 12' stroke='%23FFFFFF' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
-    background-size: 80%;
-    background-repeat: no-repeat;
-    background-position: center;
-}
-
-/* Estilo para os ícones de gênero (Macho/Fêmea) */
-.gender-icon {
-  width: 18px;
-  height: 18px;
-  margin-left: auto; /* Empurra o ícone para a direita */
-  opacity: 0.8;
-}
-
-/* Restante do CSS mantido */
 .register-box {
   margin-top: 20px;
 }
@@ -184,21 +90,25 @@
 .button-row button {
   background-color: var(--primary-color);
   color: #FFFFFF; 
+  
   font-family: var(--ff-sans);
   font-weight: var(--ff-sans, 700); 
   font-size: 16px;
   text-transform: uppercase; 
   letter-spacing: 0.5px;
+  
   border: none;
   border-radius: 8px; 
   padding: 7px 15px; 
+
   cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s    ease;
+  transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 .button-row button:hover {
   background-color: var(--secondary-color);
+  
   transform: translateY(-2px); 
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
