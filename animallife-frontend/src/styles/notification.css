@@ -54,6 +54,7 @@
     display: block;
 }
 
+
 .notification-list {
     padding: 0;
     margin: 0;
@@ -101,19 +102,11 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 0px 10px;
+    padding: 6px 10px;
     font-size: 14px;
     font-weight: 700;
     color: #fff;
     /* Ajustes para remover o botão de fechar (se houver) */
-}
-
-.notification-item.urgente .notification-status-header {
-    background-color: #ff5252; /* Vermelho forte */
-}
-
-.notification-item.atencao .notification-status-header {
-    background-color: #ff9800; /* Laranja forte */
 }
 
 .notification-level-title {
