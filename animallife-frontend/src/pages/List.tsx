@@ -1,7 +1,8 @@
-import { Bell, Search } from "lucide-react";
+import { Search } from "lucide-react";
 import "../styles/index.css";
 import "../styles/list.css";
 import StarIcon from "../assets/fav-icon.svg";
+import Bell from "../assets/Bell-icon.svg"
 
 import grayTerm from "../assets/gray-term-monit.svg";
 import greenTerm from "../assets/green-term-monit.svg";
@@ -296,7 +297,7 @@ export default function AnimalList() {
           <h1 className="header">Animais</h1>
 
           <div className="notification" onClick={() => setShowNotifications(true)}>
-            <Bell className="bell-icon" />
+            <img src={Bell} className="bell-icon" />
             {notifications.length > 0 && (
               <span className="notification-count">{notifications.length}</span>
             )}
