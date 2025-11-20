@@ -158,7 +158,7 @@ const Average = styled.span`
 `;
 
 const Status = styled.span`
-  font-size: 16px;
+  font-size: 22px;
   font-weight: bold;
   color: var(--secondary-color);
 `;
