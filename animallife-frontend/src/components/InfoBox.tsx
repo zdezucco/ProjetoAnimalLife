@@ -45,11 +45,37 @@ const normalizeToDb = (text: string) => {
     .toUpperCase();
 };
 
+// Função auxiliar para formatar data e hora
+const formatDateTime = (dateString: string) => {
+  if (!dateString) return "";
+  const date = new Date(dateString);
+  return new Intl.DateTimeFormat("pt-BR", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  }).format(date);
+};
 
 const InfoBox = ({ animalId }: InfoBoxProps) => {
   const [animal, setAnimal] = useState<any>(null);
+  const [monitoramentoLogs, setMonitoramentoLogs] = useState<any[]>([]); // Estado para os logs
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState<any>({});
+
+  // Função para buscar os logs de monitoramento
+  const fetchLogs = async () => {
+    const { data, error } = await supabase
+      .from("monitoramento")
+      .select("id, data_monitoramento, observacoes")
+      .eq("id_animal", animalId)
+      .order("data_monitoramento", { ascending: false }); // Mais recentes primeiro
+
+    if (!error && data) {
+      setMonitoramentoLogs(data);
+    }
+  };
 
   // 🔹 Buscar dados do animal
   useEffect(() => {
@@ -87,9 +113,34 @@ const InfoBox = ({ animalId }: InfoBoxProps) => {
       });
     };
 
-    if (animalId) fetchAnimal();
-  }, [animalId]);
+    if (animalId) {
+      fetchAnimal();
+      fetchLogs(); // Busca os logs iniciais
 
+      // Inscreve no Realtime para atualizar a lista automaticamente
+      const channel = supabase
+        .channel(`monitoramento_logs_${animalId}`)
+        .on(
+          "postgres_changes",
+          {
+            event: "INSERT",
+            schema: "public",
+            table: "monitoramento",
+            filter: `id_animal=eq.${animalId}`,
+          },
+          (payload) => {
+            // Adiciona o novo log ao topo da lista
+            setMonitoramentoLogs((prev) => [payload.new, ...prev]);
+          }
+        )
+        .subscribe();
+
+      return () => {
+        supabase.removeChannel(channel);
+      };
+    }
+  }, [animalId]);
+  
   // 🔹 Atualiza campos editáveis
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { id, value } = e.target;
@@ -267,10 +318,28 @@ const InfoBox = ({ animalId }: InfoBoxProps) => {
         </div>
       </div>
 
-      {/* 🔹 REGISTRO — somente leitura */}
+{/* 🔹 REGISTRO DE MONITORAMENTO (LISTA) */}
       <div className="register-box">
-        <h3>Registro:</h3>
-        <textarea readOnly value={animal.registro || "Sem registros"}></textarea>
+        <h3>Registro de Monitoramento:</h3>
+        
+        <div className="monitor-log-container">
+          {monitoramentoLogs.length === 0 ? (
+            <p className="no-logs">Nenhum registro encontrado.</p>
+          ) : (
+            <ul className="monitor-log-list">
+              {monitoramentoLogs.map((log) => (
+                <li key={log.id} className="monitor-log-item">
+                  <div className="log-header">
+                    <strong>{formatDateTime(log.data_monitoramento)}</strong>
+                  </div>
+                  <p className="log-obs">
+                    {log.observacoes ? log.observacoes : "Sem observações registradas."}
+                  </p>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
       </div>
     </>
   );

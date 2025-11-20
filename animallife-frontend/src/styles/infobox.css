@@ -4,8 +4,8 @@
   color: #333;
   text-align: center;        /* Centraliza */
   text-transform: uppercase; /* Letras maiúsculas */
-  margin-bottom: 20px;
-  padding-bottom: 10px;
+  margin-bottom: 15px;
+  padding-bottom: 0px;
   border-bottom: 1px solid #ddd; /* Linha abaixo do título */
   letter-spacing: 1px;
 }
