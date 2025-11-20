@@ -334,9 +334,9 @@ export default function AnimalList() {
                     <div className="animal-gender">
                       <span className="gender">
                         {animal.sexo === "FEMEA" ? (
-                          <img src={FemaleIcon} className="gender-icon" />
+                          <img src={FemaleIcon} className="gender-icon-list" />
                         ) : animal.sexo === "MACHO" ? (
-                          <img src={MaleIcon} className="gender-icon" />
+                          <img src={MaleIcon} className="gender-icon-list" />
                         ) : null}
                       </span>
                     </div>
