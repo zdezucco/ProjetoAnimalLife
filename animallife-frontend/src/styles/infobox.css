@@ -22,7 +22,7 @@
   color: #666;
 }
 
-.form-group input {
+.form-group input:not([type="checkbox"]) { /* Aplica apenas a inputs de texto */
   padding: 12px;
   border-radius: 8px;
   border: 1px solid #ccc;
@@ -34,17 +34,17 @@
   gap: 15px; /* Espaço entre os inputs na mesma linha */
 }
 
+/* === SEÇÃO DE CHECKBOXES (DIETA E SEXO) === */
+
 .checkboxes-section {
+  /* Linhas divisórias horizontais */
   border-top: 1px solid #ddd; 
   border-bottom: 1px solid #ddd;
   padding: 15px 0; 
   margin-top: 20px;
-  
   display: flex;
   justify-content: space-between;
   gap: 30px;
-  
-  /* Permite o posicionamento da linha vertical */
   position: relative; 
 }
 
@@ -52,23 +52,24 @@
 .checkboxes-section::after {
     content: '';
     position: absolute;
-    top: 0; /* Começa no topo do padding */
-    bottom: 0; /* Vai até o final do padding */
+    top: 0; 
+    bottom: 0; 
     left: 50%;
     transform: translateX(-50%);
     width: 1px;
     background-color: #ddd;
 }
-@media (max-width: 600px) { /* Ajustado o breakpoint para garantir duas colunas em tablets/desktops */
+
+/* Garante quebra de linha em telas pequenas */
+@media (max-width: 600px) {
     .checkboxes-section {
-        flex-direction: column; /* Empilha em telas pequenas */
-        gap: 0; /* Remove gap horizontal ao empilhar */
+        flex-direction: column; 
+        gap: 0; 
     }
     .checkboxes-section::after {
-        content: none; /* Remove a linha vertical em telas pequenas */
+        content: none; 
     }
     .checkbox-group:first-child {
-        /* Adiciona uma linha horizontal entre os grupos Dieta e Sexo quando empilhados */
         border-bottom: 1px solid #eee;
         padding-bottom: 15px;
         margin-bottom: 15px;
@@ -77,7 +78,7 @@
 
 
 .checkbox-group {
-  flex: 1; 
+  width: calc(50% - 15px);
   min-width: 150px;
   margin-bottom: 0; 
 }
@@ -106,6 +107,8 @@
 
 /* 1. OCULTA O CHECKBOX NATIVO */
 .checkbox-group input[type="checkbox"] {
+  /* CORREÇÃO: Usa 'position: relative' ou 'margin' para evitar quebra de layout */
+  /* Removemos o input de fluxo, mas garantimos que o label (pai) o contenha */
   position: absolute;
   opacity: 0; 
   width: 0;
@@ -113,19 +116,16 @@
 }
 
 /* 2. CRIA O ELEMENTO VISUAL DO CHECKBOX */
-.checkbox-group label::before {
+.checkbox-group label > input[type="checkbox"] + ::before {
   content: '';
   display: inline-block;
-  width: 1.3em; /* Tamanho da caixa (aprox 21px) */
+  width: 1.3em; 
   height: 1.3em; 
   border-radius: 4px; 
   border: 2px solid #ccc; /* Borda cinza padrão */
   background-color: #fff;
   transition: all 0.2s ease;
   flex-shrink: 0;
-  
-  /* Remove o gap padrão da label para que o ::before fique na posição 0 */
-  margin-right: -8px; 
 }
 
 /* 3. ESTILO QUANDO CHECADO (Fundo verde e marca) */
@@ -145,12 +145,13 @@
 
 /* Estilo para os ícones de gênero (Macho/Fêmea) */
 .gender-icon {
-    width: 18px;
-    height: 18px;
-    margin-left: auto; /* Empurra o ícone para a direita */
-    opacity: 0.8;
+  width: 18px;
+  height: 18px;
+  margin-left: auto; /* Empurra o ícone para a direita */
+  opacity: 0.8;
 }
 
+/* Restante do CSS mantido */
 .register-box {
   margin-top: 20px;
 }
@@ -183,25 +184,21 @@
 .button-row button {
   background-color: var(--primary-color);
   color: #FFFFFF; 
-  
   font-family: var(--ff-sans);
   font-weight: var(--ff-sans, 700); 
   font-size: 16px;
   text-transform: uppercase; 
   letter-spacing: 0.5px;
-  
   border: none;
   border-radius: 8px; 
   padding: 7px 15px; 
-
   cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+  transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s    ease;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 .button-row button:hover {
   background-color: var(--secondary-color);
-  
   transform: translateY(-2px); 
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
