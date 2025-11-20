@@ -131,13 +131,13 @@
 .notification-content-body {
     display: flex;
     align-items: center;
-    padding: 5px 15px; /* Padding interno */
+    padding: 5px 5px; /* Padding interno */
     gap: 15px;
 }
 
 .notification-img {
-    width: 65px; 
-    height: 65px;
+    width: 80px; 
+    height: 80px;
     border-radius: 50%; 
     object-fit: cover; 
     flex-shrink: 0; 
