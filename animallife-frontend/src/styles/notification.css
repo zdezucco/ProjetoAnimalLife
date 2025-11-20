@@ -102,7 +102,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 6px 10px;
+    padding: 0px 10px;
     font-size: 14px;
     font-weight: 700;
     color: #fff;
@@ -123,7 +123,7 @@
 .notification-content-body {
     display: flex;
     align-items: center;
-    padding: 10px 15px; /* Padding interno */
+    padding: 5px 15px; /* Padding interno */
     gap: 15px;
 }
 
