@@ -248,14 +248,12 @@ const Header = ({ selectedId }: HeaderProps) => {
       <div className="header-container">
         <img src={Return} alt="Voltar" className="icon-return" onClick={Retornar} />
 
-        <div className="header-right">
-          <div className="notification" onClick={toggleNotifications}>
-            <Bell className="bell-icon" />
+        <div className="notification" onClick={() => setShowNotifications(true)}>
+            <img src={Bell} className="bell-icon" />
             {notifications.length > 0 && (
               <span className="notification-count">{notifications.length}</span>
             )}
           </div>
-        </div>
       </div>
 
       {/* FOTO DO ANIMAL */}
