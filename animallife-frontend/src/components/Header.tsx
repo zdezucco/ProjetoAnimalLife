@@ -1,10 +1,10 @@
 import { useEffect, useRef, useState, useCallback } from "react";
+import Bell from "../assets/bell-icon.svg";
 import Editicon from "../assets/edit-icon.svg";
 import Return from "../assets/return.svg";
 import "../styles/header.css";
 import { useNavigate } from "react-router";
 import NotificationPopup, { NotificationItem } from "../components/NotificationPopup";
-import Bell from "../assets/bell-icon.svg";
 import { supabase } from "../supabaseClient";
 
 interface HeaderProps {
@@ -38,7 +38,6 @@ const Header = ({ selectedId }: HeaderProps) => {
   const [showPreview, setShowPreview] = useState(false);
 
   const Retornar = () => navigate("/List");
-  const toggleNotifications = () => setShowNotifications((prev) => !prev);
 
   // ======================
   //  FUNÇÕES DE NÍVEL DE ALERTA
