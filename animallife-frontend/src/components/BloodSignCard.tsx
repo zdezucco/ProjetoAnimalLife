@@ -83,9 +83,9 @@ const BloodSignCard: React.FC<BloodSignCardProps> = ({ monitoramentos }) => {
   const { color, textcolor, status, icon } = getBloodStatus(oxigen);
 
   // Exibição dos valores (protegido contra null/undefined)
-  const displayOxigen = oxigenIsValid ? oxigen.toFixed(1) : 'N/A';
+  const displayOxigen = oxigenIsValid ? oxigen.toFixed(1) : '';
   // CORREÇÃO: Altera para string 'N/A' se não houver dados
-  const displayMedia = validOxigens.length > 0 ? media.toFixed(0) : 'N/A';
+  const displayMedia = validOxigens.length > 0 ? media.toFixed(0) : '';
 
   return (
     <CardContainer style={{ backgroundColor: color }}>

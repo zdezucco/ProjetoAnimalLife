@@ -93,8 +93,8 @@ const TempSignCard: React.FC<TempSignCardProps> = ({ monitoramentos }) => {
   const { color, textcolor, status, icon } = getTempStatus(tempIsValid ? temp :   null); 
   
   // Exibição dos valores (protegido contra null/undefined)
-  const displayTemp = tempIsValid ? temp.toFixed(1) : 'N/A';
-  const displayMedia = validTemps.length > 0 ? media.toFixed(1) : 'N/A';
+  const displayTemp = tempIsValid ? temp.toFixed(1) : '';
+  const displayMedia = validTemps.length > 0 ? media.toFixed(1) : '';
 
   return (
     <CardContainer style={{ backgroundColor: color }}>
@@ -105,7 +105,7 @@ const TempSignCard: React.FC<TempSignCardProps> = ({ monitoramentos }) => {
           <TemperateMedium>
             {/* CORRIGIDO: Usa displayTemp e displayMedia que já verificam null */}
             <Temperature style={{ color: textcolor }}>{displayTemp}°C</ Temperature> 
-            <Average style={{ color: textcolor }}>Média: {displayMedia}°c</Average>
+            <Average style={{ color: textcolor }}>Média: {displayMedia}°C</Average>
           </TemperateMedium>
         </LeftSection>
         <Status style={{ color: textcolor }}>{status}</Status>

@@ -98,9 +98,9 @@ const VitalSignCard: React.FC<VitalSignCardProps> = ({ monitoramentos }) => {
   const { color, textcolor, status, icon } = getVitalStatus(bpm);
 
   // Exibição dos valores (protegido contra null/undefined)
-  const displayBpm = bpmIsValid ? bpm.toFixed(1) : 'N/A';
+  const displayBpm = bpmIsValid ? bpm.toFixed(1) : '';
   // CORREÇÃO: Altera para string 'N/A' se não houver dados
-  const displayMedia = validBpms.length > 0 ? media.toFixed(0) : 'N/A'; 
+  const displayMedia = validBpms.length > 0 ? media.toFixed(0) : ''; 
 
   return (
     <CardContainer style={{ backgroundColor: color }}>
