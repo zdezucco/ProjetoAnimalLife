@@ -22,7 +22,7 @@
 }
 
 .notification {
-  position: absolute;
+  position: relative;
   display: flex;
   top: -10px;
   align-items: center;
