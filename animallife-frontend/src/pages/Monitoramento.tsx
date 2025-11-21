@@ -121,8 +121,8 @@ const monitoramentosOrdenados = [...monitoramentos]
           <TempSignCard monitoramentos={monitoramentosOrdenados} />
           <VitalSignCard monitoramentos={monitoramentosOrdenados} />
           <BloodSignCard monitoramentos={monitoramentosOrdenados} />
+          <InfoBox animalId={animal.id} />
         </Content>
-        <InfoBox animalId={animal.id} />
       </PageContainer>
       <FooterBar />
     </>
@@ -147,4 +147,6 @@ const Content = styled.div`
   padding: 0px;
   margin-top: 20px;
   margin-bottom: -10px;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 6px;
+  border-color: 0.125rem var(#c5c5c5);
 `;
