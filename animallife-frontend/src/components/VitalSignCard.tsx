@@ -141,6 +141,7 @@ const CardHeader = styled.div`
   background: var(--healty-color);
   padding: 5px 10px;
   border-radius: 10px;
+  width: 95px;
 `;
 
 const CardContent = styled.div`
