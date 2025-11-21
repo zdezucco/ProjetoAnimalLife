@@ -144,7 +144,7 @@ const PageContainer = styled.div`
 `;
 
 const Content = styled.div`
-  padding: 0px;
+  padding: 0px 5px 0px 5px;
   margin-top: 20px;
   margin-bottom: -10px;
   box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 6px;
