@@ -6,9 +6,9 @@ import orangeHeart from "../assets/orange-heart.svg"
 
 interface Monitoramento {
   id: string;
-  valor_temperatura: number;
-  valor_frequencia_cardiaca: number;
-  valor_saturacao_oxigenio: number;
+  valor_temperatura: number | null;
+  valor_frequencia_cardiaca: number | null;
+  valor_saturacao_oxigenio: number | null;
   data_monitoramento: string;
   id_animal: string;
   observacoes?: string;
@@ -32,14 +32,25 @@ const VitalSignCard: React.FC<VitalSignCardProps> = ({ monitoramentos }) => {
     );
   }
 
-  const ultimo = monitoramentos[monitoramentos.length - 1];
-  const bpm = ultimo.valor_frequencia_cardiaca;
-  const media =
-    monitoramentos.reduce((acc, m) => acc + m.valor_frequencia_cardiaca, 0) /
-    monitoramentos.length;
+  // Usamos o primeiro item da lista (Monitoramento.tsx ordena como descending)
+  const ultimo = monitoramentos[0]; 
+  const bpm = ultimo.valor_frequencia_cardiaca;
+
+   // Verifica se o BPM é um número válido (ignora null/undefined)
+  const bpmIsValid = typeof bpm === 'number' && bpm !== null;
+  
+  // Calcula a média apenas se houver valores válidos
+  const validBpms = monitoramentos
+    .map(m => m.valor_frequencia_cardiaca)
+    .filter((fc): fc is number => typeof fc === 'number' && fc !== null && !isNaN(fc));
+
+  const media = validBpms.length > 0 
+    ? validBpms.reduce((acc, fc) => acc + fc, 0) / validBpms.length
+    : 0;
+
 
   // Função que define o status, cor e ícone com base na temperatura
-  const getVitalStatus = (bpm: number) => {
+  const getVitalStatus = (bpm: number | null) => {
     if (bpm === undefined || bpm === null || bpm === 0)
       return {
         color: "var(--second-text-color)",
@@ -83,7 +94,13 @@ const VitalSignCard: React.FC<VitalSignCardProps> = ({ monitoramentos }) => {
     };
   };
 
-  const { color, textcolor, status, icon } = getVitalStatus(bpm);
+  // CORREÇÃO: Passa 'bpm' diretamente
+  const { color, textcolor, status, icon } = getVitalStatus(bpm);
+
+  // Exibição dos valores (protegido contra null/undefined)
+  const displayBpm = bpmIsValid ? bpm.toFixed(1) : 'N/A';
+  // CORREÇÃO: Altera para string 'N/A' se não houver dados
+  const displayMedia = validBpms.length > 0 ? media.toFixed(0) : 'N/A'; 
 
   return (
     <CardContainer style={{ backgroundColor: color }}>
@@ -92,9 +109,10 @@ const VitalSignCard: React.FC<VitalSignCardProps> = ({ monitoramentos }) => {
         <LeftSection>
           <img src={icon} alt="Ícone Frequência Cardíaca" width={34} height={34} />
           <TemperateMedium>
-            <Temperature style={{ color: textcolor }}>{bpm.toFixed(1)}bpm</Temperature>
-            <Average style={{ color: textcolor }}>Média: {media.toFixed(0)}bpm</Average>
-          </TemperateMedium>
+            {/* CORRIGIDO: Usa displayBpm e displayMedia que já verificam null */}
+            <Temperature style={{ color: textcolor }}>{displayBpm}bpm</Temperature>
+            <Average style={{ color: textcolor }}>Média: {displayMedia}bpm</Average>
+          </TemperateMedium>
         </LeftSection>
         <Status style={{ color: textcolor }}>{status}</Status>
       </CardContent>

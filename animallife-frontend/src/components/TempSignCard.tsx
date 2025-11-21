@@ -6,7 +6,7 @@ import orangeTerm from "../assets/orange-term-monit.svg";
 
 interface Monitoramento {
   id: string;
-  valor_temperatura: number;
+  valor_temperatura: number | null;
   data_monitoramento: string;
   id_animal: string;
   observacoes?: string;
@@ -30,14 +30,21 @@ const TempSignCard: React.FC<TempSignCardProps> = ({ monitoramentos }) => {
     );
   }
 
-  const ultimo = monitoramentos[monitoramentos.length - 1];
-  const temp = ultimo.valor_temperatura;
-  const media =
-    monitoramentos.reduce((acc, m) => acc + m.valor_temperatura, 0) /
-    monitoramentos.length;
+  const ultimo = monitoramentos[0]; 
+  const temp = ultimo.valor_temperatura;
+
+  const tempIsValid = typeof temp === 'number' && temp !== null;
+
+   const validTemps = monitoramentos
+    .map(m => m.valor_temperatura)
+    .filter((t): t is number => typeof t === 'number' && t !== null && !isNaN(t));
+
+  const media = validTemps.length > 0 
+    ? validTemps.reduce((acc, t) => acc + t, 0) / validTemps.length
+    : 0;
 
   // Função que define o status, cor e ícone com base na temperatura
-  const getTempStatus = (temp: number) => {
+  const getTempStatus = (temp: number | null) => {
     if (temp === undefined || temp === null || temp === 0)
       return {
         color: "var(--second-text-color)",
@@ -81,7 +88,13 @@ const TempSignCard: React.FC<TempSignCardProps> = ({ monitoramentos }) => {
     };
   };
 
-  const { color, textcolor, status, icon } = getTempStatus(temp);
+  // Usamos 37.5 (neutro) se a temperatura não for válida para evitar que getTempStatus falhe
+  // Mas a exibição final usará N/A.
+  const { color, textcolor, status, icon } = getTempStatus(tempIsValid ? temp :   null); 
+  
+  // Exibição dos valores (protegido contra null/undefined)
+  const displayTemp = tempIsValid ? temp.toFixed(1) : 'N/A';
+  const displayMedia = validTemps.length > 0 ? media.toFixed(1) : 'N/A';
 
   return (
     <CardContainer style={{ backgroundColor: color }}>
@@ -90,9 +103,10 @@ const TempSignCard: React.FC<TempSignCardProps> = ({ monitoramentos }) => {
         <LeftSection>
           <img src={icon} alt="Ícone Termômetro" width={34} height={34} />
           <TemperateMedium>
-            <Temperature style={{ color: textcolor }}>{temp.toFixed(1)}°C</Temperature>
-            <Average style={{ color: textcolor }}>Média: {media.toFixed(1)}°c</Average>
-          </TemperateMedium>
+            {/* CORRIGIDO: Usa displayTemp e displayMedia que já verificam null */}
+            <Temperature style={{ color: textcolor }}>{displayTemp}°C</ Temperature> 
+            <Average style={{ color: textcolor }}>Média: {displayMedia}°c</Average>
+          </TemperateMedium>
         </LeftSection>
         <Status style={{ color: textcolor }}>{status}</Status>
       </CardContent>

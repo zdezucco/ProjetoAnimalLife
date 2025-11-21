@@ -6,9 +6,9 @@ import orangeBlood from "../assets/blood-orange.svg";
 
 interface Monitoramento {
   id: string;
-  valor_temperatura: number;
-  valor_frequencia_cardiaca: number;
-  valor_saturacao_oxigenio: number;
+  valor_temperatura: number | null;
+  valor_frequencia_cardiaca: number | null;
+  valor_saturacao_oxigenio: number | null;
   data_monitoramento: string;
   id_animal: string;
   observacoes?: string;
@@ -32,14 +32,24 @@ const BloodSignCard: React.FC<BloodSignCardProps> = ({ monitoramentos }) => {
     );
   }
 
-  const ultimo = monitoramentos[monitoramentos.length - 1];
-  const oxigen = ultimo.valor_saturacao_oxigenio;
-  const media =
-    monitoramentos.reduce((acc, m) => acc + m.valor_saturacao_oxigenio, 0) /
-    monitoramentos.length;
+  // Usamos o primeiro item da lista (Monitoramento.tsx ordena como descending)
+  const ultimo = monitoramentos[0]; 
+  const oxigen = ultimo.valor_saturacao_oxigenio;
+
+  // Verifica se o Oxigênio é um número válido (ignora null/undefined)
+  const oxigenIsValid = typeof oxigen === 'number' && oxigen !== null;
+
+  // Calcula a média apenas se houver valores válidos
+  const validOxigens = monitoramentos
+    .map(m => m.valor_saturacao_oxigenio)
+    .filter((o2): o2 is number => typeof o2 === 'number' && o2 !== null && !isNaN(o2));
+
+  const media = validOxigens.length > 0 
+    ? validOxigens.reduce((acc, o2) => acc + o2, 0) / validOxigens.length
+    : 0;
 
   // Função que define o status, cor e ícone com base na temperatura
-  const getBloodStatus = (oxigen: number) => {
+  const getBloodStatus = (oxigen: number | null) => {
     if (oxigen === undefined || oxigen === null || oxigen === 0)
       return {
         color: "var(--second-text-color)",
@@ -69,7 +79,13 @@ const BloodSignCard: React.FC<BloodSignCardProps> = ({ monitoramentos }) => {
     };
   };
 
-  const { color, textcolor, status, icon } = getBloodStatus(oxigen);
+  // CORREÇÃO: Passa 'oxigen' diretamente
+  const { color, textcolor, status, icon } = getBloodStatus(oxigen);
+
+  // Exibição dos valores (protegido contra null/undefined)
+  const displayOxigen = oxigenIsValid ? oxigen.toFixed(1) : 'N/A';
+  // CORREÇÃO: Altera para string 'N/A' se não houver dados
+  const displayMedia = validOxigens.length > 0 ? media.toFixed(0) : 'N/A';
 
   return (
     <CardContainer style={{ backgroundColor: color }}>
@@ -78,9 +94,10 @@ const BloodSignCard: React.FC<BloodSignCardProps> = ({ monitoramentos }) => {
         <LeftSection>
           <img src={icon} alt="Ícone Saturação de Oxigênio" width={34} height={34} />
           <TemperateMedium>
-            <Temperature style={{ color: textcolor }}>{oxigen.toFixed(1)}%</Temperature>
-            <Average style={{ color: textcolor }}>Média: {media.toFixed(0)}%</Average>
-          </TemperateMedium>
+            {/* CORRIGIDO: Usa displayOxigen e displayMedia que já verificam null */}
+            <Temperature style={{ color: textcolor }}>{displayOxigen}%</Temperature>
+            <Average style={{ color: textcolor }}>Média: {displayMedia}%</Average>
+          </TemperateMedium>
         </LeftSection>
         <Status style={{ color: textcolor }}>{status}</Status>
       </CardContent>
