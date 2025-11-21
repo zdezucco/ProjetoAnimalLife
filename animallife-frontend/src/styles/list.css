@@ -110,7 +110,7 @@
   border: 4px #8A8989;
   background-color: var(--bg-secundary-color);
   box-shadow: rgba(0, 0, 0, 0.24) -2px 3px 12px;
-  padding: 10px 5px 5px 0px;
+  padding: 10px 5px 5px 5px;
   margin-top: -8px;
 
   scrollbar-width: none;
