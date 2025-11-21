@@ -41,6 +41,11 @@ const isFemale = (sexo: string) => {
 };
 
 const AnimalHeader: React.FC<AnimalHeaderProps> = ({ animal }) => {
+  // CORREÇÃO: Formata o texto do sexo para exibição
+  const displaySexo = animal.sexo === "FEMEA" ? "FÊMEA" : 
+                      animal.sexo === "MACHO" ? "MACHO" :
+                      animal.sexo;
+
   return (
     <HeaderContainer>
 
@@ -58,7 +63,7 @@ const AnimalHeader: React.FC<AnimalHeaderProps> = ({ animal }) => {
             alt={animal.sexo}
           />
         </GenderIcon>
-        <GenderText>{animal.sexo}</GenderText>
+        <GenderText>{displaySexo}</GenderText>
       </GenderSection>
     </HeaderContainer>
   );
