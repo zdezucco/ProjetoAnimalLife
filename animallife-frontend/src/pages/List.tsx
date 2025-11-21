@@ -29,6 +29,14 @@ import NotificationPopup, { NotificationItem } from "../components/NotificationP
 import { supabase } from "../supabaseClient";
 import LoadingScreen from "../pages/Loadingscreen";
 
+type Level = "URGENTE" | "ATENÇÃO" | "SAUDÁVEL" | "INVÁLIDO";
+const PRIORITY_SCORE: Record<Level, number> = {
+    "URGENTE": 40,
+    "ATENÇÃO": 30,
+    "SAUDÁVEL": 20,
+    "INVÁLIDO": 10,
+};
+
 interface Animal {
   id: number;
   nome: string;
@@ -43,6 +51,9 @@ interface Animal {
     valor_saturacao_oxigenio?: number;
     data_monitoramento?: string;
   };
+  // Adiciona campos para auxiliar na ordenação
+  priorityScore?: number;
+  urgentCount?: number;
 }
 
 // ======================
@@ -130,6 +141,33 @@ const getSpeciesName = (especie: string) => {
   }
 };
 
+const analyzeAnimalStatus = (animal: Animal): { score: number; urgentCount: number } => {
+    const m = animal.monitoramento;
+    if (!m) return { score: PRIORITY_SCORE["INVÁLIDO"], urgentCount: 0 };
+
+    const levels: Level[] = [
+        tempLevel(m.valor_temperatura),
+        heartLevel(m.valor_frequencia_cardiaca),
+        oxygenLevel(m.valor_saturacao_oxigenio)
+    ];
+
+    let maxScore = 0;
+    let urgentCount = 0;
+
+    levels.forEach(level => {
+        const score = PRIORITY_SCORE[level];
+        if (score > maxScore) {
+            maxScore = score;
+        }
+        if (level === "URGENTE") {
+            urgentCount++;
+        }
+    });
+
+    return { score: maxScore, urgentCount };
+};
+
+
 export default function AnimalList() {
   const navigate = useNavigate();
   const [showNotifications, setShowNotifications] = useState(false);
@@ -161,14 +199,39 @@ export default function AnimalList() {
     const animalsRows = animalDataRaw ?? [];
     const monitorRows = monitorDataRaw ?? [];
 
-    // 💡 TRATAMENTO FINAL DE ID + MERGE SEGURO (usa Number para evitar problemas de tipo)
-    const merged: Animal[] = animalsRows.map((a: any) => {
-      const idA = Number(a.id);
-      const monitoramento = monitorRows.find((m: any) => Number(m.id_animal) === idA);
-      return { ...a, monitoramento };
+     // 💡 DADOS BRUTOS + MERGE + CÁLCULO DE PRIORIDADE
+    let merged: Animal[] = animalsRows.map((a: any) => {
+      const idA = Number(a.id);
+      const monitoramento = monitorRows.find((m: any) => Number(m.id_animal) === idA);
+      
+      const animalWithMonitoramento: Animal = { ...a, monitoramento };
+      
+      // Calcula o score e a contagem de urgência para ordenação
+      const { score, urgentCount } = analyzeAnimalStatus(animalWithMonitoramento);
+      
+      return { 
+        ...animalWithMonitoramento,
+        priorityScore: score,
+        urgentCount: urgentCount
+      };
+    });
+
+    // 🏆 ORDENAÇÃO CUSTOMIZADA
+    // Critérios: 1. Maior Score Geral (URGENTE > ATENÇÃO > SAUDÁVEL...)
+    //            2. Maior Contagem de Alertas URGENTES (ex: 2 URGENTES > 1 URGENTE)
+    //            3. Se tudo igual, mantém a ordem atual (ordenado por nome/id, etc)
+    merged.sort((a, b) => {
+        // 1. Prioriza o score (descendente)
+        if (b.priorityScore !== a.priorityScore) {
+            return (b.priorityScore || 0) - (a.priorityScore || 0);
+        }
+        
+        // 2. Se scores são iguais, prioriza a contagem de URGENTES (descendente)
+        return (b.urgentCount || 0) - (a.urgentCount || 0);
     });
 
-    setAnimals(merged);
+
+    setAnimals(merged);
 
     // 🔔 GERA NOTIFICAÇÕES CONSOLIDADAS (Genéricas e Agrupadas)
     const generated: NotificationItem[] = [];
