@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, useCallback } from "react";
-import Bell from "../assets/bell-icon.svg";
+import Bell from "../assets/Bell-icon.svg";
 import Editicon from "../assets/edit-icon.svg";
 import Return from "../assets/return.svg";
 import "../styles/header.css";
