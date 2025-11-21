@@ -30,7 +30,7 @@ const TempSignCard: React.FC<TempSignCardProps> = ({ monitoramentos }) => {
     );
   }
 
-  const ultimo = monitoramentos[0]; 
+  const ultimo = monitoramentos[monitoramentos.length - 1];
   const temp = ultimo.valor_temperatura;
 
   const tempIsValid = typeof temp === 'number' && temp !== null;

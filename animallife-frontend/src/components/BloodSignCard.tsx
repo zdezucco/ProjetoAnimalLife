@@ -33,7 +33,7 @@ const BloodSignCard: React.FC<BloodSignCardProps> = ({ monitoramentos }) => {
   }
 
   // Usamos o primeiro item da lista (Monitoramento.tsx ordena como descending)
-  const ultimo = monitoramentos[0]; 
+  const ultimo = monitoramentos[monitoramentos.length - 1];
   const oxigen = ultimo.valor_saturacao_oxigenio;
 
   // Verifica se o Oxigênio é um número válido (ignora null/undefined)

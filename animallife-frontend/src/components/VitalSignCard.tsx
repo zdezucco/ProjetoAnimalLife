@@ -33,7 +33,7 @@ const VitalSignCard: React.FC<VitalSignCardProps> = ({ monitoramentos }) => {
   }
 
   // Usamos o primeiro item da lista (Monitoramento.tsx ordena como descending)
-  const ultimo = monitoramentos[0]; 
+  const ultimo = monitoramentos[monitoramentos.length - 1];
   const bpm = ultimo.valor_frequencia_cardiaca;
 
    // Verifica se o BPM é um número válido (ignora null/undefined)
