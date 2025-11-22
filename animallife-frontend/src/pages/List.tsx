@@ -272,7 +272,7 @@ export default function AnimalList() {
     // Gerenciamento do Loading
     if (isInitialLoad) {
         const elapsed = Date.now() - start;
-        const wait = 2000 - elapsed; // Aumentado para 2 segundos
+        const wait = 1000 - elapsed; // Aumentado para 2 segundos
         
         setTimeout(() => {
             setLoading(false);
