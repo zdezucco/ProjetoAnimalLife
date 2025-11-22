@@ -1,12 +1,11 @@
-/* === TÍTULO CENTRALIZADO COM LINHA === */
 .info-box-container h4 {
   font-size: 1.2em;
   color: #333;
-  text-align: center;        /* Centraliza */
-  text-transform: uppercase; /* Letras maiúsculas */
+  text-align: center;        
+  text-transform: uppercase;
   margin-bottom: 15px;
   padding-bottom: 0px;
-  border-bottom: 1px solid #ddd; /* Linha abaixo do título */
+  border-bottom: 1px solid #ddd; 
   letter-spacing: 1px;
 }
 
@@ -28,7 +27,7 @@
   color: #666;
 }
 
-/* Aplica estilo apenas aos inputs de texto/número, ignorando o checkbox */
+
 .form-group input:not([type="checkbox"]) {
   padding: 12px;
   border-radius: 8px;
@@ -41,22 +40,19 @@
   gap: 15px;
 }
 
-/* === SEÇÃO DE CHECKBOXES EM COLUNAS === */
 .checkboxes-section {
   margin-top: 20px;
   padding: 20px 0;
   
-  /* Linhas de separação da seção */
   border-top: 1px solid #ddd;
   border-bottom: 1px solid #ddd;
 
-  /* Layout Flex para duas colunas */
   display: flex;
-  justify-content: space-between; /* Espalha as colunas */
+  justify-content: space-between; 
   position: relative;
 }
 
-/* Linha vertical no meio (Separador das colunas) */
+
 .checkboxes-section::after {
   content: '';
   position: absolute;
@@ -68,10 +64,10 @@
   transform: translateX(-50%);
 }
 
-/* Coluna individual (Dieta / Sexo) */
+
 .checkbox-group {
-  flex: 1;            /* Ocupa metade do espaço */
-  padding: 0 20px;    /* Espaçamento interno para não colar na linha do meio */
+  flex: 1;            
+  padding: 0 20px;    
   display: flex;
   flex-direction: column;
 }
@@ -86,11 +82,11 @@
 
 .checkbox-group .options {
   display: flex;
-  flex-direction: column; /* Opções uma embaixo da outra */
+  flex-direction: column; 
   gap: 12px;
 }
 
-/* Estilo do Item (Label) */
+
 .checkbox-group label {
   display: flex;
   align-items: center;
@@ -100,9 +96,7 @@
   user-select: none;
 }
 
-/* === CHECKBOX CUSTOMIZADO === */
 
-/* 1. Esconde o input nativo */
 .checkbox-group input[type="checkbox"] {
   position: absolute;
   opacity: 0;
@@ -111,28 +105,27 @@
   width: 0;
 }
 
-/* 2. Cria a caixa customizada (span.custom-checkbox) */
+
 .custom-checkbox {
   height: 20px;
   width: 20px;
   background-color: #fff;
   border: 2px solid #ccc;
   border-radius: 4px;
-  margin-right: 10px; /* Espaço entre a caixa e o texto */
+  margin-right: 10px; 
   display: flex;
   align-items: center;
   justify-content: center;
   transition: all 0.2s ease-in-out;
-  flex-shrink: 0; /* Impede que a caixa encolha */
+  flex-shrink: 0; 
 }
 
-/* 3. Estilo quando marcado (Checked) */
+
 .checkbox-group input:checked ~ .custom-checkbox {
-  background-color: #1d8016; /* Verde do seu print */
+  background-color: #1d8016;
   border-color: #1d8016;
 }
 
-/* 4. O Ícone de Check (Visto) */
 .custom-checkbox::after {
   content: "";
   display: none;
@@ -141,15 +134,14 @@
   border: solid white;
   border-width: 0 2px 2px 0;
   transform: rotate(45deg);
-  margin-bottom: 2px; /* Ajuste fino da posição do check */
+  margin-bottom: 2px; 
 }
 
-/* Mostra o ícone quando marcado */
+
 .checkbox-group input:checked ~ .custom-checkbox::after {
   display: block;
 }
 
-/* Ícones de Gênero */
 .gender-icon {
   width: 16px;
   height: 16px;
@@ -157,14 +149,13 @@
   opacity: 0.7;
 }
 
-/* Responsividade: Empilha em telas pequenas */
 @media (max-width: 500px) {
   .checkboxes-section {
     flex-direction: row;
     gap: 20px;
   }
   .checkboxes-section::after {
-    display: none; /* Remove linha vertical */
+    display: none;
   }
   .checkbox-group {
     padding: 0;
@@ -180,20 +171,20 @@
   font-size: 1.2em;
   margin-bottom: 15px;
   color: #333;
-  border-left: 4px solid #2e7d32; /* Detalhe visual verde à esquerda */
+  border-left: 4px solid #2e7d32; 
   padding-left: 10px;
 }
 
-/* Contêiner da lista com scroll */
+
 .monitor-log-container {
   width: 100%;
-  max-height: 300px; /* Altura máxima antes de aparecer a barra de rolagem */
-  overflow-y: auto;  /* Scroll vertical automático */
+  max-height: 300px; 
+  overflow-y: auto; 
   background-color: #f9f9f9;
   border: 1px solid #e0e0e0;
   border-radius: 8px;
   padding: 10px;
-  box-shadow: inset 0 2px 4px rgba(0,0,0,0.05); /* Sombra interna suave */
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.05); 
 }
 
 .monitor-log-list {
@@ -216,12 +207,12 @@
 }
 
 .monitor-log-item:hover {
-  background-color: #fff; /* Destaque ao passar o mouse */
+  background-color: #fff; 
   border-radius: 4px;
 }
 
 .log-header strong {
-  color: #2e7d32; /* Verde escuro para a data/hora */
+  color: #2e7d32; 
   font-size: 0.85em;
   text-transform: uppercase;
   letter-spacing: 0.5px;
@@ -242,7 +233,7 @@
   font-size: 0.9em;
 }
 
-/* Estilização da barra de rolagem (Scrollbar) */
+
 .monitor-log-container::-webkit-scrollbar {
   width: 6px;
 }
@@ -266,7 +257,7 @@
   width: 100%;
 }
 .button-row button {
-  background-color: var(--primary-color, #2e7d32); /* Fallback verde */
+  background-color: var(--primary-color, #2e7d32);
   color: #FFFFFF;
   font-weight: 700;
   font-size: 14px;

@@ -51,13 +51,13 @@ interface Animal {
     valor_saturacao_oxigenio?: number;
     data_monitoramento?: string;
   };
-  // Adiciona campos para auxiliar na ordenação
+
   priorityScore?: number;
   urgentCount?: number;
 }
 
 // ======================
-//  TEMPERATURA (icones usados na listagem — mantive helpers caso queira usar)
+//  TEMPERATURA 
 // ======================
 const getTempIcon = (t: number | undefined) => {
   if (t === undefined || t === null) return grayTerm;
@@ -174,15 +174,11 @@ export default function AnimalList() {
   const [animals, setAnimals] = useState<Animal[]>([]);
   const [notifications, setNotifications] = useState<NotificationItem[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
-  // Estado para controlar o loading da tela (apenas na primeira vez)
   const [loading, setLoading] = useState(true);
   const [initialLoadDone, setInitialLoadDone] = useState(false);
 
-  // ============================
-  // FETCH COM TRATAMENTO COMPLETO
-  // ============================
+
   const fetchAnimals = async (isInitialLoad = false) => {
-    // Só exibe o loading na tela se for a primeira carga
     if (isInitialLoad) {
         setLoading(true);
     }
@@ -199,7 +195,7 @@ export default function AnimalList() {
     const animalsRows = animalDataRaw ?? [];
     const monitorRows = monitorDataRaw ?? [];
 
-     // 💡 DADOS BRUTOS + MERGE + CÁLCULO DE PRIORIDADE
+
     let merged: Animal[] = animalsRows.map((a: any) => {
       const idA = Number(a.id);
       const monitoramento = monitorRows.find((m: any) => Number(m.id_animal) === idA);
@@ -233,7 +229,7 @@ export default function AnimalList() {
 
     setAnimals(merged);
 
-    // 🔔 GERA NOTIFICAÇÕES CONSOLIDADAS (Genéricas e Agrupadas)
+
     const generated: NotificationItem[] = [];
     const priority = { URGENTE: 3, ATENÇÃO: 2, SAUDÁVEL: 1, INVÁLIDO: 0 }; 
 
@@ -245,18 +241,17 @@ export default function AnimalList() {
       const heartStatus = heartLevel(m.valor_frequencia_cardiaca);
       const oxygenStatus = oxygenLevel(m.valor_saturacao_oxigenio);
 
-      // Determina o nível de prioridade mais alto
+
       const levels = [tempStatus, heartStatus, oxygenStatus]
         .filter((l): l is "URGENTE" | "ATENÇÃO" => l === "URGENTE" || l === "ATENÇÃO");
 
-      if (levels.length === 0) return; // Sem alertas
+      if (levels.length === 0) return; 
 
       const highestLevel = levels.reduce((max, current) => 
         priority[current] > priority[max] ? current : max,
         "ATENÇÃO" as "ATENÇÃO" | "URGENTE"
       );
 
-      // 4. CRIA A NOTIFICAÇÃO GENÉRICA
       generated.push({
         id: `consolidated-${a.id}`,
         title: `${a.nome} — ALERTA VITAL`, 
@@ -269,14 +264,13 @@ export default function AnimalList() {
 
     setNotifications(generated);
 
-    // Gerenciamento do Loading
     if (isInitialLoad) {
         const elapsed = Date.now() - start;
-        const wait = 1000 - elapsed; // Aumentado para 2 segundos
+        const wait = 1000 - elapsed; 
         
         setTimeout(() => {
             setLoading(false);
-            setInitialLoadDone(true); // Marca que o carregamento inicial de 2s terminou
+            setInitialLoadDone(true); 
         }, wait > 0 ? wait : 0);
     }
   };
@@ -285,10 +279,8 @@ export default function AnimalList() {
   // REALTIME
   // ============================
   useEffect(() => {
-    // 1. CHAMA O FETCH INICIAL COM FLAG PARA LOADING E DELAY
     fetchAnimals(true);
 
-    // 2. LISTENERS REALTIME (não chamam setLoading(true) novamente)
     const animalCh = supabase
       .channel("animal_rt")
       .on("postgres_changes", { event: "*", schema: "public", table: "animal" }, () => fetchAnimals(false))
@@ -311,7 +303,6 @@ export default function AnimalList() {
   if (loading && !initialLoadDone) return <LoadingScreen />;
 
   const acessarMonitoramento = (id: number) => {
-    // Adiciona delay de 2s antes de navegar
     setLoading(true);
     setTimeout(() => {
         setLoading(false);
@@ -320,11 +311,9 @@ export default function AnimalList() {
   };
 
   const handleNotificationClick = (n: NotificationItem) => {
-    // Se clicar numa notificação, abre o monitoramento do animal
     const id = Number(n.collar);
     if (id) {
       setShowNotifications(false);
-      // Adiciona delay de 2s antes de navegar
       setLoading(true);
       setTimeout(() => {
           setLoading(false);
@@ -337,7 +326,6 @@ export default function AnimalList() {
     a.nome.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  // Se 'loading' for true aqui (após clicar em algo), exibe a tela de loading
   if (loading) return <LoadingScreen />;
 
   return (
@@ -354,7 +342,6 @@ export default function AnimalList() {
           </div>
         </div>
 
-        {/* Barra de busca */}
         <div id="search-container">
           <div className="search-bar">
             <Search className="icon search-icon" size={16} />
@@ -405,7 +392,6 @@ export default function AnimalList() {
                     </div>
                   </div>
 
-                  {/* Ícones vitais */}
                   <div className="vital-icons">
                     <img src={getTempIcon(mon?.valor_temperatura)} className="vital-icon" />
                     <img

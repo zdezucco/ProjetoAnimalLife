@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { supabase } from "../supabaseClient"; // ajusta o caminho conforme tua estrutura
+import { supabase } from "../supabaseClient"; 
 import "../styles/infobox.css";
 import FemaleIcon from "../assets/female-icon.svg";
 import MaleIcon from "../assets/male-icon.svg";
@@ -31,10 +31,10 @@ const formatEspecie = (text: string) => {
 const normalizeEspecie = (text: string) => {
   if (!text) return "";
   return text
-    .normalize("NFD") // remove acentos
+    .normalize("NFD")
     .replace(/[\u0300-\u036f]/g, "")
     .toUpperCase()
-    .replace(/\s+/g, "_"); // troca espaços por "_"
+    .replace(/\s+/g, "_");
 };
 
 const normalizeToDb = (text: string) => {
@@ -45,7 +45,7 @@ const normalizeToDb = (text: string) => {
     .toUpperCase();
 };
 
-// Função auxiliar para formatar data e hora
+
 const formatDateTime = (dateString: string) => {
   if (!dateString) return "";
   const date = new Date(dateString);
@@ -60,24 +60,22 @@ const formatDateTime = (dateString: string) => {
 
 const InfoBox = ({ animalId }: InfoBoxProps) => {
   const [animal, setAnimal] = useState<any>(null);
-  const [monitoramentoLogs, setMonitoramentoLogs] = useState<any[]>([]); // Estado para os logs
+  const [monitoramentoLogs, setMonitoramentoLogs] = useState<any[]>([]);
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState<any>({});
 
-  // Função para buscar os logs de monitoramento
   const fetchLogs = async () => {
     const { data, error } = await supabase
       .from("monitoramento")
       .select("id, data_monitoramento, observacoes")
       .eq("id_animal", animalId)
-      .order("data_monitoramento", { ascending: false }); // Mais recentes primeiro
+      .order("data_monitoramento", { ascending: false }); 
 
     if (!error && data) {
       setMonitoramentoLogs(data);
     }
   };
 
-  // 🔹 Buscar dados do animal
   useEffect(() => {
     const fetchAnimal = async () => {
       const { data, error } = await supabase
@@ -91,7 +89,6 @@ const InfoBox = ({ animalId }: InfoBoxProps) => {
         return;
       }
 
-      // Formatamos para exibição amigável
       setAnimal(data);
       setFormData({
         ...data,
@@ -115,9 +112,9 @@ const InfoBox = ({ animalId }: InfoBoxProps) => {
 
     if (animalId) {
       fetchAnimal();
-      fetchLogs(); // Busca os logs iniciais
+      fetchLogs(); 
 
-      // Inscreve no Realtime para atualizar a lista automaticamente
+
       const channel = supabase
         .channel(`monitoramento_logs_${animalId}`)
         .on(
@@ -129,7 +126,6 @@ const InfoBox = ({ animalId }: InfoBoxProps) => {
             filter: `id_animal=eq.${animalId}`,
           },
           (payload) => {
-            // Adiciona o novo log ao topo da lista
             setMonitoramentoLogs((prev) => [payload.new, ...prev]);
           }
         )
@@ -141,34 +137,33 @@ const InfoBox = ({ animalId }: InfoBoxProps) => {
     }
   }, [animalId]);
   
-  // 🔹 Atualiza campos editáveis
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { id, value } = e.target;
     setFormData({ ...formData, [id]: value });
   };
 
-  // 🔹 Atualiza checkboxes de dieta e sexo
   const handleCheckboxChange = (field: string, value: string) => {
     setFormData({ ...formData, [field]: value });
   };
 
-  // 🔹 Salvar alterações no Supabase
+
   const handleSave = async () => {
-  // 🧠 Se a espécie não foi alterada, mantém a original (formato do banco)
+
   const especieFinal =
     formData.especie === formatEspecie(animal.especie)
-      ? animal.especie // já está normalizado no banco
+      ? animal.especie 
       : normalizeEspecie(formData.especie);
 
   const updateData = {
     nome: formData.nome,
-    especie: especieFinal, // ✅ agora garantido no formato do banco
+    especie: especieFinal, 
     raca: formData.raca,
     peso: formData.peso,
     altura: formData.altura,
     comprimento: formData.comprimento,
-    dieta: normalizeToDb(formData.dieta), // ✅ HERBIVORO / CARNIVORO / ONIVORO
-    sexo: normalizeToDb(formData.sexo), // ✅ MACHO / FEMEA
+    dieta: normalizeToDb(formData.dieta), 
+    sexo: normalizeToDb(formData.sexo),
   };
 
   const { error } = await supabase
@@ -268,7 +263,6 @@ const InfoBox = ({ animalId }: InfoBoxProps) => {
           </div>
         </form>
 
-      {/* 🔹 DIETA e SEXO */}
       <div className="checkboxes-section">
         <div className="checkbox-group">
           <label className="group-label">Dieta:</label>

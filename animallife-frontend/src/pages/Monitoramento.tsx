@@ -17,7 +17,7 @@ const Monitoramento = () => {
   const [searchParams] = useSearchParams();
   const [animal, setAnimal] = useState<any>(null);
   const [monitoramentos, setMonitoramentos] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true); // Adicionado estado de loading local
+  const [loading, setLoading] = useState(true); 
   const animalId = searchParams.get("id");
 
 const monitoramentosOrdenados = [...monitoramentos]
@@ -26,7 +26,6 @@ const monitoramentosOrdenados = [...monitoramentos]
     new Date(b.data_monitoramento).getTime()
   );
 
-  // ===== FUNÇÃO DE CARREGAR DADOS =====
   const fetchData = async () => {
     if (!animalId) return;
 
@@ -46,12 +45,11 @@ const monitoramentosOrdenados = [...monitoramentos]
     setMonitoramentos(monitoramentoData || []);
   };
 
-  // ===== CARREGAMENTO INICIAL COM DELAY DE 2s =====
   useEffect(() => {
     const start = Date.now();
     fetchData().then(() => {
         const elapsed = Date.now() - start;
-        const wait = 1000 - elapsed; // Delay de 2 segundos
+        const wait = 1000 - elapsed; 
         
         setTimeout(() => {
             setLoading(false);
@@ -60,13 +58,9 @@ const monitoramentosOrdenados = [...monitoramentos]
   }, [animalId]);
 
 
-  // ======= SUPABASE REALTIME LISTENERS (Sem Loading) =======
   useEffect(() => {
     if (!animalId) return;
 
-    // A função fetchData agora só atualiza o estado, não toca no loading
-
-    // Atualizações na tabela *animal*
     const animalChannel = supabase
       .channel(`animal-updates-${animalId}`)
       .on(
@@ -84,7 +78,6 @@ const monitoramentosOrdenados = [...monitoramentos]
       )
       .subscribe();
 
-    // Atualizações na tabela *monitoramento*
     const monitoramentoChannel = supabase
       .channel(`monitoramento-updates-${animalId}`)
       .on(
@@ -102,14 +95,12 @@ const monitoramentosOrdenados = [...monitoramentos]
       )
       .subscribe();
 
-    // Cleanup para evitar vazamento de memória
     return () => {
       supabase.removeChannel(animalChannel);
       supabase.removeChannel(monitoramentoChannel);
     };
   }, [animalId]);
 
-  // Condição de renderização do Loading Screen
   if (loading || !animal) return <LoadingScreen />;
 
   return (

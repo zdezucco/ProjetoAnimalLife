@@ -1,7 +1,7 @@
 .TelaAnimal {
   width: 100%;
-  max-width: 480px;   /* limite para não esticar demais em tablets grandes */
-  height: 100vh;      /* ocupa altura total da tela */
+  max-width: 480px;   
+  height: 100vh;     
   margin: 0 auto;
   margin-top: 10px;
   background-color: var(--bg-primary-color);
@@ -29,7 +29,7 @@
   padding: 0rem 1rem 1rem;
   display: flex;
   align-items: center;
-  justify-content: center; /* centraliza o conteúdo (h1) */
+  justify-content: center; 
 }
 
 .header {
@@ -118,7 +118,7 @@
 
 .animal-list::-webkit-scrollbar {
     display: none;
-    width: 0; /* Garante que não ocupe espaço horizontal */
+    width: 0; 
     height: 0;
 }
 

@@ -30,9 +30,9 @@ const NotificationPopup: React.FC<NotificationPopupProps> = ({
   const getLevelColor = (level: string) => {
     switch (level) {
       case "URGENTE":
-        return "var(--red-temp, #FFBCBC)"; // Usando fallback
+        return "var(--red-temp, #FFBCBC)"; 
       case "ATENÇÃO":
-        return "var(--orange-temp, #FEDAB9)"; // Usando fallback
+        return "var(--orange-temp, #FEDAB9)";
       default:
         return "var(--gray-temp, #D9D9D9)";
     }
@@ -40,12 +40,9 @@ const NotificationPopup: React.FC<NotificationPopupProps> = ({
 
   const finalNotifications = notifications;
 
-  // FUNÇÃO SIMPLIFICADA para renderizar apenas negrito (sem listas)
   const renderSimpleMarkdown = (text: string) => {
-    // 1. Converte negrito **texto** em <strong>texto</strong>
     let html = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
     
-    // 2. Converte quebras de linha duplas (\n) em <br> para respeitar a formatação de parágrafo
     html = html.replace(/\n/g, '<br/>');
 
     return html;
@@ -53,7 +50,6 @@ const NotificationPopup: React.FC<NotificationPopupProps> = ({
 
 // CORREÇÃO: Função auxiliar para remover ACENTOS de forma robusta
   const getCssLevel = (level: "URGENTE" | "ATENÇÃO") => {
-    // 1. Converte para minúsculas
     const lower = level.toLowerCase();
     return lower.normalize('NFD').replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, '');
   };
@@ -65,7 +61,6 @@ const NotificationPopup: React.FC<NotificationPopupProps> = ({
         onClick={(e) => e.stopPropagation()}
       >
         <div className="popup-header">
-          {/* Altera <h3> para <h2> para corresponder ao CSS do header */}
           <h2>Notificações</h2>
           <button className="close-btn" onClick={onClose}>
             <img src={CloseBtn} alt="Fechar" className="close-icon-img" />
@@ -79,10 +74,9 @@ const NotificationPopup: React.FC<NotificationPopupProps> = ({
             {finalNotifications.map((n) => (
               <li
                 key={n.id}
-                className={`notification-item ${getCssLevel(n.level)}`}  // Adiciona classe 'urgente' ou 'atencao'
+                className={`notification-item ${getCssLevel(n.level)}`} 
                 onClick={() => onNotificationClick && onNotificationClick(n)}
               >
-                {/* LINHA DE STATUS SUPERIOR (URGENTE! / ATENÇÃO!) */}
                 <div className="notification-status-header">
                     <strong
                         className="notification-level-title"
@@ -100,7 +94,6 @@ const NotificationPopup: React.FC<NotificationPopupProps> = ({
                     />
 
                     <div className="notification-info">
-                        {/* A nova mensagem será a mensagem genérica que precisa de negrito */}
                         <div
                             className="notification-message"
                             dangerouslySetInnerHTML={{ __html: renderSimpleMarkdown(n.message) }}

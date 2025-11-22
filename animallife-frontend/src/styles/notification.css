@@ -1,4 +1,3 @@
-/* Seu código CSS original */
 .popup-overlay {
   position: fixed;
   top: 0;
@@ -12,7 +11,7 @@
   z-index: 2000;
 }
 
-/* Alterado para 'notification-popup' para corresponder à classe usada no React */
+
 .notification-popup {
   background: #f5f5f5;
   border-radius: 12px;
@@ -28,28 +27,26 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  /* Removido o border-bottom e margin-bottom */
   margin-bottom: 0;
-  padding-bottom: 8px; /* Adiciona um pequeno padding inferior */
+  padding-bottom: 8px; 
 }
 
-/* Estilo para o H3 do título "Notificações" */
 .popup-header h2 {
   margin: 0;
   font-size: 18px;
-  font-weight: bold; /* Deixa mais forte */
+  font-weight: bold; 
 }
 
 .close-btn {
   background: none;
   border: none;
   cursor: pointer;
-  padding: 0; /* Remove padding padrão, se houver */
-  line-height: 0; /* Remove altura da linha */
+  padding: 0; 
+  line-height: 0; 
 }
 
 .close-icon-img {
-    width: 24px; /* Tamanho desejado do ícone */
+    width: 24px; 
     height: 24px;
     display: block;
 }
@@ -58,33 +55,32 @@
 .notification-list {
     padding: 0;
     margin: 0;
-    list-style: none; /* Remove os marcadores de lista */
+    list-style: none;
     display: flex;
     flex-direction: column;
-    gap: 12px; /* Espaçamento entre os cards de notificação */
+    gap: 12px;
 
     scrollbar-width: none;
 }
 
 .notification-list::-webkit-scrollbar {
     display: none;
-    width: 0; /* Garante que não ocupe espaço horizontal */
+    width: 0;
     height: 0;
 }
 
-/* --- ESTILO DO CARD DE NOTIFICAÇÃO (notification-item) --- */
+
 
 .notification-item {
-    /* Reseta estilos anteriores e define o card */
     display: flex;
     flex-direction: column;
-    padding: 0; /* O padding virá dos elementos internos */
+    padding: 0; 
     border-radius: 12px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     cursor: pointer;
     transition: transform 0.2s, box-shadow 0.2s;
-    overflow: hidden; /* Garante que o round corner funcione com a borda de cor */
-    border: 1px solid transparent; /* Base para o hover */
+    overflow: hidden; 
+    border: 1px solid transparent; 
 }
 
 .notification-item:hover {
@@ -92,19 +88,15 @@
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
 }
 
-/* ESTILOS CONDICIONAIS DE COR */
-
 .notification-item.urgente {
-    background-color: #FFBCBC; /* Fundo muito claro de vermelho */
-    border-color: #ff5252; /* Borda vermelha */
+    background-color: #FFBCBC; 
+    border-color: #ff5252; 
 }
 
 .notification-item.atencao {
-    background-color: #FEDAB9; /* Fundo muito claro de laranja */
-    border-color: #ff9800; /* Borda laranja */
+    background-color: #FEDAB9; 
+    border-color: #ff9800; 
 }
-
-/* --- CABEÇALHO DE STATUS (URGENTE! / ATENÇÃO!) --- */
 
 .notification-status-header {
     display: flex;
@@ -114,11 +106,9 @@
     font-size: 14px;
     font-weight: 700;
     color: #fff;
-    /* Ajustes para remover o botão de fechar (se houver) */
 }
 
 .notification-level-title {
-    /* Este strong define a cor do texto do nível */
     padding: 0;
     margin: 0;
     text-align: center;
@@ -127,11 +117,10 @@
     width: 100%;
 }
 
-/* Conteúdo Principal (Imagem + Texto) */
 .notification-content-body {
     display: flex;
     align-items: center;
-    padding: 5px 5px; /* Padding interno */
+    padding: 5px 5px; 
     gap: 15px;
 }
 
@@ -141,7 +130,7 @@
     border-radius: 50%; 
     object-fit: cover; 
     flex-shrink: 0; 
-    border: 3px solid #fff; /* Borda branca na imagem */
+    border: 3px solid #fff; 
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
 }
 
@@ -150,27 +139,26 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    white-space: normal; /* Garante quebra de linha */
+    white-space: normal; 
 }
 
-/* Mensagem (Contém o texto genérico) */
+
 .notification-message {
     font-size: 14px;
     font-weight: 500;
     line-height: 1.4;
-    color: #333; /* Cor escura para melhor contraste */
-    /* Garante quebra de linha */
+    color: #333; 
     overflow: visible;
     text-overflow: clip;
     white-space: normal;
 }
 
-/* Estilo para o Footer (Coleira) */
+
 .notification-footer {
     display: flex;
-    justify-content: flex-end; /* Alinha a coleira à direita */
+    justify-content: flex-end; 
     padding: 5px 15px 10px 15px;
-    border-top: 1px solid rgba(0, 0, 0, 0.05); /* Linha fina de separação */
+    border-top: 1px solid rgba(0, 0, 0, 0.05); 
 }
 
 .notification-collar {

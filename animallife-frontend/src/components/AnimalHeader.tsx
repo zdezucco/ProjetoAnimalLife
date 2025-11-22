@@ -36,12 +36,11 @@ const getSpeciesName = (especie: string) => {
 // Função auxiliar para identificar o gênero corretamente
 const isFemale = (sexo: string) => {
   if (!sexo) return false;
-  const normalized = sexo.normalize("NFD").replace(/[\u0300-\u036f]/g, ""); // remove acentos
+  const normalized = sexo.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
   return ["f", "femea", "fêmea"].includes(normalized.toLowerCase());
 };
 
 const AnimalHeader: React.FC<AnimalHeaderProps> = ({ animal }) => {
-  // CORREÇÃO: Formata o texto do sexo para exibição
   const displaySexo = animal.sexo === "FEMEA" ? "FÊMEA" : 
                       animal.sexo === "MACHO" ? "MACHO" :
                       animal.sexo;
@@ -107,7 +106,7 @@ const GenderSection = styled.div`
   flex-direction: column;
   align-items: center;
   margin-top: 5px;
-  min-width: 40px;  /* largura mínima para não quebrar o layout */
+  min-width: 40px; 
 `;
 
 const GenderIcon = styled.div`

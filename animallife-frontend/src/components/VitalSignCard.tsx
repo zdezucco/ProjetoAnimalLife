@@ -32,14 +32,11 @@ const VitalSignCard: React.FC<VitalSignCardProps> = ({ monitoramentos }) => {
     );
   }
 
-  // Usamos o primeiro item da lista (Monitoramento.tsx ordena como descending)
   const ultimo = monitoramentos[monitoramentos.length - 1];
   const bpm = ultimo.valor_frequencia_cardiaca;
 
-   // Verifica se o BPM é um número válido (ignora null/undefined)
   const bpmIsValid = typeof bpm === 'number' && bpm !== null;
   
-  // Calcula a média apenas se houver valores válidos
   const validBpms = monitoramentos
     .map(m => m.valor_frequencia_cardiaca)
     .filter((fc): fc is number => typeof fc === 'number' && fc !== null && !isNaN(fc));
@@ -94,12 +91,9 @@ const VitalSignCard: React.FC<VitalSignCardProps> = ({ monitoramentos }) => {
     };
   };
 
-  // CORREÇÃO: Passa 'bpm' diretamente
   const { color, textcolor, status, icon } = getVitalStatus(bpm);
 
-  // Exibição dos valores (protegido contra null/undefined)
   const displayBpm = bpmIsValid ? bpm.toFixed(1) : '';
-  // CORREÇÃO: Altera para string 'N/A' se não houver dados
   const displayMedia = validBpms.length > 0 ? media.toFixed(0) : ''; 
 
   return (
@@ -109,7 +103,6 @@ const VitalSignCard: React.FC<VitalSignCardProps> = ({ monitoramentos }) => {
         <LeftSection>
           <img src={icon} alt="Ícone Frequência Cardíaca" width={34} height={34} />
           <TemperateMedium>
-            {/* CORRIGIDO: Usa displayBpm e displayMedia que já verificam null */}
             <Temperature style={{ color: textcolor }}>{displayBpm}bpm</Temperature>
             <Average style={{ color: textcolor }}>Média: {displayMedia}bpm</Average>
           </TemperateMedium>

@@ -8,10 +8,9 @@ import NotificationPopup, { NotificationItem } from "../components/NotificationP
 import { supabase } from "../supabaseClient";
 
 interface HeaderProps {
-  selectedId?: number; // Para forçar ID vindo do Monitoramento
+  selectedId?: number; 
 }
 
-// Interface Animal ajustada para incluir os valores de monitoramento
 interface Animal {
   id: number;
   nome: string;
@@ -181,61 +180,51 @@ const Header = ({ selectedId }: HeaderProps) => {
       const levels = [tempStatus, heartStatus, oxygenStatus]
         .filter((l): l is "URGENTE" | "ATENÇÃO" => l === "URGENTE" || l === "ATENÇÃO");
 
-      if (levels.length === 0) return; // Sem alertas
+      if (levels.length === 0) return; 
 
       const highestLevel = levels.reduce((max, current) => 
         priority[current] > priority[max] ? current : max,
         "ATENÇÃO" as "ATENÇÃO" | "URGENTE"
       );
       
-      // CRIA A NOTIFICAÇÃO GENÉRICA
       generated.push({
         id: `consolidated-${a.id}`,
         title: `${a.nome} — ALERTA VITAL`, 
         level: highestLevel,
-        // MENSAGEM GENÉRICA:
         message: `${a.nome} está em nível de **${highestLevel}**. Verifique o monitoramento.`,
         image: a.avatar || "/avatars/default.png",
         collar: a.id.toString(),
       });
     });
 
-    // Usa as notificações geradas diretamente, pois já estão consolidadas
+   
     setNotifications(generated); 
-  }, [selectedId]); // Depende de selectedId
+  }, [selectedId]); 
 
-  // 1. EFEITO PARA BUSCA INICIAL (Chama a função fetchAnimals)
   useEffect(() => {
     fetchAnimals();
   }, [fetchAnimals]);
 
-  // 2. EFEITO PARA LISTENERS REALTIME (CORRIGIDO: Adiciona listeners)
+
   useEffect(() => {
-    // Escutando mudanças na tabela 'animal'
     const animalCh = supabase
       .channel("animal_rt")
       .on("postgres_changes", { event: "*", schema: "public", table: "animal" }, fetchAnimals)
       .subscribe();
 
-    // Escutando mudanças na tabela 'monitoramento'
     const monCh = supabase
       .channel("monitor_rt")
       .on("postgres_changes", { event: "*", schema: "public", table: "monitoramento" }, fetchAnimals)
       .subscribe();
 
-    // Cleanup: Remove os listeners quando o componente for desmontado
     return () => {
       supabase.removeChannel(animalCh);
       supabase.removeChannel(monCh);
     };
-  }, [fetchAnimals]); // Depende da função memoizada
+  }, [fetchAnimals]); 
 
-  // 🔵 CLIQUE NA NOTIFICAÇÃO
+
   const handleNotificationClick = (notification: NotificationItem) => {
-    // Adiciona o delay de 2s ANTES de navegar
-    // Nota: O Header não tem estado 'loading' próprio para a tela inteira,
-    // mas a navegação do List.tsx para o Monitoramento.tsx lida com isso.
-    // Aqui, apenas garantimos a navegação.
     navigate(`/Monitoramento?id=${notification.collar}`);
     setShowNotifications(false);
   };
@@ -255,7 +244,6 @@ const Header = ({ selectedId }: HeaderProps) => {
           </div>
       </div>
 
-      {/* FOTO DO ANIMAL */}
       <div className="animal-photo-section">
         <div className="photo-wrapper" onClick={() => setShowPreview(true)}>
           <img
@@ -284,7 +272,6 @@ const Header = ({ selectedId }: HeaderProps) => {
         </div>
       </div>
 
-      {/* PREVIEW */}
       {showPreview && (
         <div className="preview-overlay" onClick={() => setShowPreview(false)}>
           <img
@@ -296,7 +283,6 @@ const Header = ({ selectedId }: HeaderProps) => {
         </div>
       )}
 
-      {/* POPUP DE NOTIFICAÇÕES */}
       <NotificationPopup
         isOpen={showNotifications}
         onClose={() => setShowNotifications(false)}

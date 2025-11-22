@@ -2,7 +2,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 5px; /* Ajuste de espaçamento */
+  padding: 10px 5px;
 }
 
 .icon-return {
@@ -18,7 +18,7 @@
 .header-right {
   display: flex;
   align-items: center;
-  gap: 20px; /* Aumenta o espaço entre o sino e a estrela */
+  gap: 20px; 
 }
 
 .notification {
@@ -41,7 +41,7 @@
   position: absolute;
   top: -4px;
   right: -4px;
-  background-color: #f44336; /* Cor vermelha do protótipo */
+  background-color: #f44336; 
   color: white;
   border-radius: 50%;
   width: 18px;
@@ -52,7 +52,7 @@
   font-size: 11px;
   font-weight: bold;
   border: 2px solid white;
-  overflow-y: hidden; /* Borda branca para destacar */
+  overflow-y: hidden; 
 }
 
 .icon-star {
@@ -62,7 +62,7 @@
   top: 20px;
   right: 0px;
   position: absolute;
-  color: #FFC107; /* Cor da estrela */
+  color: #FFC107; 
 }
 
 .animal-photo-section {
@@ -70,14 +70,13 @@
   margin: 20px 0;
 }
 
-/* Novo wrapper para a foto e o ícone */
 .photo-wrapper {
   position: relative;
-  display: inline-block; /* Importante para o posicionamento funcionar */
-  width: 170px; /* Mesmo width da .animal-photo */
-  height: 170px; /* Mesmo height da .animal-photo */  
+  display: inline-block; 
+  width: 170px; 
+  height: 170px;  
   overflow-y: hidden;
-  overflow-x: hidden; /* Impede rolagem horizontal */
+  overflow-x: hidden;
 }
 
 .animal-photo {
