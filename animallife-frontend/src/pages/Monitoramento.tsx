@@ -51,7 +51,7 @@ const monitoramentosOrdenados = [...monitoramentos]
     const start = Date.now();
     fetchData().then(() => {
         const elapsed = Date.now() - start;
-        const wait = 2000 - elapsed; // Delay de 2 segundos
+        const wait = 1500 - elapsed; // Delay de 2 segundos
         
         setTimeout(() => {
             setLoading(false);
