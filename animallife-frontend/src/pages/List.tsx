@@ -329,7 +329,7 @@ export default function AnimalList() {
       setTimeout(() => {
           setLoading(false);
           navigate(`/Monitoramento?id=${id}`);
-      }, 2000);
+      }, 1000);
     }
   };
 
