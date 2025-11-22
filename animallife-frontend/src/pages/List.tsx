@@ -316,7 +316,7 @@ export default function AnimalList() {
     setTimeout(() => {
         setLoading(false);
         navigate(`/Monitoramento?id=${id}`);
-    }, 1500);
+    }, 1000);
   };
 
   const handleNotificationClick = (n: NotificationItem) => {
